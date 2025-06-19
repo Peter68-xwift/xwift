@@ -6,8 +6,8 @@ import { ThemeProvider } from "../contexts/ThemeContext"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "MERN Auth App",
-  description: "A MERN stack application with authentication",
+  title: "Xswift Ranch",
+  description: "A modern mern application",
     generator: 'v0.dev'
 }
 
