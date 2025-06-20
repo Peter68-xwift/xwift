@@ -6,18 +6,8 @@ import { usePathname } from "next/navigation"
 import { MainNav } from "@/components/main-nav"
 import { SidebarNav } from "@/components/sidebar-nav"
 
-interface SidebarProps {
-  items: {
-    title: string
-    href: string
-    items: {
-      title: string
-      href: string
-    }[]
-  }[]
-}
 
-export function AdminSidebar({ items }: SidebarProps) {
+export function AdminSidebar({ items }) {
   const pathname = usePathname()
 
   const navigation = [
