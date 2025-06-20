@@ -1,52 +1,52 @@
 import { NextResponse } from "next/server"
-
-// Mock user database - updated to match signup structure
-const users = [
-  {
-    id: 1,
-    fullName: "John Doe",
-    username: "johndoe",
-    email: "user@example.com",
-    phone: "+1234567890",
-    password: "password123",
-    role: "user",
-    name: "John Doe", // Keep for backward compatibility
-  },
-  {
-    id: 2,
-    fullName: "Admin User",
-    username: "admin",
-    email: "admin@example.com",
-    phone: "+1987654321",
-    password: "admin123",
-    role: "admin",
-    name: "Admin User", // Keep for backward compatibility
-  },
-]
+import { UserModel } from "../../../../lib/database.js"
 
 export async function POST(request) {
   try {
     const { email, password } = await request.json()
 
+    if (!email || !password) {
+      return NextResponse.json({ error: "Email and password are required" }, { status: 400 })
+    }
+
     // Find user by email or username
-    const user = users.find(
-      (u) =>
-        (u.email.toLowerCase() === email.toLowerCase() || u.username.toLowerCase() === email.toLowerCase()) &&
-        u.password === password,
-    )
+    const user = await UserModel.findUserByEmailOrUsername(email)
 
     if (!user) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
     }
 
+    // Check if user is active
+    if (user.isActive === false) {
+      return NextResponse.json({ error: "Account is deactivated. Please contact support." }, { status: 401 })
+    }
+
+    // Verify password
+    const isPasswordValid = await UserModel.verifyPassword(password, user.password)
+
+    if (!isPasswordValid) {
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
+    }
+
     // Return user without password
-    const { password: _, ...userWithoutPassword } = user
+    const userResponse = {
+      id: user._id,
+      fullName: user.fullName,
+      username: user.username,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      name: user.fullName, // For backward compatibility
+      emailVerified: user.emailVerified,
+      createdAt: user.createdAt,
+    }
 
     return NextResponse.json({
-      user: userWithoutPassword,
+      user: userResponse,
       message: "Login successful",
     })
   } catch (error) {
-    return NextResponse.json({ error: "Server error" }, { status: 500 })
+    console.error("Login error:", error)
+    return NextResponse.json({ error: "Server error. Please try again." }, { status: 500 })
   }
 }

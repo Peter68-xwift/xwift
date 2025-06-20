@@ -1,72 +1,208 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "../../../contexts/AuthContext"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import MobileHeader from "../../../components/MobileHeader"
-import BottomNavigation from "../../../components/BottomNavigation"
-import { User, Mail, Phone, MapPin, Edit, Save, Camera } from "lucide-react"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../../../contexts/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import MobileHeader from "../../../components/MobileHeader";
+import BottomNavigation from "../../../components/BottomNavigation";
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Edit,
+  Save,
+  Camera,
+  RefreshCw,
+  AlertCircle,
+} from "lucide-react";
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth()
-  const router = useRouter()
-  const [isEditing, setIsEditing] = useState(false)
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const [profileData, setProfileData] = useState({
     name: "",
     email: "",
-    phone: "+1 (555) 123-4567",
-    address: "123 Main St, New York, NY 10001",
-    joinDate: "January 2024",
-  })
+    phone: "",
+    address: "",
+    joinDate: "",
+  });
+
+  const [profileStats, setProfileStats] = useState([
+    { label: "Total Invested", value: "$0.00", icon: "💰" },
+    { label: "Active Packages", value: "0", icon: "📦" },
+    { label: "Referrals", value: "0", icon: "👥" },
+    { label: "Member Since", value: "Recently", icon: "📅" },
+  ]);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== "user")) {
-      router.push("/")
+      router.push("/");
     }
-    if (user) {
-      setProfileData((prev) => ({
-        ...prev,
-        name: user.name,
-        email: user.email,
-      }))
+    if (user && user.role === "user") {
+      fetchProfileData();
     }
-  }, [user, loading, router])
+  }, [user, loading, router]);
 
-  if (loading) {
+  const fetchProfileData = async () => {
+    try {
+      setIsLoading(true);
+      setError("");
+      const userId = user?.id; // ← replace this with the actual ID from auth context or state
+      // const response = await fetch(`/api/user/dashboard?userId=${userId}`);
+
+      const response = await fetch(`/api/user/profile?userId=${userId}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      const data = await response.json();
+      console.log(data)
+
+      if (data.success) {
+        const { user: userData, stats } = data.data;
+
+        setProfileData({
+          name: userData.name,
+          email: userData.email,
+          phone: userData.phone,
+          address: userData.address,
+          joinDate: userData.joinDate,
+        });
+
+        setProfileStats([
+          { label: "Total Invested", value: stats.totalInvested, icon: "💰" },
+          { label: "Active Packages", value: stats.activePackages, icon: "📦" },
+          { label: "Referrals", value: stats.referrals, icon: "👥" },
+          { label: "Member Since", value: stats.memberSince, icon: "📅" },
+        ]);
+      } else {
+        setError(data.error || "Failed to fetch profile data");
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+      setError("Failed to load profile data");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      setError("");
+      setSuccessMessage("");
+      const userId = user?.id;
+      const response = await fetch(`/api/user/profile?userId=${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: profileData.name,
+          email: profileData.email,
+          phone: profileData.phone,
+          address: profileData.address,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setIsEditing(false);
+        setSuccessMessage("Profile updated successfully!");
+        // Clear success message after 3 seconds
+        setTimeout(() => setSuccessMessage(""), 3000);
+      } else {
+        setError(data.error || "Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setError("Failed to update profile");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleRefresh = () => {
+    fetchProfileData();
+  };
+
+  if (loading || isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen bg-gray-50 pb-20">
+        <MobileHeader title="Profile" />
+        <div className="flex items-center justify-center pt-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+        <BottomNavigation />
       </div>
-    )
+    );
   }
 
   if (!user || user.role !== "user") {
-    return null
+    return null;
   }
-
-  const handleSave = () => {
-    // Here you would typically save to your backend
-    setIsEditing(false)
-    // Show success message
-  }
-
-  const profileStats = [
-    { label: "Total Invested", value: "$1,250", icon: "💰" },
-    { label: "Active Packages", value: "3", icon: "📦" },
-    { label: "Referrals", value: "12", icon: "👥" },
-    { label: "Member Since", value: profileData.joinDate, icon: "📅" },
-  ]
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <MobileHeader title="Profile" />
 
       <main className="px-4 py-6 max-w-md mx-auto">
+        {/* Refresh Button */}
+        <div className="flex justify-end mb-4">
+          <Button
+            onClick={handleRefresh}
+            variant="outline"
+            size="sm"
+            disabled={isLoading}
+            className="flex items-center gap-2"
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+            />
+            Refresh
+          </Button>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <Card className="mb-4 border-red-200 bg-red-50">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-2 text-red-600">
+                <AlertCircle className="h-4 w-4" />
+                <p className="text-sm">{error}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Success Message */}
+        {successMessage && (
+          <Card className="mb-4 border-green-200 bg-green-50">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-2 text-green-600">
+                <div className="h-4 w-4 rounded-full bg-green-600 flex items-center justify-center">
+                  <div className="h-2 w-2 bg-white rounded-full"></div>
+                </div>
+                <p className="text-sm">{successMessage}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Profile Header */}
         <Card className="mb-6">
           <CardContent className="pt-6">
@@ -74,27 +210,49 @@ export default function ProfilePage() {
               <div className="relative mb-4">
                 <Avatar className="h-20 w-20">
                   <AvatarFallback className="text-lg bg-blue-100 text-blue-600">
-                    {user.name
+                    {profileData.name
                       .split(" ")
                       .map((n) => n[0])
-                      .join("")}
+                      .join("")
+                      .toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <Button size="sm" className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full p-0" variant="secondary">
+                <Button
+                  size="sm"
+                  className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full p-0"
+                  variant="secondary"
+                >
                   <Camera className="h-4 w-4" />
                 </Button>
               </div>
-              <h2 className="text-xl font-bold text-gray-900">{profileData.name}</h2>
+              <h2 className="text-xl font-bold text-gray-900">
+                {profileData.name}
+              </h2>
               <p className="text-sm text-gray-500">{profileData.email}</p>
-              <Button onClick={() => setIsEditing(!isEditing)} variant="outline" size="sm" className="mt-3">
-                {isEditing ? <Save className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
-                {isEditing ? "Save Changes" : "Edit Profile"}
+              <Button
+                onClick={() => setIsEditing(!isEditing)}
+                variant="outline"
+                size="sm"
+                className="mt-3"
+                disabled={isSaving}
+              >
+                {isEditing ? (
+                  <>
+                    <Save className="h-4 w-4 mr-2" />
+                    {isSaving ? "Saving..." : "Save Changes"}
+                  </>
+                ) : (
+                  <>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit Profile
+                  </>
+                )}
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Profile Stats */}
+        {/* Profile Stats - Real Data */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           {profileStats.map((stat, index) => (
             <Card key={index} className="p-4">
@@ -122,7 +280,9 @@ export default function ProfilePage() {
                 <Input
                   id="name"
                   value={profileData.name}
-                  onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                  onChange={(e) =>
+                    setProfileData({ ...profileData, name: e.target.value })
+                  }
                   disabled={!isEditing}
                   className="pl-10"
                 />
@@ -139,7 +299,9 @@ export default function ProfilePage() {
                   id="email"
                   type="email"
                   value={profileData.email}
-                  onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
+                  onChange={(e) =>
+                    setProfileData({ ...profileData, email: e.target.value })
+                  }
                   disabled={!isEditing}
                   className="pl-10"
                 />
@@ -155,7 +317,9 @@ export default function ProfilePage() {
                 <Input
                   id="phone"
                   value={profileData.phone}
-                  onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
+                  onChange={(e) =>
+                    setProfileData({ ...profileData, phone: e.target.value })
+                  }
                   disabled={!isEditing}
                   className="pl-10"
                 />
@@ -171,7 +335,9 @@ export default function ProfilePage() {
                 <Input
                   id="address"
                   value={profileData.address}
-                  onChange={(e) => setProfileData({ ...profileData, address: e.target.value })}
+                  onChange={(e) =>
+                    setProfileData({ ...profileData, address: e.target.value })
+                  }
                   disabled={!isEditing}
                   className="pl-10"
                 />
@@ -180,11 +346,24 @@ export default function ProfilePage() {
 
             {isEditing && (
               <div className="flex space-x-3 pt-4">
-                <Button onClick={handleSave} className="flex-1">
+                <Button
+                  onClick={handleSave}
+                  className="flex-1"
+                  disabled={isSaving}
+                >
                   <Save className="h-4 w-4 mr-2" />
-                  Save Changes
+                  {isSaving ? "Saving..." : "Save Changes"}
                 </Button>
-                <Button onClick={() => setIsEditing(false)} variant="outline" className="flex-1">
+                <Button
+                  onClick={() => {
+                    setIsEditing(false);
+                    setError("");
+                    setSuccessMessage("");
+                  }}
+                  variant="outline"
+                  className="flex-1"
+                  disabled={isSaving}
+                >
                   Cancel
                 </Button>
               </div>
@@ -207,7 +386,10 @@ export default function ProfilePage() {
             <Button variant="outline" className="w-full justify-start">
               Notification Preferences
             </Button>
-            <Button variant="outline" className="w-full justify-start text-red-600 hover:text-red-700">
+            <Button
+              variant="outline"
+              className="w-full justify-start text-red-600 hover:text-red-700"
+            >
               Delete Account
             </Button>
           </CardContent>
@@ -216,5 +398,5 @@ export default function ProfilePage() {
 
       <BottomNavigation />
     </div>
-  )
+  );
 }
