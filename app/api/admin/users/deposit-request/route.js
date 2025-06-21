@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { connectToDatabase } from "../../../../lib/mongodb";
+import clientPromise from "../../../../../lib/mongodb";
+
 
 export async function POST(request) {
   try {
@@ -11,7 +12,8 @@ export async function POST(request) {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const { db } = await connectToDatabase();
+    const client = await clientPromise; // ✅ correct usage
+    const db = client.db("mern_auth_app"); // ⬅️ use your actual DB name
 
     const user = await db.collection("users").findOne({ _id: decoded.userId });
     if (!user) {

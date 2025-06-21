@@ -3,7 +3,7 @@ import {
   UserModel,
   PackageModel,
   GiftCodeModel,
-} from "../../../../lib/database.js";
+} from "../../../../lib/database";
 
 export async function GET(request) {
   try {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { PackageModel } from "../../../../../lib/database.js";
+import { PackageModel } from "../../../../../lib/database";
 import { ObjectId } from "mongodb";
 
 // GET - Fetch single package

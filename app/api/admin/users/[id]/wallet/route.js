@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { UserModel } from "../../../../../../lib/database.js";
+import { UserModel } from "../../../../../../lib/database";
 import { ObjectId } from "mongodb";
 
 export async function PATCH(request, { params }) {

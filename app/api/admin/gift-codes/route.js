@@ -1,4 +1,4 @@
-import { GiftCodeModel } from "../../../../lib/database.js";
+import { GiftCodeModel } from "../../../../lib/database";
 
 export async function GET(request) {
   try {
