@@ -68,11 +68,11 @@ export default function ProfilePage() {
       });
 
       const data = await response.json();
-      console.log(data)
+      console.log(data);
 
       if (data.success) {
         const { user: userData, stats } = data.data;
-
+        console.log(userData);
         setProfileData({
           name: userData.name,
           email: userData.email,
@@ -248,6 +248,11 @@ export default function ProfilePage() {
                   </>
                 )}
               </Button>
+              <div className=" flex items-center gap-3 mt-3">
+                <p className="text-sm font-medium">Referral Code</p>
+
+                <span className="text-black">1{profileData.address || ""}</span>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -319,24 +324,6 @@ export default function ProfilePage() {
                   value={profileData.phone}
                   onChange={(e) =>
                     setProfileData({ ...profileData, phone: e.target.value })
-                  }
-                  disabled={!isEditing}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="address" className="text-sm font-medium">
-                Address
-              </Label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="address"
-                  value={profileData.address}
-                  onChange={(e) =>
-                    setProfileData({ ...profileData, address: e.target.value })
                   }
                   disabled={!isEditing}
                   className="pl-10"

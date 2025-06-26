@@ -6,21 +6,21 @@ import { ObjectId } from "mongodb";
 
 export async function PATCH(request, { params }) {
   try {
-    const token = request.headers.get("authorization")?.replace("Bearer ", "");
-
-    if (!token) {
-      return NextResponse.json({ error: "No token provided" }, { status: 401 });
-    }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     const client = await clientPromise; // ✅ correct usage
     const db = client.db("mern_auth_app"); // ⬅️ use your actual DB name
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
 
-    const admin = await db.collection("users").findOne({ _id: decoded.userId });
-    if (!admin || admin.role !== "admin") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    if (!userId) {
+      return NextResponse.json({ error: "Missing user ID" }, { status: 400 });
     }
+
+     const admin = await db
+          .collection("users")
+          .findOne({ _id: new ObjectId(userId) });
+        if (!admin || admin.role !== "admin") {
+          return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+        }
 
     const { action, adminNotes } = await request.json();
     const requestId = params.id;

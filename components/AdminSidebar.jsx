@@ -20,6 +20,8 @@ import {
   FileText,
   Gift,
   DollarSign,
+  CreditCard,
+  Banknote,
 } from "lucide-react";
 
 export default function AdminSidebar({ children }) {
@@ -64,6 +66,17 @@ export default function AdminSidebar({ children }) {
       href: "/admin-dashboard/deposits",
       icon: DollarSign,
       current: pathname === "/admin-dashboard/deposits",
+    },
+    {
+      name: "Withdrawals",
+      href: "/admin-dashboard/withdrawals",
+      icon: DollarSign,
+      current: pathname === "/admin-dashboard/withdrawals",
+    },
+    {
+      name: "Subscriptions",
+      href: "/admin-dashboard/subscriptions",
+      icon: CreditCard,
     },
     {
       name: "Gift Codes",

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
 import { UserModel } from "../../../../lib/database";
+import { ObjectId } from "mongodb";
+import clientPromise from "../../../../lib/mongodb";
 
 export async function GET(request) {
   try {
@@ -17,7 +18,6 @@ export async function GET(request) {
     if (!user || user.role !== "user") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
 
     // Calculate wallet statistics
     const walletHistory = user.walletHistory || [];
@@ -83,20 +83,19 @@ export async function GET(request) {
   }
 }
 
+
+
 export async function POST(request) {
   try {
-    // Get token from Authorization header
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return NextResponse.json({ error: "No token provided" }, { status: 401 });
-    }
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
 
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!userId) {
+      return NextResponse.json({ error: "Missing user ID" }, { status: 400 });
+    }
 
     const { type, amount, description } = await request.json();
 
-    // Validate input
     if (!type || !amount || !description) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -111,36 +110,107 @@ export async function POST(request) {
       );
     }
 
-    // Get user from database
-    const user = await UserModel.findUserById(decoded.userId);
+    const user = await UserModel.findUserById(userId);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // For withdrawals, check if user has sufficient balance
-    if (
-      type === "withdrawal" &&
-      (user.wallet?.availableBalance || 0) < amount
-    ) {
-      return NextResponse.json(
-        { error: "Insufficient balance" },
-        { status: 400 }
+    const client = await clientPromise;
+    const db = client.db("mern_auth_app");
+
+    // Withdrawal logic
+    if (type === "withdrawal") {
+      const now = new Date();
+      const day = now.getDay(); // 0 = Sunday, 6 = Saturday
+      const hour = now.getHours();
+
+      if (day === 0 || day === 6 || hour < 9 || hour >= 16) {
+        return NextResponse.json(
+          {
+            error:
+              "Withdrawals are only permitted Monday to Friday between 9:00 AM and 4:00 PM.",
+          },
+          { status: 403 }
+        );
+      }
+
+      const available = user.wallet?.availableBalance || 0;
+      if (available < amount) {
+        return NextResponse.json(
+          { error: "Insufficient available balance" },
+          { status: 400 }
+        );
+      }
+
+      // Create withdrawal request document
+      const withdrawalRequest = {
+        _id: new ObjectId(),
+        userId: new ObjectId(userId),
+        fullName: user.fullName,
+        username: user.username,
+        amount,
+        description,
+        status: "pending",
+        type: "withdrawal",
+        createdAt: new Date(),
+      };
+
+      // Insert to withdrawalRequests collection
+      await db.collection("withdrawalRequests").insertOne(withdrawalRequest);
+
+      // Also log it to user's wallet history (as pending)
+      const logResult = await db.collection("users").updateOne(
+        { _id: new ObjectId(userId) },
+        {
+          $push: {
+            walletHistory: {
+              id: new ObjectId(), // or use withdrawalRequest._id
+              type: "withdrawal",
+              amount: -amount,
+              description,
+              status: "pending",
+              timestamp: new Date(),
+            },
+          },
+        }
       );
+      
+
+      if (!logResult || logResult.modifiedCount === 0) {
+        return NextResponse.json(
+          { error: "Failed to log wallet transaction" },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: "Withdrawal request submitted and is pending admin approval.",
+      });
     }
 
-    // Update wallet based on transaction type
-    const transactionAmount = type === "withdrawal" ? -amount : amount;
-
-    const result = await UserModel.updateUserWallet(
-      decoded.userId,
-      transactionAmount,
+    // Other transactions (e.g. deposits)
+    const transaction = {
+      _id: new ObjectId(),
+      userId: new ObjectId(userId),
       type,
-      description
-    );
+      amount,
+      description,
+      status: "completed",
+      createdAt: new Date(),
+    };
 
-    if (result.modifiedCount === 0) {
+    const newBalance = (user.wallet?.balance || 0) + amount;
+
+    const updateResult = await UserModel.updateUserWalletBalance(userId, {
+      balance: newBalance,
+      availableBalance: newBalance,
+      transaction,
+    });
+
+    if (!updateResult || updateResult.modifiedCount === 0) {
       return NextResponse.json(
-        { error: "Failed to update wallet" },
+        { error: "Failed to process transaction" },
         { status: 500 }
       );
     }
@@ -157,3 +227,4 @@ export async function POST(request) {
     );
   }
 }
+

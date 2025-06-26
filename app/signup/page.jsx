@@ -8,7 +8,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, Eye, EyeOff, Check, X, User, Mail, Phone, Lock } from "lucide-react"
+import {
+  Loader2,
+  Eye,
+  EyeOff,
+  Check,
+  X,
+  User,
+  Mail,
+  Phone,
+  Lock,
+  Link2,
+} from "lucide-react";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -18,7 +29,8 @@ export default function SignUpPage() {
     phone: "",
     password: "",
     confirmPassword: "",
-  })
+    referrerCode: "",
+  });
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -143,9 +155,10 @@ export default function SignUpPage() {
           username: formData.username.trim(),
           email: formData.email.trim(),
           phone: formData.phone.trim(),
+          referrerCode: formData.referrerCode,
           password: formData.password,
         }),
-      })
+      });
 
       const data = await response.json()
 
@@ -180,7 +193,9 @@ export default function SignUpPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-          <CardDescription>Sign up to get started with your investment journey</CardDescription>
+          <CardDescription>
+            Sign up to get started with your investment journey
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -199,7 +214,9 @@ export default function SignUpPage() {
                   className={`pl-10 ${errors.fullName ? "border-red-500" : ""}`}
                 />
               </div>
-              {errors.fullName && <p className="text-sm text-red-600">{errors.fullName}</p>}
+              {errors.fullName && (
+                <p className="text-sm text-red-600">{errors.fullName}</p>
+              )}
             </div>
 
             {/* Username */}
@@ -214,13 +231,27 @@ export default function SignUpPage() {
                   value={formData.username}
                   onChange={handleInputChange}
                   placeholder="Choose a unique username"
-                  className={`pl-10 pr-10 ${errors.username ? "border-red-500" : usernameStatus.available === true ? "border-green-500" : ""}`}
+                  className={`pl-10 pr-10 ${
+                    errors.username
+                      ? "border-red-500"
+                      : usernameStatus.available === true
+                      ? "border-green-500"
+                      : ""
+                  }`}
                 />
-                <div className="absolute right-3 top-3">{getUsernameStatusIcon()}</div>
+                <div className="absolute right-3 top-3">
+                  {getUsernameStatusIcon()}
+                </div>
               </div>
-              {errors.username && <p className="text-sm text-red-600">{errors.username}</p>}
+              {errors.username && (
+                <p className="text-sm text-red-600">{errors.username}</p>
+              )}
               {usernameStatus.message && !errors.username && (
-                <p className={`text-sm ${usernameStatus.available ? "text-green-600" : "text-red-600"}`}>
+                <p
+                  className={`text-sm ${
+                    usernameStatus.available ? "text-green-600" : "text-red-600"
+                  }`}
+                >
                   {usernameStatus.message}
                 </p>
               )}
@@ -241,7 +272,9 @@ export default function SignUpPage() {
                   className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
                 />
               </div>
-              {errors.email && <p className="text-sm text-red-600">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
 
             {/* Phone Number */}
@@ -259,7 +292,9 @@ export default function SignUpPage() {
                   className={`pl-10 ${errors.phone ? "border-red-500" : ""}`}
                 />
               </div>
-              {errors.phone && <p className="text-sm text-red-600">{errors.phone}</p>}
+              {errors.phone && (
+                <p className="text-sm text-red-600">{errors.phone}</p>
+              )}
             </div>
 
             {/* Password */}
@@ -274,17 +309,25 @@ export default function SignUpPage() {
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Create a password"
-                  className={`pl-10 pr-10 ${errors.password ? "border-red-500" : ""}`}
+                  className={`pl-10 pr-10 ${
+                    errors.password ? "border-red-500" : ""
+                  }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
-              {errors.password && <p className="text-sm text-red-600">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-sm text-red-600">{errors.password}</p>
+              )}
             </div>
 
             {/* Confirm Password */}
@@ -299,17 +342,47 @@ export default function SignUpPage() {
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
                   placeholder="Confirm your password"
-                  className={`pl-10 pr-10 ${errors.confirmPassword ? "border-red-500" : ""}`}
+                  className={`pl-10 pr-10 ${
+                    errors.confirmPassword ? "border-red-500" : ""
+                  }`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                 >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </button>
               </div>
-              {errors.confirmPassword && <p className="text-sm text-red-600">{errors.confirmPassword}</p>}
+              {errors.confirmPassword && (
+                <p className="text-sm text-red-600">{errors.confirmPassword}</p>
+              )}
+            </div>
+
+            {/* referrerCode */}
+            <div className="space-y-2">
+              <Label htmlFor="phone">Referrer Code</Label>
+              <div className="relative">
+                <Link2 className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Input
+                  id="referrerCode"
+                  name="referrerCode"
+                  type="text"
+                  value={formData.referrerCode}
+                  onChange={handleInputChange}
+                  placeholder="Enter your Referrer Code"
+                  className={`pl-10 ${
+                    errors.referrerCode ? "border-red-500" : ""
+                  }`}
+                />
+              </div>
+              {errors.referrerCode && (
+                <p className="text-sm text-red-600">{errors.referrerCode}</p>
+              )}
             </div>
 
             {errors.submit && (
@@ -318,7 +391,11 @@ export default function SignUpPage() {
               </Alert>
             )}
 
-            <Button type="submit" className="w-full" disabled={loading || !usernameStatus.available}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading || !usernameStatus.available}
+            >
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create Account
             </Button>
@@ -327,7 +404,10 @@ export default function SignUpPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
-              <Link href="/" className="font-medium text-blue-600 hover:text-blue-500">
+              <Link
+                href="/"
+                className="font-medium text-blue-600 hover:text-blue-500"
+              >
                 Sign in here
               </Link>
             </p>
@@ -335,5 +415,5 @@ export default function SignUpPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

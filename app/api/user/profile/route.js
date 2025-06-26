@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { UserModel } from "../../../../lib/database";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+
 
 export async function GET(request) {
   try {
@@ -38,8 +37,8 @@ export async function GET(request) {
         name: user.fullName || user.name,
         email: user.email,
         username: user.username,
-        phone: user.phoneNumber || "+1 (555) 123-4567",
-        address: user.address || "Not provided",
+        phone: user.phone || "+1 (555) 123-4567",
+        address: user.referralCode || "Not provided",
         joinDate: memberSince,
         createdAt: user.createdAt,
       },

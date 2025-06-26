@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, usePathname } from "next/navigation"
-import { Home, Package, User, Wallet } from "lucide-react"
+import { Home, Package, User, Wallet, CreditCard } from "lucide-react";
 
 export default function BottomNavigation() {
   const router = useRouter()
@@ -21,6 +21,12 @@ export default function BottomNavigation() {
       active: pathname === "/user-dashboard/packages",
     },
     {
+      name: "Subscriptions",
+      path: "/user-dashboard/subscriptions",
+      icon: CreditCard,
+      active: pathname === "/user-dashboard/subscriptions",
+    },
+    {
       name: "Profile",
       icon: User,
       path: "/user-dashboard/profile",
@@ -32,7 +38,7 @@ export default function BottomNavigation() {
       path: "/user-dashboard/wallet",
       active: pathname === "/user-dashboard/wallet",
     },
-  ]
+  ];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-2 z-50">

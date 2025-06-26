@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { UserModel, PackageModel } from "../../../../lib/database";
-
+import clientPromise from "../../../../lib/mongodb";
+import { ObjectId } from "mongodb";
 
 export async function GET(request) {
   try {
+    const client = await clientPromise;
+    const db = client.db("mern_auth_app");
+
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
@@ -11,7 +15,15 @@ export async function GET(request) {
       return NextResponse.json({ error: "Missing user ID" }, { status: 400 });
     }
 
-    const user = await UserModel.findUserById(userId);
+    const user = await db
+      .collection("users")
+      .findOne({ _id: new ObjectId(userId) });
+    
+      const myPacks = await db
+        .collection("purchaseRequests")
+        .find({ userId: new ObjectId(userId), status: "active" }) // optional filter
+        .toArray();
+    
 
     if (!user || user.role !== "user") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -35,15 +47,16 @@ export async function GET(request) {
       }));
 
     // Get user's packages (mock data for now - you can implement user investments later)
-    const userPackages = user.investments || [];
+    const userPackages = user?.wallet?.history || [];
+    const totalInvested = user?.wallet?.totalInvested || 0;
 
-    const myPackages = userPackages
+    const myPackages = myPacks
       .map((investment) => {
         const pkg = allPackages.find(
-          (p) => p._id.toString() === investment.packageId
+          (p) => p._id?.toString() === investment.packageId?.toString()
         );
         if (!pkg) return null;
-
+        // console.log(pkg)
         const startDate = new Date(investment.startDate);
         const endDate = new Date(
           startDate.getTime() + pkg.duration * 24 * 60 * 60 * 1000
@@ -73,13 +86,15 @@ export async function GET(request) {
         };
       })
       .filter(Boolean);
+    // console.log(myPackages);
 
     return NextResponse.json({
       success: true,
       data: {
         availablePackages,
         myPackages,
-        totalInvested: userPackages.reduce((sum, inv) => sum + inv.amount, 0),
+        myPacks,
+        totalInvested,
         activeInvestments: myPackages.filter((pkg) => pkg.status === "Active")
           .length,
       },

@@ -409,8 +409,8 @@ export default function AdminAnalytics() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {analytics.topPerformingPackages.length > 0 ? (
-                  analytics.topPerformingPackages.map((pkg, index) => (
+                {analytics.topPerformingPackages?.length > 0 ? (
+                  analytics.topPerformingPackages?.map((pkg, index) => (
                     <div
                       key={index}
                       className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg"

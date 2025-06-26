@@ -20,10 +20,10 @@ import {
   Loader2,
 } from "lucide-react";
 
-export default function AdminDepositsPage() {
+export default function AdminwithdrawalsPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [depositRequests, setDepositRequests] = useState([]);
+  const [withdrawalRequests, setwithdrawalRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,45 +40,45 @@ export default function AdminDepositsPage() {
     if (!loading && (!user || user.role !== "admin")) {
       router.push("/");
     } else if (user && user.role === "admin") {
-      fetchDepositRequests();
+      fetchwithdrawalRequests();
     }
   }, [user, loading, router]);
 
-  const fetchDepositRequests = async () => {
+  const fetchwithdrawalRequests = async () => {
     try {
       setIsLoading(true);
       const userId = user?.id;
 
-      const response = await fetch(
-        `/api/admin/deposit-requests?userId=${userId}`,
-        {}
-      );
+        const response = await fetch(
+            `/api/admin/Withdrawals-request?userId=${userId}`,
+            {}
+        );
 
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          setDepositRequests(data.depositRequests);
+          setwithdrawalRequests(data.withdrawalRequests);
           setStats(data.stats);
         } else {
-          console.error("Failed to fetch deposit requests:", data.error);
+          console.error("Failed to fetch withdrawal requests:", data.error);
         }
       } else {
-        console.error("Failed to fetch deposit requests");
+        console.error("Failed to fetch withdrawal requests");
       }
     } catch (error) {
-      console.error("Error fetching deposit requests:", error);
+      console.error("Error fetching withdrawal requests:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const processDepositRequest = async (requestId, action) => {
+  const processwithdrawalRequest = async (requestId, action) => {
     setIsProcessing(true);
     try {
       const userId = user?.id;
       console.log(user)
       const response = await fetch(
-        `/api/admin/deposit-requests/${requestId}?userId=${userId}`,
+        `/api/admin/Withdrawals-request/${requestId}?userId=${userId}`,
         {
           method: "PATCH",
           headers: {
@@ -94,16 +94,16 @@ export default function AdminDepositsPage() {
       const data = await response.json();
 
       if (data.success) {
-        alert(`Deposit request ${action}d successfully!`);
+        alert(`withdrawal request ${action}d successfully!`);
         setSelectedRequest(null);
         setAdminNotes("");
-        fetchDepositRequests();
+        fetchwithdrawalRequests();
       } else {
-        alert(data.error || `Failed to ${action} deposit request`);
+        alert(data.error || `Failed to ${action} withdrawal request`);
       }
     } catch (error) {
-      console.error(`Error ${action}ing deposit request:`, error);
-      alert(`Failed to ${action} deposit request`);
+      console.error(`Error ${action}ing withdrawal request:`, error);
+      alert(`Failed to ${action} withdrawal request`);
     } finally {
       setIsProcessing(false);
     }
@@ -139,7 +139,7 @@ export default function AdminDepositsPage() {
     return (
       <div className="flex min-h-screen bg-gray-50">
         <AdminSidebar />
-        <main className="flex-1 p-6 ">
+        <main className="flex-1 p-6">
           <div className="flex items-center justify-center h-64">
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
@@ -160,10 +160,10 @@ export default function AdminDepositsPage() {
         <div className="max-w-7xl mx-auto">
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-gray-900">
-              Deposit Requests
+              withdrawal Requests
             </h1>
             <p className="text-gray-600">
-              Manage user deposit requests and verifications
+              Manage user withdrawal requests and verifications
             </p>
           </div>
 
@@ -239,16 +239,16 @@ export default function AdminDepositsPage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Deposit Requests List */}
+            {/* withdrawal Requests List */}
             <Card>
               <CardHeader>
                 <CardTitle>
-                  Deposit Requests ({depositRequests.length})
+                  withdrawal Requests ({withdrawalRequests.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {depositRequests.map((request) => (
+                  {withdrawalRequests.map((request) => (
                     <div
                       key={request._id}
                       className={`p-4 border rounded-lg cursor-pointer transition-colors ${
@@ -286,10 +286,10 @@ export default function AdminDepositsPage() {
                     </div>
                   ))}
 
-                  {depositRequests.length === 0 && (
+                  {withdrawalRequests.length === 0 && (
                     <div className="text-center py-8 text-gray-500">
                       <DollarSign className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                      <p>No deposit requests found</p>
+                      <p>No withdrawal requests found</p>
                     </div>
                   )}
                 </div>
@@ -347,16 +347,7 @@ export default function AdminDepositsPage() {
                       </div>
                     </div>
 
-                    <div>
-                      <Label className="text-sm font-medium text-gray-600">
-                        Transaction Message
-                      </Label>
-                      <div className="mt-1 p-3 bg-gray-50 rounded-lg border">
-                        <p className="text-sm whitespace-pre-wrap">
-                          {selectedRequest.transactionMessage}
-                        </p>
-                      </div>
-                    </div>
+                 
 
                     <div>
                       <Label className="text-sm font-medium text-gray-600">
@@ -375,7 +366,7 @@ export default function AdminDepositsPage() {
                           </Label>
                           <Textarea
                             id="admin-notes"
-                            placeholder="Add notes about this deposit request..."
+                            placeholder="Add notes about this withdrawal request..."
                             value={adminNotes}
                             onChange={(e) => setAdminNotes(e.target.value)}
                             rows={3}
@@ -385,7 +376,7 @@ export default function AdminDepositsPage() {
                         <div className="flex space-x-3">
                           <Button
                             onClick={() =>
-                              processDepositRequest(
+                              processwithdrawalRequest(
                                 selectedRequest._id,
                                 "approve"
                               )
@@ -401,13 +392,13 @@ export default function AdminDepositsPage() {
                             ) : (
                               <div className="flex items-center space-x-2">
                                 <CheckCircle className="h-4 w-4" />
-                                <span>Approve & Add to Wallet</span>
+                                <span>Approve</span>
                               </div>
                             )}
                           </Button>
                           <Button
                             onClick={() =>
-                              processDepositRequest(
+                              processwithdrawalRequest(
                                 selectedRequest._id,
                                 "reject"
                               )
@@ -466,7 +457,7 @@ export default function AdminDepositsPage() {
                 ) : (
                   <div className="text-center py-8 text-gray-500">
                     <Eye className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <p>Select a deposit request to view details</p>
+                    <p>Select a withdrawal request to view details</p>
                   </div>
                 )}
               </CardContent>

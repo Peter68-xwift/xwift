@@ -21,13 +21,11 @@ export default function PackagesPage() {
   const fetchPackagesData = async () => {
     try {
       setIsLoading(true);
-      const userId = user.id
+      const userId = user?.id;
+
       const response = await fetch(`/api/user/packages?userId=${userId}`);
       const result = await response.json();
-
-      // const userId = user?.id; // ← replace this with the actual ID from auth context or state
-      // const response = await fetch(`/api/user/dashboard?userId=${userId}`);
-
+      console.log(result.data)
       if (result.success) {
         setPackagesData(result.data);
         setError(null);
@@ -190,6 +188,11 @@ export default function PackagesPage() {
                     <Button
                       className="w-full"
                       variant={pkg.popular ? "default" : "outline"}
+                      onClick={() =>
+                        router.push(
+                          `/user-dashboard/checkout?packageId=${pkg.id}`
+                        )
+                      }
                     >
                       Purchase Package
                     </Button>

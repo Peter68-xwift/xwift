@@ -44,11 +44,11 @@ export default function DepositPage() {
 
   const fetchDepositRequests = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/api/user/deposit-request", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const userId = user?.id;
+
+      
+      const response = await fetch(`/api/user/deposit-request?userId=${userId}`, {
+       
       });
 
       if (response.ok) {
@@ -72,12 +72,14 @@ export default function DepositPage() {
 
     setIsSubmitting(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("/api/user/deposit-request", {
+      const userId = user?.id;
+
+      
+      const response = await fetch(`/api/user/deposit-request?userId=${userId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+         
         },
         body: JSON.stringify(formData),
       });

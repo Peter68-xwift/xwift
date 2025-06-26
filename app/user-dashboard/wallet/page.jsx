@@ -86,12 +86,13 @@ export default function WalletPage() {
 
     try {
       setProcessing(true);
-      const token = localStorage.getItem("token");
+      const userId = user?.id;
 
-      const response = await fetch("/api/user/wallet", {
+
+      const response = await fetch(`/api/user/wallet?userId=${userId}`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
