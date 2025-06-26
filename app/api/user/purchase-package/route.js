@@ -191,8 +191,8 @@ export async function POST(request) {
         roi: packageData.roi,
       },
       paymentInstructions: {
-        businessNumber: "123456",
-        businessName: "InvestApp Ltd",
+        businessNumber: "0795486102",
+        businessName: "Cosmas Kipyegon",
         amount: packageData.price,
         reference: result.insertedId.toString().slice(-8).toUpperCase(),
       },

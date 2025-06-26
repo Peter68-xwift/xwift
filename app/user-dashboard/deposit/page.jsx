@@ -218,11 +218,13 @@ export default function DepositPage() {
                         Business Number:
                       </span>
                       <div className="flex items-center space-x-2">
-                        <span className="font-bold text-green-900">123456</span>
+                        <span className="font-bold text-green-900">
+                          0795486102
+                        </span>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => copyToClipboard("123456")}
+                          onClick={() => copyToClipboard("0795486102")}
                           className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
                         >
                           <Copy className="h-3 w-3" />
@@ -235,12 +237,12 @@ export default function DepositPage() {
                       </span>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-green-900">
-                          InvestApp Ltd
+                          Cosmas Kipyegon
                         </span>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => copyToClipboard("InvestApp Ltd")}
+                          onClick={() => copyToClipboard("Cosmas Kipyegon")}
                           className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
                         >
                           <Copy className="h-3 w-3" />

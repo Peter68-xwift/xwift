@@ -153,8 +153,9 @@ export default function AdminwithdrawalsPage() {
   }
 
   return (
+      <AdminSidebar>
+      
     <div className="flex min-h-screen bg-gray-50">
-      <AdminSidebar />
 
       <main className="flex-1 p-6 ">
         <div className="max-w-7xl mx-auto">
@@ -464,5 +465,6 @@ export default function AdminwithdrawalsPage() {
         </div>
       </main>
     </div>
+      </AdminSidebar>
   );
 }

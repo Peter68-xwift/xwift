@@ -339,7 +339,7 @@ export default function CheckoutPage() {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-green-800">
-                        Business Number:
+                        Mpesa Number:
                       </span>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-green-900">
@@ -361,7 +361,7 @@ export default function CheckoutPage() {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-green-800">
-                        Business Name:
+                        Mpesa Name:
                       </span>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-green-900">

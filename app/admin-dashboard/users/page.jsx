@@ -126,6 +126,7 @@ export default function UserManagement() {
 
       if (data.success) {
         setUsers(data.data.users);
+        console.log(data.data);
         setTotalUsers(data.data.total);
         setTotalPages(data.data.totalPages);
       } else {
@@ -644,7 +645,7 @@ export default function UserManagement() {
                       <TableHead>Role</TableHead>
                       <TableHead>Wallet Balance</TableHead>
                       <TableHead>Join Date</TableHead>
-                      <TableHead>Last Login</TableHead>
+                      <TableHead>Refered By</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -679,11 +680,7 @@ export default function UserManagement() {
                           {new Date(user.createdAt).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
-                          {user.stats?.lastLogin
-                            ? new Date(
-                                user.stats.lastLogin
-                              ).toLocaleDateString()
-                            : "Never"}
+                          {user.referrer?.username || "none"}
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>

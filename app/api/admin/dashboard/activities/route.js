@@ -60,7 +60,7 @@ export async function GET() {
           type: latestTransaction.type === "credit" ? "deposit" : "withdrawal",
           message: `${user.fullName} ${
             latestTransaction.type === "credit" ? "deposited" : "withdrew"
-          } $${latestTransaction.amount}`,
+          } Ksh${latestTransaction.amount}`,
           time: getTimeAgo(latestTransaction.timestamp),
           timestamp: latestTransaction.timestamp,
         });

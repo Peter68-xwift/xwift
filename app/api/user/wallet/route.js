@@ -83,6 +83,11 @@ export async function GET(request) {
   }
 }
 
+import { NextResponse } from "next/server";
+import { ObjectId } from "mongodb";
+import { UserModel } from "../../../../lib/database";
+import clientPromise from "../../../../lib/mongodb";
+
 export async function POST(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -116,7 +121,7 @@ export async function POST(request) {
     const client = await clientPromise;
     const db = client.db("mern_auth_app");
 
-    // Withdrawal logic
+    // Handle withdrawal
     if (type === "withdrawal") {
       const now = new Date();
       const day = now.getDay(); // 0 = Sunday, 6 = Saturday
@@ -132,6 +137,24 @@ export async function POST(request) {
         );
       }
 
+      // 🛑 One withdrawal per day check
+      const startOfDay = new Date(now);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const existingWithdrawal = await db
+        .collection("withdrawalRequests")
+        .findOne({
+          userId: new ObjectId(userId),
+          createdAt: { $gte: startOfDay },
+        });
+
+      if (existingWithdrawal) {
+        return NextResponse.json(
+          { error: "You have already made a withdrawal request today." },
+          { status: 403 }
+        );
+      }
+
       const available = user.wallet?.availableBalance || 0;
       if (available < amount) {
         return NextResponse.json(
@@ -140,7 +163,7 @@ export async function POST(request) {
         );
       }
 
-      // Create withdrawal request document
+      // Create withdrawal request
       const withdrawalRequest = {
         _id: new ObjectId(),
         userId: new ObjectId(userId),
@@ -153,16 +176,14 @@ export async function POST(request) {
         createdAt: new Date(),
       };
 
-      // Insert to withdrawalRequests collection
       await db.collection("withdrawalRequests").insertOne(withdrawalRequest);
 
-      // Also log it to user's wallet history (as pending)
       const logResult = await db.collection("users").updateOne(
         { _id: new ObjectId(userId) },
         {
           $push: {
             walletHistory: {
-              id: new ObjectId(), // or use withdrawalRequest._id
+              id: new ObjectId(),
               type: "withdrawal",
               amount: -amount,
               description,
@@ -186,7 +207,7 @@ export async function POST(request) {
       });
     }
 
-    // Other transactions (e.g. deposits)
+    // Handle deposit or other types
     const transaction = {
       _id: new ObjectId(),
       userId: new ObjectId(userId),
@@ -224,3 +245,4 @@ export async function POST(request) {
     );
   }
 }
+
