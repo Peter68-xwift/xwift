@@ -153,7 +153,7 @@ export default function ProfilePage() {
 
   if (loading || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 pb-20">
+      <div className="min-h-screen bg-blue-300 pb-20">
         <MobileHeader title="Profile" />
         <div className="flex items-center justify-center pt-20">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>

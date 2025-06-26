@@ -370,7 +370,7 @@ export default function UserManagement() {
 
   return (
     <AdminSidebar>
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 bg-blue-300">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>

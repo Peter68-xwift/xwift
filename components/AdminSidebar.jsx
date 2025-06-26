@@ -110,7 +110,7 @@ export default function AdminSidebar({ children }) {
   };
 
   const SidebarContent = () => (
-    <div className="flex h-full flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
+    <div className="flex h-full flex-col bg-blue-200 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
       {/* Logo/Header */}
       <div className="flex h-16 items-center justify-center border-b border-gray-200 dark:border-gray-700 px-4">
         <div className="flex items-center space-x-2">

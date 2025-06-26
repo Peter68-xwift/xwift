@@ -65,7 +65,7 @@ export default function GiftCodeRedemption() {
   };
 
   return (
-    <Card className="mb-6">
+    <Card className="mb-6 bg-blue-200">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
           <Gift className="h-4 w-4 text-purple-600" />

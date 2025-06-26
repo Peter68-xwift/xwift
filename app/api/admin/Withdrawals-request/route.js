@@ -28,7 +28,7 @@ export async function GET(request) {
       .find()
       .sort({ createdAt: -1 }) // newest first
       .toArray();
-console.log(withdrawalRequests);
+// console.log(withdrawalRequests);
     // Compute statistics
     const stats = {
       total: withdrawalRequests.length,

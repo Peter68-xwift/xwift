@@ -155,7 +155,7 @@ export default function AdminReports() {
     switch (selectedReport) {
       case "financial":
         return (
-          <div className="space-y-6">
+          <div className="space-y-6 bg-blue-300">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {financialData.map((item, index) => (
                 <Card key={index}>
@@ -186,7 +186,7 @@ export default function AdminReports() {
 
       case "users":
         return (
-          <div className="space-y-6">
+          <div className="space-y-6 bg-blue-300">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {userData.map((item, index) => (
                 <Card key={index}>
@@ -254,7 +254,7 @@ export default function AdminReports() {
       default:
         return (
           <Card>
-            <CardContent className="p-8 text-center">
+            <CardContent className="p-8 text-center ">
               <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                 Activity Report
@@ -270,7 +270,7 @@ export default function AdminReports() {
 
   return (
     <AdminSidebar>
-      <div className="p-6 space-y-6">
+      <div className="p-6 space-y-6 bg-blue-300">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>

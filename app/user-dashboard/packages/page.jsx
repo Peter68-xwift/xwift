@@ -87,7 +87,7 @@ export default function PackagesPage() {
   const myPackages = packagesData?.myPackages || [];
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-blue-300 pb-20">
       <MobileHeader title="Packages" />
 
       <main className="px-4 py-6 max-w-md mx-auto">

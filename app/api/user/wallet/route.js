@@ -164,6 +164,7 @@ export async function POST(request) {
         userId: new ObjectId(userId),
         fullName: user.fullName,
         username: user.username,
+        phoneNumber: user.phone,
         amount,
         description,
         status: "pending",

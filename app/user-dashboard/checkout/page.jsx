@@ -178,7 +178,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-blue-300 pb-20">
       <MobileHeader
         title="Checkout"
         showBack={true}

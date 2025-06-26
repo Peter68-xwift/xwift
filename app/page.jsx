@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, CheckCircle } from "lucide-react"
+import Image from "next/image"
+import logo from '@/public/logo.png'
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -60,6 +62,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
+          <Image src={logo} alt="Company logo" className="w-[40%] mx-auto mb-5" />
           <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
           <CardDescription>Sign in to your account</CardDescription>
         </CardHeader>
@@ -114,18 +117,6 @@ export default function LoginPage() {
                 Create one here
               </Link>
             </p>
-          </div>
-
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm font-medium mb-2">Demo Credentials:</p>
-            <div className="text-xs space-y-1">
-              <p>
-                <strong>User:</strong> user@example.com / password123
-              </p>
-              <p>
-                <strong>Admin:</strong> admin@example.com / admin123
-              </p>
-            </div>
           </div>
         </CardContent>
       </Card>

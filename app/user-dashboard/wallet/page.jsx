@@ -190,7 +190,7 @@ export default function WalletPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-blue-300 pb-20">
       <MobileHeader title="Wallet" />
 
       <main className="px-4 py-6 max-w-md mx-auto">
@@ -393,15 +393,7 @@ export default function WalletPage() {
                   max={walletData.availableBalance}
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="bank-account">Bank Account</Label>
-                <Input
-                  id="bank-account"
-                  placeholder="Select bank account"
-                  value={`${user.phoneNumber || "****1234"} - M-Pesa`}
-                  disabled
-                />
-              </div>
+
               <Button
                 className="w-full"
                 onClick={handleWithdrawal}

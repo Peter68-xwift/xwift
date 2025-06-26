@@ -15,7 +15,7 @@ export default function MobileHeader({ title }) {
   }
 
   return (
-    <header className="bg-white shadow-sm border-b sticky top-0 z-40">
+    <header className="bg-blue-200 shadow-sm border-b sticky top-0 z-40">
       <div className="px-4 py-3">
         <div className="flex justify-between items-center">
           <div>
@@ -26,12 +26,17 @@ export default function MobileHeader({ title }) {
             <Button variant="ghost" size="sm" className="p-2">
               <Bell className="h-4 w-4" />
             </Button>
-            <Button onClick={handleLogout} variant="ghost" size="sm" className="p-2">
+            <Button
+              onClick={handleLogout}
+              variant="ghost"
+              size="sm"
+              className="p-2"
+            >
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </div>
     </header>
-  )
+  );
 }

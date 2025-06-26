@@ -153,318 +153,316 @@ export default function AdminwithdrawalsPage() {
   }
 
   return (
-      <AdminSidebar>
-      
-    <div className="flex min-h-screen bg-gray-50">
+    <AdminSidebar>
+      <div className="flex min-h-screen bg-blue-300">
+        <main className="flex-1 p-6 ">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-6">
+              <h1 className="text-2xl font-bold text-gray-900">
+                withdrawal Requests
+              </h1>
+              <p className="text-gray-600">
+                Manage user withdrawal requests and verifications
+              </p>
+            </div>
 
-      <main className="flex-1 p-6 ">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              withdrawal Requests
-            </h1>
-            <p className="text-gray-600">
-              Manage user withdrawal requests and verifications
-            </p>
-          </div>
-
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Total Requests</p>
-                    <p className="text-2xl font-bold">{stats.total}</p>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-6">
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">Total Requests</p>
+                      <p className="text-2xl font-bold">{stats.total}</p>
+                    </div>
+                    <Users className="h-8 w-8 text-blue-600" />
                   </div>
-                  <Users className="h-8 w-8 text-blue-600" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Pending</p>
-                    <p className="text-2xl font-bold text-yellow-600">
-                      {stats.pending}
-                    </p>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">Pending</p>
+                      <p className="text-2xl font-bold text-yellow-600">
+                        {stats.pending}
+                      </p>
+                    </div>
+                    <Clock className="h-8 w-8 text-yellow-600" />
                   </div>
-                  <Clock className="h-8 w-8 text-yellow-600" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Approved</p>
-                    <p className="text-2xl font-bold text-green-600">
-                      {stats.approved}
-                    </p>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">Approved</p>
+                      <p className="text-2xl font-bold text-green-600">
+                        {stats.approved}
+                      </p>
+                    </div>
+                    <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
-                  <CheckCircle className="h-8 w-8 text-green-600" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Rejected</p>
-                    <p className="text-2xl font-bold text-red-600">
-                      {stats.rejected}
-                    </p>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">Rejected</p>
+                      <p className="text-2xl font-bold text-red-600">
+                        {stats.rejected}
+                      </p>
+                    </div>
+                    <XCircle className="h-8 w-8 text-red-600" />
                   </div>
-                  <XCircle className="h-8 w-8 text-red-600" />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600">Total Amount</p>
-                    <p className="text-2xl font-bold text-blue-600">
-                      Ksh{stats.totalAmount}
-                    </p>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600">Total Amount</p>
+                      <p className="text-2xl font-bold text-blue-600">
+                        Ksh{stats.totalAmount}
+                      </p>
+                    </div>
+                    <DollarSign className="h-8 w-8 text-blue-600" />
                   </div>
-                  <DollarSign className="h-8 w-8 text-blue-600" />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                </CardContent>
+              </Card>
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* withdrawal Requests List */}
-            <Card>
-              <CardHeader>
-                <CardTitle>
-                  withdrawal Requests ({withdrawalRequests.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {withdrawalRequests.map((request) => (
-                    <div
-                      key={request._id}
-                      className={`p-4 border rounded-lg cursor-pointer transition-colors ${
-                        selectedRequest?._id === request._id
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-gray-200 hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedRequest(request)}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          {getStatusIcon(request.status)}
-                          <span className="font-medium">
-                            {request.userFullName}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* withdrawal Requests List */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    withdrawal Requests ({withdrawalRequests.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {withdrawalRequests.map((request) => (
+                      <div
+                        key={request._id}
+                        className={`p-4 border rounded-lg cursor-pointer transition-colors ${
+                          selectedRequest?._id === request._id
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                        onClick={() => setSelectedRequest(request)}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-2">
+                            {getStatusIcon(request.status)}
+                            <span className="font-medium">
+                              {request.userFullName}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              @{request.username}
+                            </span>
+                          </div>
+                          <Badge className={getStatusColor(request.status)}>
+                            {request.status}
+                          </Badge>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-lg font-bold text-green-600">
+                            Ksh{request.amount}
                           </span>
                           <span className="text-sm text-gray-500">
-                            @{request.username}
+                            {new Date(request.createdAt).toLocaleDateString()}
                           </span>
                         </div>
-                        <Badge className={getStatusColor(request.status)}>
-                          {request.status}
-                        </Badge>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {request.phoneNumber}
+                        </p>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-lg font-bold text-green-600">
-                          Ksh{request.amount}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {new Date(request.createdAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {request.phoneNumber}
-                      </p>
-                    </div>
-                  ))}
+                    ))}
 
-                  {withdrawalRequests.length === 0 && (
+                    {withdrawalRequests.length === 0 && (
+                      <div className="text-center py-8 text-gray-500">
+                        <DollarSign className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                        <p>No withdrawal requests found</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Request Details */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Request Details</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {selectedRequest ? (
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-sm font-medium text-gray-600">
+                            User
+                          </Label>
+                          <p className="font-medium">
+                            {selectedRequest.userFullName}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            @{selectedRequest.username}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {selectedRequest.userEmail}
+                          </p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium text-gray-600">
+                            Amount
+                          </Label>
+                          <p className="text-xl font-bold text-green-600">
+                            Ksh{selectedRequest.amount}
+                          </p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium text-gray-600">
+                            Phone Number
+                          </Label>
+                          <p className="font-medium">
+                            {selectedRequest.phoneNumber}
+                          </p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium text-gray-600">
+                            Status
+                          </Label>
+                          <Badge
+                            className={getStatusColor(selectedRequest.status)}
+                          >
+                            {selectedRequest.status}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      <div>
+                        <Label className="text-sm font-medium text-gray-600">
+                          Submitted
+                        </Label>
+                        <p className="text-sm">
+                          {new Date(selectedRequest.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+
+                      {selectedRequest.status === "pending" && (
+                        <>
+                          <div>
+                            <Label htmlFor="admin-notes">
+                              Admin Notes (Optional)
+                            </Label>
+                            <Textarea
+                              id="admin-notes"
+                              placeholder="Add notes about this withdrawal request..."
+                              value={adminNotes}
+                              onChange={(e) => setAdminNotes(e.target.value)}
+                              rows={3}
+                            />
+                          </div>
+
+                          <div className="flex space-x-3">
+                            <Button
+                              onClick={() =>
+                                processwithdrawalRequest(
+                                  selectedRequest._id,
+                                  "approve"
+                                )
+                              }
+                              disabled={isProcessing}
+                              className="flex-1 bg-green-600 hover:bg-green-700"
+                            >
+                              {isProcessing ? (
+                                <div className="flex items-center space-x-2">
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                  <span>Processing...</span>
+                                </div>
+                              ) : (
+                                <div className="flex items-center space-x-2">
+                                  <CheckCircle className="h-4 w-4" />
+                                  <span>Approve</span>
+                                </div>
+                              )}
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                processwithdrawalRequest(
+                                  selectedRequest._id,
+                                  "reject"
+                                )
+                              }
+                              disabled={isProcessing}
+                              variant="destructive"
+                              className="flex-1"
+                            >
+                              {isProcessing ? (
+                                <div className="flex items-center space-x-2">
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                  <span>Processing...</span>
+                                </div>
+                              ) : (
+                                <div className="flex items-center space-x-2">
+                                  <XCircle className="h-4 w-4" />
+                                  <span>Reject</span>
+                                </div>
+                              )}
+                            </Button>
+                          </div>
+                        </>
+                      )}
+
+                      {selectedRequest.status !== "pending" && (
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                          <div className="flex items-center space-x-2 mb-2">
+                            {getStatusIcon(selectedRequest.status)}
+                            <span className="font-medium">
+                              {selectedRequest.status === "approved"
+                                ? "Approved & Added to Wallet"
+                                : "Rejected"}
+                            </span>
+                          </div>
+                          {selectedRequest.processedAt && (
+                            <p className="text-sm text-gray-600">
+                              Processed on{" "}
+                              {new Date(
+                                selectedRequest.processedAt
+                              ).toLocaleString()}
+                            </p>
+                          )}
+                          {selectedRequest.adminNotes && (
+                            <div className="mt-2">
+                              <Label className="text-sm font-medium text-gray-600">
+                                Admin Notes
+                              </Label>
+                              <p className="text-sm mt-1">
+                                {selectedRequest.adminNotes}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
                     <div className="text-center py-8 text-gray-500">
-                      <DollarSign className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                      <p>No withdrawal requests found</p>
+                      <Eye className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+                      <p>Select a withdrawal request to view details</p>
                     </div>
                   )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Request Details */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Request Details</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {selectedRequest ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label className="text-sm font-medium text-gray-600">
-                          User
-                        </Label>
-                        <p className="font-medium">
-                          {selectedRequest.userFullName}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          @{selectedRequest.username}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {selectedRequest.userEmail}
-                        </p>
-                      </div>
-                      <div>
-                        <Label className="text-sm font-medium text-gray-600">
-                          Amount
-                        </Label>
-                        <p className="text-xl font-bold text-green-600">
-                          Ksh{selectedRequest.amount}
-                        </p>
-                      </div>
-                      <div>
-                        <Label className="text-sm font-medium text-gray-600">
-                          Phone Number
-                        </Label>
-                        <p className="font-medium">
-                          {selectedRequest.phoneNumber}
-                        </p>
-                      </div>
-                      <div>
-                        <Label className="text-sm font-medium text-gray-600">
-                          Status
-                        </Label>
-                        <Badge
-                          className={getStatusColor(selectedRequest.status)}
-                        >
-                          {selectedRequest.status}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label className="text-sm font-medium text-gray-600">
-                        Submitted
-                      </Label>
-                      <p className="text-sm">
-                        {new Date(selectedRequest.createdAt).toLocaleString()}
-                      </p>
-                    </div>
-
-                    {selectedRequest.status === "pending" && (
-                      <>
-                        <div>
-                          <Label htmlFor="admin-notes">
-                            Admin Notes (Optional)
-                          </Label>
-                          <Textarea
-                            id="admin-notes"
-                            placeholder="Add notes about this withdrawal request..."
-                            value={adminNotes}
-                            onChange={(e) => setAdminNotes(e.target.value)}
-                            rows={3}
-                          />
-                        </div>
-
-                        <div className="flex space-x-3">
-                          <Button
-                            onClick={() =>
-                              processwithdrawalRequest(
-                                selectedRequest._id,
-                                "approve"
-                              )
-                            }
-                            disabled={isProcessing}
-                            className="flex-1 bg-green-600 hover:bg-green-700"
-                          >
-                            {isProcessing ? (
-                              <div className="flex items-center space-x-2">
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                                <span>Processing...</span>
-                              </div>
-                            ) : (
-                              <div className="flex items-center space-x-2">
-                                <CheckCircle className="h-4 w-4" />
-                                <span>Approve</span>
-                              </div>
-                            )}
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              processwithdrawalRequest(
-                                selectedRequest._id,
-                                "reject"
-                              )
-                            }
-                            disabled={isProcessing}
-                            variant="destructive"
-                            className="flex-1"
-                          >
-                            {isProcessing ? (
-                              <div className="flex items-center space-x-2">
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                                <span>Processing...</span>
-                              </div>
-                            ) : (
-                              <div className="flex items-center space-x-2">
-                                <XCircle className="h-4 w-4" />
-                                <span>Reject</span>
-                              </div>
-                            )}
-                          </Button>
-                        </div>
-                      </>
-                    )}
-
-                    {selectedRequest.status !== "pending" && (
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <div className="flex items-center space-x-2 mb-2">
-                          {getStatusIcon(selectedRequest.status)}
-                          <span className="font-medium">
-                            {selectedRequest.status === "approved"
-                              ? "Approved & Added to Wallet"
-                              : "Rejected"}
-                          </span>
-                        </div>
-                        {selectedRequest.processedAt && (
-                          <p className="text-sm text-gray-600">
-                            Processed on{" "}
-                            {new Date(
-                              selectedRequest.processedAt
-                            ).toLocaleString()}
-                          </p>
-                        )}
-                        {selectedRequest.adminNotes && (
-                          <div className="mt-2">
-                            <Label className="text-sm font-medium text-gray-600">
-                              Admin Notes
-                            </Label>
-                            <p className="text-sm mt-1">
-                              {selectedRequest.adminNotes}
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Eye className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                    <p>Select a withdrawal request to view details</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
-      </main>
-    </div>
-      </AdminSidebar>
+        </main>
+      </div>
+    </AdminSidebar>
   );
 }

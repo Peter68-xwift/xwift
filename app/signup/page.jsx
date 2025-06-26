@@ -27,6 +27,8 @@ import {
   Lock,
   Link2,
 } from "lucide-react";
+import Image from "next/image";
+import logo from "@/public/logo.png"
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -213,6 +215,11 @@ export default function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
+          <Image
+            src={logo}
+            alt="Company logo"
+            className="w-[40%] mx-auto mb-5"
+          />
           <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
           <CardDescription>
             Sign up to get started with your investment journey
