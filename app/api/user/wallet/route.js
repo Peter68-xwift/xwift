@@ -83,11 +83,6 @@ export async function GET(request) {
   }
 }
 
-import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb";
-import { UserModel } from "../../../../lib/database";
-import clientPromise from "../../../../lib/mongodb";
-
 export async function POST(request) {
   try {
     const { searchParams } = new URL(request.url);
