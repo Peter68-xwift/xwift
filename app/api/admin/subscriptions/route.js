@@ -52,7 +52,9 @@ export async function GET(request) {
       await Promise.all([
         db.collection("purchaseRequests").countDocuments({}),
         db.collection("purchaseRequests").countDocuments({
-          status: { $in: ["pending_payment", "pending_verification", "pending"] },
+          status: {
+            $in: ["pending_payment", "pending_verification", "pending"],
+          },
         }),
         db.collection("purchaseRequests").countDocuments({ status: "active" }),
         db

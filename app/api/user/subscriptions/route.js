@@ -110,7 +110,6 @@ export async function GET(request) {
 
     // Filter out any nulls if packages were missing
     const validSubscriptions = formattedSubscriptions.filter(Boolean);
-    
 
     // Calculate statistics
     const stats = {
@@ -124,7 +123,7 @@ export async function GET(request) {
       availableFeeds: validSubscriptions.filter((s) => s.canFeed).length,
       fedToday: validSubscriptions.filter((s) => s.fedToday).length,
     };
-    
+
     return NextResponse.json({
       success: true,
       data: {

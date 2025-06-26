@@ -20,6 +20,7 @@ import {
   Camera,
   RefreshCw,
   AlertCircle,
+  Copy,
 } from "lucide-react";
 
 export default function ProfilePage() {
@@ -30,6 +31,7 @@ export default function ProfilePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const [profileData, setProfileData] = useState({
     name: "",
@@ -40,7 +42,7 @@ export default function ProfilePage() {
   });
 
   const [profileStats, setProfileStats] = useState([
-    { label: "Total Invested", value: "$0.00", icon: "💰" },
+    { label: "Total Invested", value: "Ksh0.00", icon: "💰" },
     { label: "Active Packages", value: "0", icon: "📦" },
     { label: "Referrals", value: "0", icon: "👥" },
     { label: "Member Since", value: "Recently", icon: "📅" },
@@ -78,6 +80,7 @@ export default function ProfilePage() {
           email: userData.email,
           phone: userData.phone,
           address: userData.address,
+          referralLink: userData.referralLink,
           joinDate: userData.joinDate,
         });
 
@@ -96,6 +99,14 @@ export default function ProfilePage() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const referralLink = profileData?.referralLink || "";
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(referralLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const handleSave = async () => {
@@ -248,10 +259,27 @@ export default function ProfilePage() {
                   </>
                 )}
               </Button>
-              <div className=" flex items-center gap-3 mt-3">
-                <p className="text-sm font-medium">Referral Code</p>
+              <div className="flex items-center gap-3 mt-3 flex-wrap">
+                <p className="text-sm font-medium">Referral Link:</p>
 
-                <span className="text-black">1{profileData.address || ""}</span>
+                <a
+                  href={referralLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-700 underline break-all text-sm"
+                >
+                  {referralLink}
+                </a>
+
+                {referralLink && (
+                  <button
+                    onClick={handleCopy}
+                    className="text-xs text-white bg-blue-600 px-2 py-1 rounded hover:bg-blue-700 transition flex items-center gap-1"
+                  >
+                    <Copy className="w-4 h-4" />
+                    {copied ? "Copied!" : "Copy"}
+                  </button>
+                )}
               </div>
             </div>
           </CardContent>

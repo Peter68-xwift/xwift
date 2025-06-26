@@ -159,7 +159,6 @@ export async function POST(request) {
         createdAt: new Date(),
       });
     }
-    
 
     return NextResponse.json({
       success: true,

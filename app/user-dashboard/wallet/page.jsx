@@ -39,7 +39,6 @@ export default function WalletPage() {
 
       const response = await fetch(`/api/user/wallet?userId=${userId}`, {
         headers: {
-         
           "Content-Type": "application/json",
         },
       });
@@ -88,11 +87,9 @@ export default function WalletPage() {
       setProcessing(true);
       const userId = user?.id;
 
-
       const response = await fetch(`/api/user/wallet?userId=${userId}`, {
         method: "POST",
         headers: {
-          
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -219,7 +216,7 @@ export default function WalletPage() {
               <div>
                 <p className="text-blue-100 text-sm">Total Balance</p>
                 <p className="text-3xl font-bold">
-                  ${walletData.balance.toFixed(2)}
+                  Ksh{walletData.balance.toFixed(2)}
                 </p>
               </div>
               <Wallet className="h-8 w-8 text-blue-200" />
@@ -228,13 +225,13 @@ export default function WalletPage() {
               <div>
                 <p className="text-blue-100">Pending</p>
                 <p className="font-medium">
-                  ${walletData.pendingBalance.toFixed(2)}
+                  Ksh{walletData.pendingBalance.toFixed(2)}
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-blue-100">Available</p>
                 <p className="font-medium">
-                  ${walletData.availableBalance.toFixed(2)}
+                  Ksh{walletData.availableBalance.toFixed(2)}
                 </p>
               </div>
             </div>
@@ -248,7 +245,7 @@ export default function WalletPage() {
               <div>
                 <p className="text-xs text-gray-600">Total Earnings</p>
                 <p className="text-lg font-bold text-green-600">
-                  ${walletData.totalEarnings.toFixed(2)}
+                  Ksh{walletData.totalEarnings.toFixed(2)}
                 </p>
               </div>
               <ArrowDownLeft className="h-5 w-5 text-green-600" />
@@ -259,7 +256,7 @@ export default function WalletPage() {
               <div>
                 <p className="text-xs text-gray-600">Total Withdrawals</p>
                 <p className="text-lg font-bold text-red-600">
-                  ${walletData.totalWithdrawals.toFixed(2)}
+                  Ksh{walletData.totalWithdrawals.toFixed(2)}
                 </p>
               </div>
               <ArrowUpRight className="h-5 w-5 text-red-600" />
@@ -381,7 +378,7 @@ export default function WalletPage() {
             <CardContent className="space-y-4">
               <div className="bg-blue-50 p-3 rounded-lg">
                 <p className="text-sm text-blue-800">
-                  Available for withdrawal: $
+                  Available for withdrawal: Ksh
                   {walletData.availableBalance.toFixed(2)}
                 </p>
               </div>

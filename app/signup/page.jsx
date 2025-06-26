@@ -1,13 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Loader2,
   Eye,
@@ -31,32 +38,38 @@ export default function SignUpPage() {
     confirmPassword: "",
     referrerCode: "",
   });
-  const [errors, setErrors] = useState({})
-  const [loading, setLoading] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [usernameStatus, setUsernameStatus] = useState({ checking: false, available: null, message: "" })
-  const router = useRouter()
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [usernameStatus, setUsernameStatus] = useState({
+    checking: false,
+    available: null,
+    message: "",
+  });
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const ref = searchParams.get("ref");
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Clear specific error when user starts typing
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }))
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
 
     // Check username availability
     if (name === "username" && value.length >= 3) {
-      checkUsernameAvailability(value)
+      checkUsernameAvailability(value);
     } else if (name === "username") {
-      setUsernameStatus({ checking: false, available: null, message: "" })
+      setUsernameStatus({ checking: false, available: null, message: "" });
     }
-  }
+  };
 
   const checkUsernameAvailability = async (username) => {
-    setUsernameStatus({ checking: true, available: null, message: "" })
+    setUsernameStatus({ checking: true, available: null, message: "" });
 
     try {
       const response = await fetch("/api/auth/check-username", {
@@ -65,128 +78,136 @@ export default function SignUpPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
       setUsernameStatus({
         checking: false,
         available: data.available,
         message: data.message,
-      })
+      });
     } catch (error) {
       setUsernameStatus({
         checking: false,
         available: null,
         message: "Error checking username",
-      })
+      });
     }
-  }
+  };
 
   const validateForm = () => {
-    const newErrors = {}
+    const newErrors = {};
 
     // Full name validation
     if (!formData.fullName.trim()) {
-      newErrors.fullName = "Full name is required"
+      newErrors.fullName = "Full name is required";
     } else if (formData.fullName.trim().length < 2) {
-      newErrors.fullName = "Full name must be at least 2 characters"
+      newErrors.fullName = "Full name must be at least 2 characters";
     }
 
     // Username validation
     if (!formData.username.trim()) {
-      newErrors.username = "Username is required"
+      newErrors.username = "Username is required";
     } else if (formData.username.length < 3) {
-      newErrors.username = "Username must be at least 3 characters"
+      newErrors.username = "Username must be at least 3 characters";
     } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-      newErrors.username = "Username can only contain letters, numbers, and underscores"
+      newErrors.username =
+        "Username can only contain letters, numbers, and underscores";
     } else if (!usernameStatus.available) {
-      newErrors.username = "Username is not available"
+      newErrors.username = "Username is not available";
     }
 
     // Email validation
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required"
+      newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format"
+      newErrors.email = "Invalid email format";
     }
 
     // Phone validation
     if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required"
-    } else if (!/^[+]?[1-9][\d]{0,15}$/.test(formData.phone.replace(/[\s\-$$$$]/g, ""))) {
-      newErrors.phone = "Invalid phone number format"
+      newErrors.phone = "Phone number is required";
+    } else if (
+      !/^[+]?[1-9][\d]{0,15}$/.test(
+        formData.phone.replace(/[\s\-Ksh$Ksh$]/g, "")
+      )
+    ) {
+      newErrors.phone = "Invalid phone number format";
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = "Password is required"
+      newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters"
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     // Confirm password validation
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password"
+      newErrors.confirmPassword = "Please confirm your password";
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match"
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!validateForm()) {
-      return
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullName: formData.fullName.trim(),
-          username: formData.username.trim(),
-          email: formData.email.trim(),
-          phone: formData.phone.trim(),
-          referrerCode: formData.referrerCode,
-          password: formData.password,
-        }),
-      });
+      const response = await fetch(
+        `/api/auth/signup${ref ? `?ref=${ref}` : ""}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName: formData.fullName.trim(),
+            username: formData.username.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
 
-      const data = await response.json()
+            password: formData.password,
+          }),
+        }
+      );
+
+      const data = await response.json();
 
       if (response.ok) {
         // Success - redirect to login with success message
-        router.push("/?signup=success")
+        router.push("/?signup=success");
       } else {
-        setErrors({ submit: data.error })
+        setErrors({ submit: data.error });
       }
     } catch (error) {
-      setErrors({ submit: "Network error. Please try again." })
+      setErrors({ submit: "Network error. Please try again." });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const getUsernameStatusIcon = () => {
     if (usernameStatus.checking) {
-      return <Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+      return <Loader2 className="h-4 w-4 animate-spin text-gray-400" />;
     }
     if (usernameStatus.available === true) {
-      return <Check className="h-4 w-4 text-green-600" />
+      return <Check className="h-4 w-4 text-green-600" />;
     }
     if (usernameStatus.available === false) {
-      return <X className="h-4 w-4 text-red-600" />
+      return <X className="h-4 w-4 text-red-600" />;
     }
-    return null
-  }
+    return null;
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -360,28 +381,6 @@ export default function SignUpPage() {
               </div>
               {errors.confirmPassword && (
                 <p className="text-sm text-red-600">{errors.confirmPassword}</p>
-              )}
-            </div>
-
-            {/* referrerCode */}
-            <div className="space-y-2">
-              <Label htmlFor="phone">Referrer Code</Label>
-              <div className="relative">
-                <Link2 className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input
-                  id="referrerCode"
-                  name="referrerCode"
-                  type="text"
-                  value={formData.referrerCode}
-                  onChange={handleInputChange}
-                  placeholder="Enter your Referrer Code"
-                  className={`pl-10 ${
-                    errors.referrerCode ? "border-red-500" : ""
-                  }`}
-                />
-              </div>
-              {errors.referrerCode && (
-                <p className="text-sm text-red-600">{errors.referrerCode}</p>
               )}
             </div>
 

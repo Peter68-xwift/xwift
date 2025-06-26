@@ -68,27 +68,25 @@ export default function AdminDashboard() {
 
   if (loading || dataLoading) {
     return (
-      
-        <AdminSidebar>
-          <div className="p-6 space-y-6 bg-gray-50 dark:bg-gray-900 min-h-full">
-            <div className="animate-pulse space-y-6">
-              <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {[...Array(4)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="bg-white dark:bg-gray-800 rounded-lg p-6 h-32"
-                  >
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
-                    <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
-                  </div>
-                ))}
-              </div>
+      <AdminSidebar>
+        <div className="p-6 space-y-6 bg-gray-50 dark:bg-gray-900 min-h-full">
+          <div className="animate-pulse space-y-6">
+            <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-gray-800 rounded-lg p-6 h-32"
+                >
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
+                  <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+                </div>
+              ))}
             </div>
           </div>
-        </AdminSidebar>
-     
+        </div>
+      </AdminSidebar>
     );
   }
 
@@ -131,9 +129,9 @@ export default function AdminDashboard() {
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-US", {
+    return Intl.NumberFormat("en-KE", {
       style: "currency",
-      currency: "USD",
+      currency: "KES",
     }).format(amount);
   };
 

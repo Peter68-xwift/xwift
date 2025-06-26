@@ -64,7 +64,7 @@ export async function POST(request) {
       try {
         const giftCode = await GiftCodeModel.createGiftCode({
           amount: Number.parseFloat(amount),
-          description: description || `Gift code worth $${amount}`,
+          description: description || `Gift code worth Ksh${amount}`,
           expiresAt: expiresAt ? new Date(expiresAt) : null,
           createdBy: null, // TODO: Add admin user ID when auth is implemented
         });

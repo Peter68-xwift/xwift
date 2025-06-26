@@ -73,22 +73,27 @@ export default function AdminReports() {
   ];
 
   const financialData = [
-    { metric: "Total Revenue", value: "$485,000", change: "+23%", trend: "up" },
+    {
+      metric: "Total Revenue",
+      value: "Ksh485,000",
+      change: "+23%",
+      trend: "up",
+    },
     {
       metric: "Active Investments",
-      value: "$325,000",
+      value: "Ksh325,000",
       change: "+15%",
       trend: "up",
     },
     {
       metric: "Monthly Recurring Revenue",
-      value: "$45,000",
+      value: "Ksh45,000",
       change: "+8%",
       trend: "up",
     },
     {
       metric: "Average Investment Size",
-      value: "$2,450",
+      value: "Ksh2,450",
       change: "-2%",
       trend: "down",
     },
@@ -105,17 +110,27 @@ export default function AdminReports() {
     {
       name: "Premium Growth",
       subscribers: 245,
-      revenue: "$122,500",
+      revenue: "Ksh122,500",
       roi: "18.5%",
     },
     {
       name: "Stable Income",
       subscribers: 387,
-      revenue: "$96,750",
+      revenue: "Ksh96,750",
       roi: "12.3%",
     },
-    { name: "High Yield", subscribers: 156, revenue: "$78,000", roi: "25.7%" },
-    { name: "Conservative", subscribers: 298, revenue: "$59,600", roi: "8.9%" },
+    {
+      name: "High Yield",
+      subscribers: 156,
+      revenue: "Ksh78,000",
+      roi: "25.7%",
+    },
+    {
+      name: "Conservative",
+      subscribers: 298,
+      revenue: "Ksh59,600",
+      roi: "8.9%",
+    },
   ];
 
   useEffect(() => {

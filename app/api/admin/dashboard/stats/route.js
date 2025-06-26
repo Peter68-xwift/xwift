@@ -49,7 +49,9 @@ export async function GET() {
       .collection("packages")
       .aggregate([
         { $match: { status: "active" } },
-        { $group: { _id: null, totalRevenue: { $sum: "$totalRevenue" } } },
+        {
+          $group: { _id: null, totalRevenue: { $sum: "$totalRevenue" } },
+        },
       ])
       .toArray();
     const totalRevenue = revenueResult[0]?.totalRevenue || 0;
@@ -149,7 +151,9 @@ export async function GET() {
         .aggregate([
           {
             $project: {
-              transactionCount: { $size: { $ifNull: ["$walletHistory", []] } },
+              transactionCount: {
+                $size: { $ifNull: ["$walletHistory", []] },
+              },
             },
           },
           { $group: { _id: null, total: { $sum: "$transactionCount" } } },

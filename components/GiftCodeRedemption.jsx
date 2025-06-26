@@ -35,7 +35,7 @@ export default function GiftCodeRedemption() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage(`Success! $${data.amount} has been added to your wallet.`);
+        setMessage(`Success! Ksh${data.amount} has been added to your wallet.`);
         setMessageType("success");
         setGiftCode("");
 

@@ -83,8 +83,6 @@ export async function GET(request) {
   }
 }
 
-
-
 export async function POST(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -174,7 +172,6 @@ export async function POST(request) {
           },
         }
       );
-      
 
       if (!logResult || logResult.modifiedCount === 0) {
         return NextResponse.json(
@@ -227,4 +224,3 @@ export async function POST(request) {
     );
   }
 }
-

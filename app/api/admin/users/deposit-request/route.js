@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import clientPromise from "../../../../../lib/mongodb";
 
-
 export async function POST(request) {
   try {
     const token = request.headers.get("authorization")?.replace("Bearer ", "");
@@ -54,7 +53,7 @@ export async function POST(request) {
     await db.collection("adminNotifications").insertOne({
       type: "deposit_request",
       title: "New Deposit Request",
-      message: `${user.fullName} (@${user.username}) has submitted a deposit request for $${amount}`,
+      message: `${user.fullName} (@${user.username}) has submitted a deposit request for Ksh${amount}`,
       userId: user._id,
       depositRequestId: result.insertedId,
       isRead: false,

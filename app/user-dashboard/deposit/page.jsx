@@ -46,10 +46,10 @@ export default function DepositPage() {
     try {
       const userId = user?.id;
 
-      
-      const response = await fetch(`/api/user/deposit-request?userId=${userId}`, {
-       
-      });
+      const response = await fetch(
+        `/api/user/deposit-request?userId=${userId}`,
+        {}
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -74,15 +74,16 @@ export default function DepositPage() {
     try {
       const userId = user?.id;
 
-      
-      const response = await fetch(`/api/user/deposit-request?userId=${userId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-         
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `/api/user/deposit-request?userId=${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
 
@@ -280,7 +281,7 @@ export default function DepositPage() {
                           {getStatusIcon(request.status)}
                           <div>
                             <p className="text-sm font-medium">
-                              ${request.amount}
+                              Ksh{request.amount}
                             </p>
                             <p className="text-xs text-gray-500">
                               {new Date(request.createdAt).toLocaleDateString()}

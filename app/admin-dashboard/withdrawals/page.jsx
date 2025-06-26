@@ -49,10 +49,10 @@ export default function AdminwithdrawalsPage() {
       setIsLoading(true);
       const userId = user?.id;
 
-        const response = await fetch(
-            `/api/admin/Withdrawals-request?userId=${userId}`,
-            {}
-        );
+      const response = await fetch(
+        `/api/admin/Withdrawals-request?userId=${userId}`,
+        {}
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -76,7 +76,7 @@ export default function AdminwithdrawalsPage() {
     setIsProcessing(true);
     try {
       const userId = user?.id;
-      console.log(user)
+      console.log(user);
       const response = await fetch(
         `/api/admin/Withdrawals-request/${requestId}?userId=${userId}`,
         {
@@ -229,7 +229,7 @@ export default function AdminwithdrawalsPage() {
                   <div>
                     <p className="text-sm text-gray-600">Total Amount</p>
                     <p className="text-2xl font-bold text-blue-600">
-                      ${stats.totalAmount}
+                      Ksh{stats.totalAmount}
                     </p>
                   </div>
                   <DollarSign className="h-8 w-8 text-blue-600" />
@@ -274,7 +274,7 @@ export default function AdminwithdrawalsPage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-lg font-bold text-green-600">
-                          ${request.amount}
+                          Ksh{request.amount}
                         </span>
                         <span className="text-sm text-gray-500">
                           {new Date(request.createdAt).toLocaleDateString()}
@@ -324,7 +324,7 @@ export default function AdminwithdrawalsPage() {
                           Amount
                         </Label>
                         <p className="text-xl font-bold text-green-600">
-                          ${selectedRequest.amount}
+                          Ksh{selectedRequest.amount}
                         </p>
                       </div>
                       <div>
@@ -346,8 +346,6 @@ export default function AdminwithdrawalsPage() {
                         </Badge>
                       </div>
                     </div>
-
-                 
 
                     <div>
                       <Label className="text-sm font-medium text-gray-600">

@@ -198,7 +198,7 @@ export default function AdminSettings() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="minInvestment">
-                  Minimum Investment Amount ($)
+                  Minimum Investment Amount (Ksh)
                 </Label>
                 <Input
                   id="minInvestment"
@@ -215,7 +215,7 @@ export default function AdminSettings() {
 
               <div className="space-y-2">
                 <Label htmlFor="maxInvestment">
-                  Maximum Investment Amount ($)
+                  Maximum Investment Amount (Ksh)
                 </Label>
                 <Input
                   id="maxInvestment"

@@ -55,45 +55,45 @@ export default function CheckoutPage() {
     }
   }, [user, loading, router, packageId]);
 
-    const fetchPackageData = async () => {
-        try {
-            setIsLoading(true);
-          const token = localStorage.getItem("token");
+  const fetchPackageData = async () => {
+    try {
+      setIsLoading(true);
+      const token = localStorage.getItem("token");
       const userId = user.id;
-          
-            const response = await fetch(`/api/user/packages?userId=${userId}`);
 
-            if (response.ok) {
-                const data = await response.json();
-                const selectedPackage = data.data.availablePackages.find(
-                    (pkg) => pkg.id === packageId
-                );
+      const response = await fetch(`/api/user/packages?userId=${userId}`);
 
-                if (selectedPackage) {
-                    setPackageData(selectedPackage);
-                } else {
-                    alert("Package not found");
-                    router.push("/user-dashboard/packages");
-                }
-            }
-        } catch (error) {
-            console.error("Error fetching package:", error);
-            alert("Failed to load package details");
-        } finally {
-            setIsLoading(false);
+      if (response.ok) {
+        const data = await response.json();
+        const selectedPackage = data.data.availablePackages.find(
+          (pkg) => pkg.id === packageId
+        );
+
+        if (selectedPackage) {
+          setPackageData(selectedPackage);
+        } else {
+          alert("Package not found");
+          router.push("/user-dashboard/packages");
         }
-    };
+      }
+    } catch (error) {
+      console.error("Error fetching package:", error);
+      alert("Failed to load package details");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handlePurchase = async () => {
     setIsPurchasing(true);
     try {
-        const userId = user?.id;
+      const userId = user?.id;
 
       const response = await fetch(
         `/api/user/purchase-package?userId=${userId}`,
         {
           method: "POST",
-          
+
           body: JSON.stringify({
             packageId,
             paymentMethod,
@@ -129,7 +129,7 @@ export default function CheckoutPage() {
     }
 
     try {
-        const userId = user.id;
+      const userId = user.id;
       // console.log(purchaseRequest);
       const response = await fetch(
         `/api/user/confirm-package-payment?userId=${userId}`,
@@ -145,7 +145,6 @@ export default function CheckoutPage() {
           }),
         }
       );
-
 
       if (response.ok) {
         alert(
@@ -388,7 +387,7 @@ export default function CheckoutPage() {
                       </span>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-green-900 text-lg">
-                          ${purchaseRequest.paymentInstructions.amount}
+                          Ksh{purchaseRequest.paymentInstructions.amount}
                         </span>
                         <Button
                           variant="ghost"

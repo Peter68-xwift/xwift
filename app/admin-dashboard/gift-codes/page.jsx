@@ -81,7 +81,7 @@ export default function GiftCodesPage() {
       if (response.ok) {
         const data = await response.json();
         setGiftCodes(data.giftCodes || []);
-        console.log(data.giftCodes)
+        console.log(data.giftCodes);
         setStats(data.stats || stats);
       }
     } catch (error) {
@@ -194,17 +194,16 @@ export default function GiftCodesPage() {
   // Filter gift codes based on search
   const filteredGiftCodes =
     Array.isArray(giftCodes) && giftCodes.length > 0
-      ? giftCodes.filter(
-          (code) =>
-            // code.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            code.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      ? giftCodes.filter((code) =>
+          // code.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          code.description?.toLowerCase().includes(searchTerm.toLowerCase())
         )
       : [];
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-US", {
+    return Intl.NumberFormat("en-KE", {
       style: "currency",
-      currency: "USD",
+      currency: "KES",
     }).format(amount);
   };
 
@@ -284,7 +283,7 @@ export default function GiftCodesPage() {
                 </DialogHeader>
                 <form onSubmit={handleCreateGiftCodes} className="space-y-4">
                   <div>
-                    <Label htmlFor="amount">Amount ($)</Label>
+                    <Label htmlFor="amount">Amount (Ksh)</Label>
                     <Input
                       id="amount"
                       type="number"

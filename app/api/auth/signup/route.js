@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { UserModel } from "../../../../lib/database";
+import clientPromise from "@/lib/mongodb";
 
 function generateReferralCode(length = 6) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -11,14 +12,16 @@ function generateReferralCode(length = 6) {
 }
 
 export async function POST(request) {
+  const client = await clientPromise; // ✅ correct usage
+  const db = client.db("mern_auth_app"); // ⬅️ use your actual DB name
+
   try {
     const { searchParams } = new URL(request.url);
-    // const referrerCode = searchParams.get("ref"); // If available
+    const referrerCode = searchParams.get("ref"); // ✅ referral from URL query
 
-    const { fullName, username, email, phone, password, referrerCode } =
-      await request.json();
+    const { fullName, username, email, phone, password } = await request.json();
 
-    // Validation checks ...
+    // 1. Validation
     if (!fullName || !username || !email || !phone || !password) {
       return NextResponse.json(
         { error: "All fields are required" },
@@ -44,7 +47,7 @@ export async function POST(request) {
 
     if (password.length < 6) {
       return NextResponse.json(
-        { error: "Password must be at least 6 characters long" },
+        { error: "Password must be at least 6 characters" },
         { status: 400 }
       );
     }
@@ -59,6 +62,7 @@ export async function POST(request) {
       );
     }
 
+    // 2. Uniqueness checks
     const existingUserByUsername = await UserModel.findUserByUsername(username);
     if (existingUserByUsername) {
       return NextResponse.json(
@@ -75,26 +79,17 @@ export async function POST(request) {
       );
     }
 
-    // Generate a unique referral code
-    let referralCode;
-    let unique = false;
+    // 3. Generate referral code
 
-    while (!unique) {
-      referralCode = generateReferralCode();
-      const existing = await UserModel.findUserByReferralCode?.(referralCode);
-      if (!existing) unique = true;
-    }
+    const referralCode = await UserModel.generateUniqueReferralCode();
 
-    // If referred, find referrer by code
-    let referrerId = null;
-    if (referrerCode) {
-      const referrer = await UserModel.findUserByReferralCode?.(referrerCode);
-      if (referrer) {
-        referrerId = referrer._id;
-      }
-    }
+    // Get referrer _id if referrerCode exists
+    const referrerId = await UserModel.getReferrerIdByCode(referrerCode);
 
-    // Create user
+    // 6. Construct referral link for the new user
+    const referralLink = `http://localhost:3000/signup?ref=${referralCode}`;
+
+    // 5. Create user
     const newUser = await UserModel.createUser({
       fullName: fullName.trim(),
       username: username.trim().toLowerCase(),
@@ -103,9 +98,11 @@ export async function POST(request) {
       password,
       role: "user",
       referralCode,
-      referrerId, // optional
+      referrerId,
+      referralLink,
     });
 
+    // 7. Response
     return NextResponse.json({
       user: {
         id: newUser._id,
@@ -115,6 +112,7 @@ export async function POST(request) {
         phone: newUser.phone,
         referralCode: newUser.referralCode,
         referredBy: referrerCode || null,
+        referralLink, // ✅ return referral link
         role: newUser.role,
         name: newUser.fullName,
       },

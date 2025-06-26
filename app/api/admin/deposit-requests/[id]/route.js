@@ -15,12 +15,12 @@ export async function PATCH(request, { params }) {
       return NextResponse.json({ error: "Missing user ID" }, { status: 400 });
     }
 
-     const admin = await db
-          .collection("users")
-          .findOne({ _id: new ObjectId(userId) });
-        if (!admin || admin.role !== "admin") {
-          return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-        }
+    const admin = await db
+      .collection("users")
+      .findOne({ _id: new ObjectId(userId) });
+    if (!admin || admin.role !== "admin") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
 
     const { action, adminNotes } = await request.json();
     const requestId = params.id;
@@ -98,7 +98,7 @@ export async function PATCH(request, { params }) {
           userId: depositRequest.userId,
           type: "deposit_approved",
           title: "Deposit Approved",
-          message: `Your deposit of $${depositRequest.amount} has been approved and added to your wallet.`,
+          message: `Your deposit of Ksh${depositRequest.amount} has been approved and added to your wallet.`,
           isRead: false,
           createdAt: new Date(),
         });
@@ -109,7 +109,7 @@ export async function PATCH(request, { params }) {
         userId: depositRequest.userId,
         type: "deposit_rejected",
         title: "Deposit Rejected",
-        message: `Your deposit request of $${
+        message: `Your deposit request of Ksh${
           depositRequest.amount
         } has been rejected. ${adminNotes ? "Reason: " + adminNotes : ""}`,
         isRead: false,

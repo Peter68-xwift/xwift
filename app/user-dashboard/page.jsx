@@ -163,7 +163,7 @@ export default function UserDashboard() {
                 <div>
                   <p className="text-blue-100 text-sm">Available Balance</p>
                   <p className="text-2xl font-bold">
-                    ${wallet.availableBalance?.toFixed(2) || "0.00"}
+                    Ksh{wallet.availableBalance?.toFixed(2) || "0.00"}
                   </p>
                 </div>
                 <DollarSign className="h-8 w-8 text-blue-200" />
@@ -172,13 +172,13 @@ export default function UserDashboard() {
                 <div>
                   <p className="text-blue-100">Total Invested</p>
                   <p className="font-medium">
-                    ${wallet.totalInvested?.toFixed(2) || "0.00"}
+                    Ksh{wallet.totalInvested?.toFixed(2) || "0.00"}
                   </p>
                 </div>
                 <div className="text-right">
                   <p className="text-blue-100">Total Returns</p>
                   <p className="font-medium">
-                    ${wallet.totalReturns?.toFixed(2) || "0.00"}
+                    Ksh{wallet.totalReturns?.toFixed(2) || "0.00"}
                   </p>
                 </div>
               </div>

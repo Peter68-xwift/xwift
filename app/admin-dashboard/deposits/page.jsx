@@ -76,7 +76,7 @@ export default function AdminDepositsPage() {
     setIsProcessing(true);
     try {
       const userId = user?.id;
-      console.log(user)
+      console.log(user);
       const response = await fetch(
         `/api/admin/deposit-requests/${requestId}?userId=${userId}`,
         {
@@ -229,7 +229,7 @@ export default function AdminDepositsPage() {
                   <div>
                     <p className="text-sm text-gray-600">Total Amount</p>
                     <p className="text-2xl font-bold text-blue-600">
-                      ${stats.totalAmount}
+                      Ksh{stats.totalAmount}
                     </p>
                   </div>
                   <DollarSign className="h-8 w-8 text-blue-600" />
@@ -274,7 +274,7 @@ export default function AdminDepositsPage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-lg font-bold text-green-600">
-                          ${request.amount}
+                          ksh{request.amount}
                         </span>
                         <span className="text-sm text-gray-500">
                           {new Date(request.createdAt).toLocaleDateString()}
@@ -324,7 +324,7 @@ export default function AdminDepositsPage() {
                           Amount
                         </Label>
                         <p className="text-xl font-bold text-green-600">
-                          ${selectedRequest.amount}
+                          Ksh{selectedRequest.amount}
                         </p>
                       </div>
                       <div>

@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import clientPromise from "../../../../lib/mongodb";
 import { UserModel } from "../../../../lib/database";
 
-
 import { ObjectId } from "mongodb";
 
 export async function POST(request) {
@@ -20,10 +19,8 @@ export async function POST(request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-      
     const client = await clientPromise; // ✅ correct usage
-        const db = client.db("mern_auth_app"); // ⬅️ use your actual DB name
-
+    const db = client.db("mern_auth_app"); // ⬅️ use your actual DB name
 
     const { packageId, paymentMethod } = await request.json();
 
@@ -182,9 +179,7 @@ export async function POST(request) {
         });
       }
     }
-    
-      
-      
+
     return NextResponse.json({
       success: true,
       message: "Purchase request created. Please complete M-Pesa payment.",

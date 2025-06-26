@@ -91,16 +91,13 @@ export async function PATCH(request, { params }) {
           $inc: {
             subscribers: 1,
             totalRevenue:
-              typeof subscription.amount === "number"
-                ? subscription.amount
-                : 0,
+              typeof subscription.amount === "number" ? subscription.amount : 0,
           },
           $set: {
             updatedAt: new Date(),
           },
         }
       );
-      
 
       // Add to user's active investments
       await db.collection("users").updateOne(
@@ -118,9 +115,7 @@ export async function PATCH(request, { params }) {
           $inc: {
             "stats.activeInvestments": 1,
             "wallet.totalInvested":
-              typeof subscription.amount === "number"
-                ? subscription.amount
-                : 0,
+              typeof subscription.amount === "number" ? subscription.amount : 0,
           },
         }
       );

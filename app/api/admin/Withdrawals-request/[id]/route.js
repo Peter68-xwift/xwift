@@ -97,7 +97,7 @@ export async function PATCH(request, { params }) {
           userId: user._id,
           type: "withdrawal_approved",
           title: "Withdrawal Approved",
-          message: `Your withdrawal of $${withdrawalRequest.amount} has been approved.`,
+          message: `Your withdrawal of Ksh${withdrawalRequest.amount} has been approved.`,
           isRead: false,
           createdAt: new Date(),
         });
@@ -108,7 +108,7 @@ export async function PATCH(request, { params }) {
         userId: withdrawalRequest.userId,
         type: "withdrawal_rejected",
         title: "Withdrawal Rejected",
-        message: `Your withdrawal request of $${
+        message: `Your withdrawal request of Ksh${
           withdrawalRequest.amount
         } was rejected. ${adminNotes ? "Reason: " + adminNotes : ""}`,
         isRead: false,

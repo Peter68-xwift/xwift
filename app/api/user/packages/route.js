@@ -18,12 +18,11 @@ export async function GET(request) {
     const user = await db
       .collection("users")
       .findOne({ _id: new ObjectId(userId) });
-    
-      const myPacks = await db
-        .collection("purchaseRequests")
-        .find({ userId: new ObjectId(userId), status: "active" }) // optional filter
-        .toArray();
-    
+
+    const myPacks = await db
+      .collection("purchaseRequests")
+      .find({ userId: new ObjectId(userId), status: "active" }) // optional filter
+      .toArray();
 
     if (!user || user.role !== "user") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -38,7 +37,7 @@ export async function GET(request) {
       .map((pkg) => ({
         id: pkg._id.toString(),
         name: pkg.name,
-        price: `$${pkg.price}`,
+        price: `Ksh${pkg.price}`,
         duration: `${pkg.duration} days`,
         returns: `${pkg.roi}% ROI`,
         description: pkg.description,
@@ -79,8 +78,8 @@ export async function GET(request) {
           status: daysLeft > 0 ? "Active" : "Completed",
           progress: Math.round(progress),
           daysLeft,
-          invested: `$${investment.amount.toFixed(2)}`,
-          currentValue: `$${currentValue.toFixed(2)}`,
+          invested: `Ksh${investment.amount.toFixed(2)}`,
+          currentValue: `Ksh${currentValue.toFixed(2)}`,
           startDate: startDate.toLocaleDateString(),
           endDate: endDate.toLocaleDateString(),
         };

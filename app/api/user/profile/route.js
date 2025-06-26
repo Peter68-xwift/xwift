@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { UserModel } from "../../../../lib/database";
 
-
 export async function GET(request) {
   try {
     // Get user from token
@@ -39,6 +38,7 @@ export async function GET(request) {
         username: user.username,
         phone: user.phone || "+1 (555) 123-4567",
         address: user.referralCode || "Not provided",
+        referralLink: user.referralLink || "Not provided",
         joinDate: memberSince,
         createdAt: user.createdAt,
       },
@@ -49,7 +49,7 @@ export async function GET(request) {
         totalDeposited: user.wallet?.totalDeposited || 0,
       },
       stats: {
-        totalInvested: `$${totalInvested.toFixed(2)}`,
+        totalInvested: `Ksh${totalInvested.toFixed(2)}`,
         activePackages: activePackages.toString(),
         referrals: totalReferrals.toString(),
         memberSince: memberSince,

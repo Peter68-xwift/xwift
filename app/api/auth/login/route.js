@@ -39,7 +39,8 @@ export async function POST(request) {
       name: user.fullName, // For backward compatibility
       emailVerified: user.emailVerified,
       createdAt: user.createdAt,
-    }
+      referralLink: user.referralLink,
+    };
 
     return NextResponse.json({
       user: userResponse,

@@ -77,7 +77,7 @@ export default function SubscriptionsPage() {
 
       if (data.success) {
         setMessage(
-          `🎉 ${data.message} +$${data.data.dailyAmount} added to your wallet!`
+          `🎉 ${data.message} +Ksh${data.data.dailyAmount} added to your wallet!`
         );
         setMessageType("success");
         fetchSubscriptions(); // Refresh data
@@ -113,25 +113,24 @@ export default function SubscriptionsPage() {
 
   if (loading) {
     return (
-      
-        <div className="min-h-screen bg-gray-50 p-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="animate-pulse space-y-4">
-              <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-24 bg-gray-200 rounded"></div>
-                ))}
-              </div>
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-48 bg-gray-200 rounded"></div>
-                ))}
-              </div>
+      <div className="min-h-screen bg-gray-50 p-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="animate-pulse space-y-4">
+            <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-24 bg-gray-200 rounded"></div>
+              ))}
+            </div>
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-48 bg-gray-200 rounded"></div>
+              ))}
             </div>
           </div>
-          <BottomNavigation/>
         </div>
+        <BottomNavigation />
+      </div>
     );
   }
 
@@ -198,7 +197,7 @@ export default function SubscriptionsPage() {
                 <div>
                   <p className="text-sm text-gray-600">Daily Income</p>
                   <p className="text-xl font-bold">
-                    ${stats.totalDailyIncome || "0.00"}
+                    Ksh{stats.totalDailyIncome || "0.00"}
                   </p>
                 </div>
               </div>
@@ -212,7 +211,7 @@ export default function SubscriptionsPage() {
                 <div>
                   <p className="text-sm text-gray-600">Total Earnings</p>
                   <p className="text-xl font-bold">
-                    ${stats.totalEarnings || "0.00"}
+                    Ksh{stats.totalEarnings || "0.00"}
                   </p>
                 </div>
               </div>
@@ -273,19 +272,19 @@ export default function SubscriptionsPage() {
                     <div>
                       <p className="text-gray-600">Investment</p>
                       <p className="font-semibold">
-                        ${subscription.packagePrice}
+                        Ksh{subscription.packagePrice}
                       </p>
                     </div>
                     <div>
                       <p className="text-gray-600">Daily Income</p>
                       <p className="font-semibold text-green-600">
-                        ${subscription.dailyIncome}
+                        Ksh{subscription.dailyIncome}
                       </p>
                     </div>
                     <div>
                       <p className="text-gray-600">Total Earned</p>
                       <p className="font-semibold text-blue-600">
-                        ${subscription.totalEarnings}
+                        Ksh{subscription.totalEarnings}
                       </p>
                     </div>
                     <div>
@@ -321,7 +320,7 @@ export default function SubscriptionsPage() {
                         <p className="text-sm text-gray-600">
                           {subscription.fedToday
                             ? `Fed today! Next feed in ${formatTimeUntilTomorrow()}`
-                            : `Claim your daily $${subscription.dailyIncome}`}
+                            : `Claim your daily Ksh${subscription.dailyIncome}`}
                         </p>
                       </div>
                     </div>

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { UserModel } from "../../../../lib/database";
 
-
 export async function GET(request) {
   try {
     // Get user from token
@@ -47,8 +46,8 @@ export async function GET(request) {
         action: activity.description || "Transaction",
         amount:
           activity.amount > 0
-            ? `+$${activity.amount.toFixed(2)}`
-            : `-$${Math.abs(activity.amount).toFixed(2)}`,
+            ? `+Ksh${activity.amount.toFixed(2)}`
+            : `-Ksh${Math.abs(activity.amount).toFixed(2)}`,
         time: getTimeAgo(activity.timestamp),
         type: activity.amount > 0 ? "income" : "expense",
       }));
@@ -68,7 +67,7 @@ export async function GET(request) {
     const stats = [
       {
         title: "Total Balance",
-        value: `$${walletData.balance.toFixed(2)}`,
+        value: `Ksh${walletData.balance.toFixed(2)}`,
         change: `+${growthPercentage}%`,
         changeType:
           Number.parseFloat(growthPercentage) > 0 ? "positive" : "neutral",

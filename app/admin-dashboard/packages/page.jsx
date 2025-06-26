@@ -271,7 +271,7 @@ export default function PackageManagement() {
           name: packageToEdit.name,
           price: packageToEdit.price.toString(),
           duration: packageToEdit.duration.toString(),
-          roi: packageToEdit.roi.toString() || '',
+          roi: packageToEdit.roi.toString() || "",
           description: packageToEdit.description,
           features: Array.isArray(packageToEdit.features)
             ? packageToEdit.features.join(", ")
@@ -359,7 +359,7 @@ export default function PackageManagement() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="price">Price ($) *</Label>
+                    <Label htmlFor="price">Price (Ksh) *</Label>
                     <Input
                       id="price"
                       type="number"
@@ -476,7 +476,7 @@ export default function PackageManagement() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="edit-price">Price ($) *</Label>
+                  <Label htmlFor="edit-price">Price (Ksh) *</Label>
                   <Input
                     id="edit-price"
                     type="number"
@@ -626,7 +626,7 @@ export default function PackageManagement() {
                     Total Revenue
                   </p>
                   <p className="text-2xl font-bold">
-                    ${totalStats.totalRevenue.toLocaleString()}
+                    Ksh{totalStats.totalRevenue.toLocaleString()}
                   </p>
                 </div>
                 <DollarSign className="h-8 w-8 text-yellow-600" />
@@ -667,13 +667,13 @@ export default function PackageManagement() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>${pkg.price}</TableCell>
+                      <TableCell>Ksh{pkg.price}</TableCell>
                       <TableCell>{pkg.duration} days</TableCell>
                       <TableCell>{pkg.roi}%</TableCell>
                       <TableCell>{getStatusBadge(pkg.status)}</TableCell>
                       <TableCell>{pkg.subscribers || 0}</TableCell>
                       <TableCell>
-                        ${(pkg.totalRevenue || 0).toLocaleString()}
+                        Ksh{(pkg.totalRevenue || 0).toLocaleString()}
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>

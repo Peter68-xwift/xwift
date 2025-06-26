@@ -75,13 +75,8 @@ export async function GET(request) {
 
     // 🟩 Gift Code Stats
     const totalGiftCodes = gifts?.length || 0;
-    const redeemedGiftCodes = gifts?.filter(
-      (code) => code.isRedeemed
-    ).length;
-    const totalGiftValue = gifts?.reduce(
-      (sum, code) => sum + code.amount,
-      0
-    );
+    const redeemedGiftCodes = gifts?.filter((code) => code.isRedeemed).length;
+    const totalGiftValue = gifts?.reduce((sum, code) => sum + code.amount, 0);
     const redeemedGiftValue = gifts
       ?.filter((code) => code.isRedeemed)
       ?.reduce((sum, code) => sum + code.amount, 0);

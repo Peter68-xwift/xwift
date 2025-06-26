@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import  clientPromise  from "../../../../lib/mongodb";
+import clientPromise from "../../../../lib/mongodb";
 import { ObjectId } from "mongodb";
 import { UserModel } from "../../../../lib/database";
-
 
 export async function POST(request) {
   try {
@@ -72,7 +71,7 @@ export async function POST(request) {
     await db.collection("adminNotifications").insertOne({
       type: "package_payment",
       title: "Package Payment Confirmation",
-      message: `${user.fullName} (@${user.username}) has submitted payment confirmation for ${purchaseRequest.packageName} - $${purchaseRequest.amount}`,
+      message: `${user.fullName} (@${user.username}) has submitted payment confirmation for ${purchaseRequest.packageName} - Ksh${purchaseRequest.amount}`,
       userId: user._id,
       purchaseRequestId: new ObjectId(purchaseRequestId),
       isRead: false,

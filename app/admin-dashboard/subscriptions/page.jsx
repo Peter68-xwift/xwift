@@ -49,16 +49,19 @@ export default function AdminSubscriptions() {
   const fetchSubscriptions = async () => {
     try {
       setLoading(true);
-        //   const token = localStorage.getItem("token");
-        const userId = user.id;
-        // console.log(user)
-        
-      const response = await fetch(`/api/admin/subscriptions?userId=${userId}`, {
-        headers: {
-        //   Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      //   const token = localStorage.getItem("token");
+      const userId = user.id;
+      // console.log(user)
+
+      const response = await fetch(
+        `/api/admin/subscriptions?userId=${userId}`,
+        {
+          headers: {
+            //   Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -81,8 +84,8 @@ export default function AdminSubscriptions() {
       setError("");
       setSuccess("");
 
-        // const token = localStorage.getItem("token");
-        const userId = user.id
+      // const token = localStorage.getItem("token");
+      const userId = user.id;
       const response = await fetch(
         `/api/admin/subscriptions/${subscriptionId}?userId=${userId}`,
         {
@@ -269,7 +272,7 @@ export default function AdminSubscriptions() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-blue-600">
-                ${(stats.totalRevenue || 0).toLocaleString()}
+                Ksh{(stats.totalRevenue || 0).toLocaleString()}
               </div>
             </CardContent>
           </Card>
@@ -293,9 +296,7 @@ export default function AdminSubscriptions() {
           >
             <option value="all">All Status</option>
             <option value="pending_payment">Pending Approval</option>
-            <option value="pending_verification">
-              Pending Payment
-            </option>
+            <option value="pending_verification">Pending Payment</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
             <option value="rejected">Rejected</option>
@@ -348,7 +349,7 @@ export default function AdminSubscriptions() {
                         <div>
                           <span className="text-gray-500">Amount:</span>
                           <p className="font-medium text-green-600">
-                            ${subscription.amount}
+                            Ksh{subscription.amount}
                           </p>
                         </div>
                         <div>
@@ -425,7 +426,7 @@ export default function AdminSubscriptions() {
                                     Amount
                                   </label>
                                   <p className="font-medium text-green-600">
-                                    ${selectedSubscription.amount}
+                                    Ksh{selectedSubscription.amount}
                                   </p>
                                 </div>
                                 <div>
@@ -466,7 +467,8 @@ export default function AdminSubscriptions() {
                               </div>
 
                               {[
-                                "pending_payment","pending",
+                                "pending_payment",
+                                "pending",
                                 "pending_verification",
                               ].includes(selectedSubscription.status) && (
                                 <div className="flex gap-2 pt-4">
@@ -517,7 +519,8 @@ export default function AdminSubscriptions() {
                       </Dialog>
 
                       {[
-                        "pending_payment", "pending",
+                        "pending_payment",
+                        "pending",
                         "pending_verification",
                       ].includes(subscription.status) && (
                         <div className="flex gap-2">
