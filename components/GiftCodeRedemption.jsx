@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Gift, Check, X, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function GiftCodeRedemption() {
+  const {user} = useAuth()
   const [giftCode, setGiftCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -22,9 +24,9 @@ export default function GiftCodeRedemption() {
 
     setIsLoading(true);
     setMessage("");
-
+    const userId = user?.id
     try {
-      const response = await fetch("/api/user/redeem-gift-code", {
+      const response = await fetch(`/api/user/redeem-gift-code?userId=${userId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
