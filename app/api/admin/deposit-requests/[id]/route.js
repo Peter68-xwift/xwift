@@ -77,6 +77,8 @@ export async function PATCH(request, { params }) {
               "wallet.balance": newBalance,
               "wallet.totalDeposited":
                 (user.wallet?.totalDeposited || 0) + depositRequest.amount,
+              "wallet.availableBalance":
+                (user.wallet?.availableBalance || 0) + depositRequest.amount,
             },
             $push: {
               "wallet.history": {

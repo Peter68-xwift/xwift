@@ -53,7 +53,9 @@ import {
   UserCheck,
   UserX,
   Loader2,
+  Package,
 } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function UserManagement() {
   const { user, loading } = useAuth();
@@ -69,6 +71,8 @@ export default function UserManagement() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
+  const [isPackagesDialogOpen, setIsPackagesDialogOpen] = useState(false);
+  const [isReferralsDialogOpen, setIsReferralsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form states
@@ -339,6 +343,16 @@ export default function UserManagement() {
   const openWalletDialog = (user) => {
     setSelectedUser(user);
     setIsWalletDialogOpen(true);
+  };
+
+  const openPackagesDialog = (user) => {
+    setSelectedUser(user);
+    setIsPackagesDialogOpen(true);
+  };
+
+  const openReferralsDialog = (user) => {
+    setSelectedUser(user);
+    setIsReferralsDialogOpen(true);
   };
 
   if (loading || !user) {
@@ -703,6 +717,18 @@ export default function UserManagement() {
                                 Manage Wallet
                               </DropdownMenuItem>
                               <DropdownMenuItem
+                                onClick={() => openPackagesDialog(user)}
+                              >
+                                <Package className="h-4 w-4 mr-2" />
+                                View Packages
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => openReferralsDialog(user)}
+                              >
+                                <Users className="h-4 w-4 mr-2" />
+                                View Referrals
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
                                 onClick={() =>
                                   handleStatusToggle(user._id, user.isActive)
                                 }
@@ -974,6 +1000,75 @@ export default function UserManagement() {
                 </Button>
               </div>
             </form>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={isPackagesDialogOpen}
+          onOpenChange={setIsPackagesDialogOpen}
+        >
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Subscribed Packages</DialogTitle>
+              <DialogDescription>
+                A list of all active or completed packages by the user
+              </DialogDescription>
+            </DialogHeader>
+            <ScrollArea className="max-h-96">
+              {selectedUser?.packagesSubscribed?.length > 0 ? (
+                <ul className="space-y-4">
+                  {selectedUser.packagesSubscribed.map((pkg, i) => (
+                    <li key={i} className="border rounded-md p-3">
+                      <div className="font-semibold">{pkg.packageName}</div>
+                      <div className="text-sm text-muted-foreground">
+                        Amount: Ksh{pkg.amount} <br />
+                        Start: {new Date(
+                          pkg.startDate
+                        ).toLocaleDateString()}{" "}
+                        <br />
+                        End: {new Date(pkg.endDate).toLocaleDateString()}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-center text-muted-foreground">
+                  No packages found.
+                </p>
+              )}
+            </ScrollArea>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          open={isReferralsDialogOpen}
+          onOpenChange={setIsReferralsDialogOpen}
+        >
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>User Referrals</DialogTitle>
+              <DialogDescription>
+                Users who were referred by {selectedUser?.fullName}
+              </DialogDescription>
+            </DialogHeader>
+            <ScrollArea className="max-h-96">
+              {selectedUser?.referrals?.length > 0 ? (
+                <ul className="space-y-3">
+                  {selectedUser.referrals.map((ref, i) => (
+                    <li key={i} className="border rounded-md p-3">
+                      <div className="font-medium">{ref.fullName}</div>
+                      <div className="text-sm text-muted-foreground">
+                        Username: {ref.username} <br />
+                        Email: {ref.email}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-center text-muted-foreground">
+                  No referrals found.
+                </p>
+              )}
+            </ScrollArea>
           </DialogContent>
         </Dialog>
       </div>

@@ -94,6 +94,7 @@ export default function UserDashboard() {
   const stats = dashboardData?.stats || [];
   const recentActivities = dashboardData?.recentActivities || [];
   const wallet = dashboardData?.wallet || {};
+  const commision = dashboardData?.subordinateCommission || 0.0;
 
   const getStatIcon = (title) => {
     switch (title) {

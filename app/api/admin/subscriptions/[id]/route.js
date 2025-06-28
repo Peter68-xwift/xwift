@@ -99,26 +99,98 @@ export async function PATCH(request, { params }) {
         }
       );
 
+      // Ensure availableBalance exists before subtracting
+      const userDoc = await db
+        .collection("users")
+        .findOne({ _id: subscription.userId });
+      const hasAvailableBalance =
+        typeof userDoc?.wallet?.availableBalance === "number";
+
+      if (!hasAvailableBalance) {
+        await db.collection("users").updateOne(
+          { _id: subscription.userId },
+          {
+            $set: { "wallet.availableBalance": userDoc.wallet?.balance || 0 },
+          }
+        );
+      }
+
       // Add to user's active investments
-      await db.collection("users").updateOne(
-        { _id: subscription.userId },
-        {
-          $push: {
-            "wallet.history": {
-              type: "investment",
-              amount: -subscription.amount,
-              description: `Investment activated - ${subscription.packageName}`,
-              timestamp: new Date(),
-              status: "completed",
-            },
+      const updateUserFields = {
+        $push: {
+          "wallet.history": {
+            type: "investment",
+            amount: -subscription.amount,
+            description: `Investment activated - ${subscription.packageName}`,
+            timestamp: new Date(),
+            status: "completed",
           },
-          $inc: {
-            "stats.activeInvestments": 1,
-            "wallet.totalInvested":
-              typeof subscription.amount === "number" ? subscription.amount : 0,
-          },
+        },
+        $inc: {
+          "stats.activeInvestments": 1,
+          "wallet.totalInvested":
+            typeof subscription.amount === "number" ? subscription.amount : 0,
+        },
+      };
+
+      if (subscription.paymentMethod === "wallet") {
+        updateUserFields.$inc["wallet.balance"] = -subscription.amount;
+        updateUserFields.$inc["wallet.availableBalance"] = -subscription.amount;
+      }
+
+      await db
+        .collection("users")
+        .updateOne({ _id: subscription.userId }, updateUserFields);
+
+      // ✅ Apply referral bonus after approval
+      const subscribedUser = await db
+        .collection("users")
+        .findOne({ _id: subscription.userId });
+
+      if (subscribedUser.referrerId) {
+        // Ensure this is the user's first approved subscription
+        const hasPreviousApproved = await db
+          .collection("purchaseRequests")
+          .findOne({
+            userId: subscribedUser._id,
+            status: { $in: ["active", "completed"] },
+            _id: { $ne: new ObjectId(id) },
+          });
+
+        if (!hasPreviousApproved) {
+          const commissionAmount = subscription.amount * 0.15;
+
+          await db.collection("users").updateOne(
+            { _id: subscribedUser.referrerId },
+            {
+              $inc: {
+                "wallet.balance": commissionAmount,
+                "wallet.availableBalance": commissionAmount,
+              },
+              $push: {
+                walletHistory: {
+                  type: "referral_bonus",
+                  amount: commissionAmount,
+                  description: `15% referral bonus from ${subscribedUser.fullName}`,
+                  timestamp: new Date(),
+                  status: "completed",
+                },
+              },
+            }
+          );
+
+          // Optional notification
+          await db.collection("userNotifications").insertOne({
+            userId: subscribedUser.referrerId,
+            title: "Referral Bonus Received",
+            message: `You earned KES ${commissionAmount.toFixed(
+              2
+            )} from referring ${subscribedUser.fullName}.`,
+            isRead: false,
+            createdAt: new Date(),
+          });
         }
-      );
+      }
 
       return NextResponse.json({
         success: true,

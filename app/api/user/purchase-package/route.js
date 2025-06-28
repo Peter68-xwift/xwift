@@ -57,42 +57,23 @@ export async function POST(request) {
         );
       }
 
-      // Deduct from wallet and create investment
-      const newBalance = userBalance - packageData.price;
+      // Create a purchase request for wallet method, pending admin approval
+      const purchaseRequest = {
+        userId: user._id,
+        userFullName: user.fullName,
+        username: user.username,
+        packageId: packageData._id,
+        packageName: packageData.name,
+        amount: packageData.price,
+        paymentMethod: "wallet",
+        status: "pending",
+        createdAt: new Date(),
+      };
 
-      await db.collection("users").updateOne(
-        { _id: user._id },
-        {
-          $set: {
-            "wallet.balance": newBalance,
-          },
-          $push: {
-            "wallet.history": {
-              type: "debit",
-              amount: -packageData.price,
-              description: `Package purchase - ${packageData.name}`,
-              timestamp: new Date(),
-              status: "completed",
-            },
-            investments: {
-              _id: new ObjectId(),
-              packageId: packageData._id,
-              packageName: packageData.name,
-              amount: packageData.price,
-              roi: packageData.roi,
-              duration: packageData.duration,
-              startDate: new Date(),
-              status: "active",
-              createdAt: new Date(),
-            },
-          },
-        }
-      );
+      const result = await db
+        .collection("purchaseRequests")
+        .insertOne(purchaseRequest);
 
-      // Update package subscribers
-      await db
-        .collection("packages")
-        .updateOne({ _id: packageData._id }, { $inc: { subscribers: 1 } });
 
       return NextResponse.json({
         success: true,
@@ -136,49 +117,49 @@ export async function POST(request) {
       createdAt: new Date(),
     });
 
-    if (user.referrerId) {
-      const hasPreviousPurchase = await db
-        .collection("purchaseRequests")
-        .findOne({
-          userId: user._id,
-          status: { $in: ["active", "completed"] },
-        });
+    // if (user.referrerId) {
+    //   const hasPreviousPurchase = await db
+    //     .collection("purchaseRequests")
+    //     .findOne({
+    //       userId: user._id,
+    //       status: { $in: ["active", "completed"] },
+    //     });
 
-      if (!hasPreviousPurchase) {
-        const commissionAmount = packageData.price * 0.15;
+    //   if (!hasPreviousPurchase) {
+    //     const commissionAmount = packageData.price * 0.15;
 
-        // Credit referrer
-        await db.collection("users").updateOne(
-          { _id: user.referrerId },
-          {
-            $inc: {
-              "wallet.balance": commissionAmount,
-              "wallet.availableBalance": commissionAmount,
-            },
-            $push: {
-              walletHistory: {
-                type: "referral_bonus",
-                amount: commissionAmount,
-                description: `15% referral bonus from ${user.fullName}`,
-                timestamp: new Date(),
-                status: "completed",
-              },
-            },
-          }
-        );
+    //     // Credit referrer
+    //     await db.collection("users").updateOne(
+    //       { _id: user.referrerId },
+    //       {
+    //         $inc: {
+    //           "wallet.balance": commissionAmount,
+    //           "wallet.availableBalance": commissionAmount,
+    //         },
+    //         $push: {
+    //           walletHistory: {
+    //             type: "referral_bonus",
+    //             amount: commissionAmount,
+    //             description: `15% referral bonus from ${user.fullName}`,
+    //             timestamp: new Date(),
+    //             status: "completed",
+    //           },
+    //         },
+    //       }
+    //     );
 
-        // Optional: notify referrer
-        await db.collection("userNotifications").insertOne({
-          userId: user.referrerId,
-          title: "Referral Bonus Received",
-          message: `You earned KES ${commissionAmount.toFixed(
-            2
-          )} from referring ${user.fullName}.`,
-          isRead: false,
-          createdAt: new Date(),
-        });
-      }
-    }
+    //     // Optional: notify referrer
+    //     await db.collection("userNotifications").insertOne({
+    //       userId: user.referrerId,
+    //       title: "Referral Bonus Received",
+    //       message: `You earned KES ${commissionAmount.toFixed(
+    //         2
+    //       )} from referring ${user.fullName}.`,
+    //       isRead: false,
+    //       createdAt: new Date(),
+    //     });
+    //   }
+    // }
 
     return NextResponse.json({
       success: true,

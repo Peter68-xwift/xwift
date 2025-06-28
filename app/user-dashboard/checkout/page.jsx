@@ -27,12 +27,12 @@ export default function CheckoutPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const packageId = searchParams.get("packageId");
-
   const [packageData, setPackageData] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("mpesa");
   const [step, setStep] = useState(1); // 1: Select payment, 2: M-Pesa instructions, 3: Confirm payment
   const [isLoading, setIsLoading] = useState(true);
   const [isPurchasing, setIsPurchasing] = useState(false);
+  const [walletData, setWalletData] = useState(null);
   const [purchaseRequest, setPurchaseRequest] = useState(null);
   const [paymentForm, setPaymentForm] = useState({
     phoneNumber: "",
@@ -52,8 +52,40 @@ export default function CheckoutPage() {
 
     if (user) {
       fetchPackageData();
+      fetchWalletData()
     }
   }, [user, loading, router, packageId]);
+
+  const fetchWalletData = async () => {
+    try {
+      setIsLoading(true);
+     
+
+      const userId = user?.id;
+
+      const response = await fetch(`/api/user/wallet?userId=${userId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch wallet data");
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        setWalletData(result.data);
+      } else {
+        throw new Error(result.error || "Failed to fetch wallet data");
+      }
+    } catch (error) {
+      console.error("Error fetching wallet data:", error);
+     
+    } finally {
+      setWalletLoading(false);
+    }
+  };
 
   const fetchPackageData = async () => {
     try {
@@ -251,7 +283,7 @@ export default function CheckoutPage() {
                   <div className="flex-1">
                     <p className="font-medium">Wallet Balance</p>
                     <p className="text-sm text-gray-600">
-                      Available: ${user.wallet?.balance?.toFixed(2) || "0.00"}
+                      Available: Ksh{walletData?.balance.toFixed(2) || 0.00}
                     </p>
                   </div>
                 </div>

@@ -86,6 +86,11 @@ export async function GET(request) {
 
         const nextFeedTime = new Date(tomorrow);
 
+        const isTodayStart = startDate >= today && startDate < tomorrow;
+
+        const canFeed = (!fedToday && daysLeft > 0) || isTodayStart;
+
+
         return {
           id: sub._id.toString(),
           packageName: packageData.name,
@@ -98,7 +103,7 @@ export async function GET(request) {
           daysLeft,
           startDate: startDate.toLocaleDateString(),
           endDate: endDate.toLocaleDateString(),
-          canFeed: !fedToday && daysLeft > 0,
+          canFeed,
           fedToday,
           nextFeedTime: nextFeedTime.toISOString(),
           lastFeedDate: sub.lastFeedDate
@@ -108,7 +113,7 @@ export async function GET(request) {
       })
     );
 
-    // Filter out any nulls if packages were missing
+    // Filter out any nulls if packages were missinG
     const validSubscriptions = formattedSubscriptions.filter(Boolean);
 
     // Calculate statistics

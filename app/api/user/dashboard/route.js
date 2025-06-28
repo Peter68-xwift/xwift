@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { UserModel } from "../../../../lib/database";
+import clientPromise from "../../../../lib/mongodb";
+import { ObjectId } from "mongodb";
+
 
 export async function GET(request) {
   try {
+    const client = await clientPromise; // ✅ correct usage
+    const db = client.db("mern_auth_app"); // ⬅️ use your actual DB name
     // Get user from token
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
@@ -64,6 +69,43 @@ export async function GET(request) {
       (activity) => new Date(activity.timestamp) > sevenDaysAgo
     ).length;
 
+    const commission = await db
+      .collection("users")
+      .aggregate([
+        { $match: { _id: new ObjectId(userId) } },
+        { $unwind: "$walletHistory" },
+        { $match: { "walletHistory.type": "subordinate_income" } },
+        {
+          $group: {
+            _id: "$_id",
+            total: { $sum: "$walletHistory.amount" },
+          },
+        },
+      ])
+      .toArray();
+
+    const totalSubordinateCommission = commission[0]?.total || 0;
+    const subordinateCommission = totalSubordinateCommission.toFixed(2);
+
+    // Get referral bonus total
+    const referralBonusData = await db
+      .collection("users")
+      .aggregate([
+        { $match: { _id: new ObjectId(userId) } },
+        { $unwind: "$walletHistory" },
+        { $match: { "walletHistory.type": "referral_bonus" } },
+        {
+          $group: {
+            _id: "$_id",
+            total: { $sum: "$walletHistory.amount" },
+          },
+        },
+      ])
+      .toArray();
+
+    const totalReferralBonus = referralBonusData[0]?.total || 0;
+    const referralBonus = totalReferralBonus.toFixed(2);
+
     const stats = [
       {
         title: "Total Balance",
@@ -79,17 +121,17 @@ export async function GET(request) {
         changeType: "neutral",
       },
       {
-        title: "Monthly Growth",
-        value: `${growthPercentage}%`,
-        change: growthPercentage > 0 ? "This month" : "No growth",
+        title: "Daily Task Commisison",
+        value: `Ksh${subordinateCommission}`,
+        change: "5% commission",
         changeType:
           Number.parseFloat(growthPercentage) > 0 ? "positive" : "neutral",
       },
       {
-        title: "Activities",
-        value: recentActivityCount.toString(),
-        change: "Last 7 days",
-        changeType: "neutral",
+        title: "Referral Commission",
+        value: `Ksh${referralBonus}`,
+        change: "15% referral bonus",
+        changeType: "positive",
       },
     ];
 
@@ -104,6 +146,7 @@ export async function GET(request) {
         },
         wallet: walletData,
         stats,
+
         recentActivities:
           recentActivities.length > 0
             ? recentActivities
