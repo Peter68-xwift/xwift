@@ -25,7 +25,7 @@ export default function PackagesPage() {
 
       const response = await fetch(`/api/user/packages?userId=${userId}`);
       const result = await response.json();
-      console.log(result.data);
+      // console.log(result.data);
       if (result.success) {
         setPackagesData(result.data);
         setError(null);

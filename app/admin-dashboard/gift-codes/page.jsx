@@ -81,7 +81,7 @@ export default function GiftCodesPage() {
       if (response.ok) {
         const data = await response.json();
         setGiftCodes(data.giftCodes || []);
-        console.log(data.giftCodes);
+        // console.log(data.giftCodes);
         setStats(data.stats || stats);
       }
     } catch (error) {

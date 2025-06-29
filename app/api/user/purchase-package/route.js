@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import clientPromise from "../../../../lib/mongodb";
 import { UserModel } from "../../../../lib/database";
-
 import { ObjectId } from "mongodb";
 
 export async function POST(request) {
@@ -19,8 +18,8 @@ export async function POST(request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const client = await clientPromise; // ✅ correct usage
-    const db = client.db("mern_auth_app"); // ⬅️ use your actual DB name
+    const client = await clientPromise;
+    const db = client.db("mern_auth_app");
 
     const { packageId, paymentMethod } = await request.json();
 
@@ -31,7 +30,6 @@ export async function POST(request) {
       );
     }
 
-    // Get package details
     const packageData = await db
       .collection("packages")
       .findOne({ _id: new ObjectId(packageId) });
@@ -47,17 +45,54 @@ export async function POST(request) {
       );
     }
 
-    // Check if user has sufficient balance (for wallet payment)
+    // === Handle Wallet Payment ===
     if (paymentMethod === "wallet") {
-      const userBalance = user.wallet?.balance || 0;
+      const userBalance = user?.wallet?.balance || 0;
       if (userBalance < packageData.price) {
         return NextResponse.json(
           { error: "Insufficient wallet balance" },
           { status: 400 }
         );
       }
+      console.log(user._id);
+      // 1. Deduct user balance and available balance
+      const updated = await db.collection("users").findOneAndUpdate(
+        {
+          _id: new ObjectId(user._id),
+        },
+        {
+          $inc: {
+            "wallet.balance": -packageData.price,
+            "wallet.availableBalance": -packageData.price,
+            "wallet.totalInvested": packageData.price,
+            "stats.activeInvestments": 1,
+          },
+          $push: {
+            walletHistory: {
+              type: "investment",
+              amount: packageData.price,
+              description: `Invested in ${packageData.name} package`,
+              timestamp: new Date(),
+              status: "completed",
+            },
+          },
+        },
+        { returnDocument: "after" }
+      );
 
-      // Create a purchase request for wallet method, pending admin approval
+      // if (!updated.value) {
+      //   return NextResponse.json(
+      //     { error: "Failed to deduct wallet funds" },
+      //     { status: 400 }
+      //   );
+      // }
+
+      // 2. Create subscription with status 'active'
+      const startDate = new Date();
+      const endDate = new Date(
+        startDate.getTime() + packageData.duration * 24 * 60 * 60 * 1000
+      );
+
       const purchaseRequest = {
         userId: user._id,
         userFullName: user.fullName,
@@ -66,18 +101,81 @@ export async function POST(request) {
         packageName: packageData.name,
         amount: packageData.price,
         paymentMethod: "wallet",
-        status: "pending",
+        status: "active",
         createdAt: new Date(),
+        activatedAt: startDate,
+        startDate,
+        endDate,
       };
 
       const result = await db
         .collection("purchaseRequests")
         .insertOne(purchaseRequest);
 
+      // 3. Update package stats
+      await db.collection("packages").updateOne(
+        { _id: packageData._id },
+        {
+          $inc: {
+            subscribers: 1,
+            totalRevenue: packageData.price,
+          },
+          $set: { updatedAt: new Date() },
+        }
+      );
+
+      // 4. Daily Feed Tracking
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      await db.collection("dailyFeeds").insertOne({
+        userId: user._id,
+        subscriptionId: result.insertedId,
+        feedDate: today,
+        createdAt: new Date(),
+      });
+
+      // 5. Referral Bonus (only if it's user's first active subscription)
+      const hasPrevious = await db.collection("purchaseRequests").findOne({
+        userId: user._id,
+        status: { $in: ["active", "completed"] },
+        _id: { $ne: result.insertedId },
+      });
+
+      if (!hasPrevious && user.referrerId) {
+        const bonus = packageData.price * 0.15;
+        await db.collection("users").updateOne(
+          { _id: user.referrerId },
+          {
+            $inc: {
+              "wallet.balance": bonus,
+              "wallet.availableBalance": bonus,
+            },
+            $push: {
+              walletHistory: {
+                type: "referral_bonus",
+                amount: bonus,
+                description: `15% referral bonus from ${user.fullName}`,
+                timestamp: new Date(),
+                status: "completed",
+              },
+            },
+          }
+        );
+
+        await db.collection("userNotifications").insertOne({
+          userId: user.referrerId,
+          title: "Referral Bonus Received",
+          message: `You earned KES ${bonus.toFixed(2)} from referring ${
+            user.fullName
+          }.`,
+          isRead: false,
+          createdAt: new Date(),
+        });
+      }
 
       return NextResponse.json({
         success: true,
-        message: "Package purchased successfully with wallet balance",
+        message: "Package purchased successfully using wallet",
         investment: {
           packageName: packageData.name,
           amount: packageData.price,
@@ -87,7 +185,7 @@ export async function POST(request) {
       });
     }
 
-    // For M-Pesa payment, create a purchase request
+    // === Handle M-Pesa Payment ===
     const purchaseRequest = {
       userId: user._id,
       userFullName: user.fullName,
@@ -98,68 +196,22 @@ export async function POST(request) {
       paymentMethod: "mpesa",
       status: "pending_payment",
       createdAt: new Date(),
-      expiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes expiry
+      expiresAt: new Date(Date.now() + 30 * 60 * 1000),
     };
 
     const result = await db
       .collection("purchaseRequests")
       .insertOne(purchaseRequest);
 
-    // Normalize today's date to 00:00
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Create initial feed record
     await db.collection("dailyFeeds").insertOne({
       userId: new ObjectId(userId),
       subscriptionId: result.insertedId,
       feedDate: today,
       createdAt: new Date(),
     });
-
-    // if (user.referrerId) {
-    //   const hasPreviousPurchase = await db
-    //     .collection("purchaseRequests")
-    //     .findOne({
-    //       userId: user._id,
-    //       status: { $in: ["active", "completed"] },
-    //     });
-
-    //   if (!hasPreviousPurchase) {
-    //     const commissionAmount = packageData.price * 0.15;
-
-    //     // Credit referrer
-    //     await db.collection("users").updateOne(
-    //       { _id: user.referrerId },
-    //       {
-    //         $inc: {
-    //           "wallet.balance": commissionAmount,
-    //           "wallet.availableBalance": commissionAmount,
-    //         },
-    //         $push: {
-    //           walletHistory: {
-    //             type: "referral_bonus",
-    //             amount: commissionAmount,
-    //             description: `15% referral bonus from ${user.fullName}`,
-    //             timestamp: new Date(),
-    //             status: "completed",
-    //           },
-    //         },
-    //       }
-    //     );
-
-    //     // Optional: notify referrer
-    //     await db.collection("userNotifications").insertOne({
-    //       userId: user.referrerId,
-    //       title: "Referral Bonus Received",
-    //       message: `You earned KES ${commissionAmount.toFixed(
-    //         2
-    //       )} from referring ${user.fullName}.`,
-    //       isRead: false,
-    //       createdAt: new Date(),
-    //     });
-    //   }
-    // }
 
     return NextResponse.json({
       success: true,

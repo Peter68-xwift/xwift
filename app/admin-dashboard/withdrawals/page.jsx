@@ -76,7 +76,7 @@ export default function AdminwithdrawalsPage() {
     setIsProcessing(true);
     try {
       const userId = user?.id;
-      console.log(user);
+      // console.log(user);
       const response = await fetch(
         `/api/admin/Withdrawals-request/${requestId}?userId=${userId}`,
         {

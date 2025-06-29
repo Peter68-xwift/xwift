@@ -44,9 +44,9 @@ export default function SubscriptionsPage() {
 
       if (data.success) {
         setSubscriptions(data.data.subscriptions);
-        console.log(data.data.subscriptions);
+        // console.log(data.data.subscriptions);
         setStats(data.data.stats);
-        console.log(data.data.stats);
+        // console.log(data.data.stats);
       } else {
         setMessage(data.error || "Failed to fetch subscriptions");
         setMessageType("error");
@@ -60,7 +60,7 @@ export default function SubscriptionsPage() {
     }
   };
 
-  const handleFeed = async (subscriptionId) => {
+  const handleFeed = async (subscriptionId) => { 
     try {
       setFeedingId(subscriptionId);
       const userId = user?.id;

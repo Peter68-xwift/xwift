@@ -31,7 +31,7 @@ export default function UserDashboard() {
       const userId = user?.id; // ← replace this with the actual ID from auth context or state
       const response = await fetch(`/api/user/dashboard?userId=${userId}`);
 
-      console.log(response);
+      // console.log(response);
       const result = await response.json();
 
       if (result.success) {

@@ -53,7 +53,7 @@ export default function AdminSettings() {
 
   const handleSave = () => {
     // Save settings logic here
-    console.log("Saving settings:", settings);
+    // console.log("Saving settings:", settings);
   };
 
   const handleInputChange = (key, value) => {

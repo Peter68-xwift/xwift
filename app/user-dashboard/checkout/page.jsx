@@ -83,7 +83,7 @@ export default function CheckoutPage() {
       console.error("Error fetching wallet data:", error);
      
     } finally {
-      setWalletLoading(false);
+      setIsLoading(false);
     }
   };
 

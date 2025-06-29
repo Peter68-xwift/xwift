@@ -130,7 +130,7 @@ export default function UserManagement() {
 
       if (data.success) {
         setUsers(data.data.users);
-        console.log(data.data);
+        // console.log(data.data);
         setTotalUsers(data.data.total);
         setTotalPages(data.data.totalPages);
       } else {
@@ -657,6 +657,7 @@ export default function UserManagement() {
                       <TableHead>User</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Role</TableHead>
+                      <TableHead>Phone</TableHead>
                       <TableHead>Wallet Balance</TableHead>
                       <TableHead>Join Date</TableHead>
                       <TableHead>Refered By</TableHead>
@@ -686,6 +687,9 @@ export default function UserManagement() {
                           >
                             {user.role}
                           </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {user.phone}
                         </TableCell>
                         <TableCell>
                           ${(user.wallet?.balance || 0).toLocaleString()}

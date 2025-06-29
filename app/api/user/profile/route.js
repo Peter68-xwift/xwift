@@ -16,7 +16,7 @@ export async function GET(request) {
     if (!user || user.role !== "user") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
+    // console.log(user)
     // Calculate real statistics from user data
     const totalInvested = user.wallet?.totalInvested || 0;
     const activePackages = user.stats?.activeInvestments || 0;

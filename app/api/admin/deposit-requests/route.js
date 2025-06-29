@@ -30,7 +30,7 @@ export async function GET(request) {
       .collection("depositRequests")
       .find()
       .toArray();
-    console.log(depositRequests); // now this will log actual data
+    // console.log(depositRequests); // now this will log actual data
 
     // Calculate statistics
     const stats = {

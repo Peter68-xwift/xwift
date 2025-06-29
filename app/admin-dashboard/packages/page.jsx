@@ -264,7 +264,7 @@ export default function PackageManagement() {
       }
     } else if (action === "edit") {
       const packageToEdit = packages.find((pkg) => pkg._id === packageId);
-      console.log(packageToEdit);
+      // console.log(packageToEdit);
       if (packageToEdit) {
         setEditingPackage(packageToEdit);
         setEditPackage({

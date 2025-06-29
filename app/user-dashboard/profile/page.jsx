@@ -70,11 +70,11 @@ export default function ProfilePage() {
       });
 
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
 
       if (data.success) {
         const { user: userData, stats } = data.data;
-        console.log(userData);
+        // console.log(userData);
         setProfileData({
           name: userData.name,
           email: userData.email,
