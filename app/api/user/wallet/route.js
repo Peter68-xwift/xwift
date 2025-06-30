@@ -133,8 +133,10 @@ export async function POST(request) {
     // Handle withdrawal
     if (type === "withdrawal") {
       const now = new Date();
-      const day = now.getDay(); // 0 = Sunday, 6 = Saturday
-      const hour = now.getHours();
+      const localNow = new Date(now.getTime() + 3 * 60 * 60 * 1000); // convert to UTC+3
+      const day = localNow.getDay(); // 0 = Sunday, 6 = Saturday
+      const hour = localNow.getHours();
+
 
       if (day === 0 || day === 6 || hour < 9 || hour >= 16) {
         return NextResponse.json(
