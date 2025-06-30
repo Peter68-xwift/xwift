@@ -5,10 +5,14 @@ import { AuthProvider } from "../contexts/AuthContext";
 import { ThemeProvider } from "../contexts/ThemeContext";
 import { BrowserRouter } from "react-router-dom";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Xswift Ranch",
+  icons: {
+    icon: "/url.png", // use string path, not import
+  },
   description: "A modern mern application",
   generator: "v0.dev",
 };
