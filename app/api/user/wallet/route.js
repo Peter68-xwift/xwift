@@ -25,8 +25,11 @@ export async function GET(request) {
       (t) => t.type === "deposit" || t.type === "credit"
     );
     const withdrawals = walletHistory.filter(
-      (t) => t.type === "withdrawal" || t.type === "debit"
+      (t) =>
+        (t.type === "withdrawal" || t.type === "debit") &&
+        (t.status === "completed" || !t.status) // fallback in case status is missing
     );
+    
     const earnings = walletHistory.filter(
       (t) => t.type === "earning" || t.type === "roi"
     );
@@ -92,6 +95,14 @@ export async function POST(request) {
       return NextResponse.json({ error: "Missing user ID" }, { status: 400 });
     }
 
+    const user = await UserModel.findUserById(userId);
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const client = await clientPromise;
+    const db = client.db("mern_auth_app");
+
     const { type, amount, description } = await request.json();
 
     if (!type || !amount || !description) {
@@ -101,20 +112,23 @@ export async function POST(request) {
       );
     }
 
-    if (amount <= 0) {
+    if (amount < 100) {
       return NextResponse.json(
-        { error: "Amount must be positive" },
+        { error: "Minimum withdrawal amount is 100" },
         { status: 400 }
       );
     }
+    const available = user.wallet?.availableBalance || 0;
 
-    const user = await UserModel.findUserById(userId);
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (available < amount) {
+      return NextResponse.json(
+        { error: "Insufficient available balance" },
+        { status: 400 }
+      );
     }
+    
 
-    const client = await clientPromise;
-    const db = client.db("mern_auth_app");
+
 
     // Handle withdrawal
     if (type === "withdrawal") {
@@ -150,7 +164,6 @@ export async function POST(request) {
         );
       }
 
-      const available = user.wallet?.availableBalance || 0;
       if (available < amount) {
         return NextResponse.json(
           { error: "Insufficient available balance" },
