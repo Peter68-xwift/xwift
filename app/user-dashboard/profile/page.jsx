@@ -73,7 +73,7 @@ export default function ProfilePage() {
       });
 
       const data = await response.json();
-      // console.log(data.data);
+      console.log(data.data);
       setReferrals(data.data.referrals || []);
 
 

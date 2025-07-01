@@ -29,6 +29,7 @@ export default function WalletPage() {
   const [walletLoading, setWalletLoading] = useState(true);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
+  const [settings, setSettings] = useState(null);
 
   const fetchWalletData = async () => {
     try {
@@ -72,6 +73,17 @@ export default function WalletPage() {
     }
   }, [user, loading, router]);
 
+  useEffect(() => {
+    async function fetchSettings() {
+      const res = await fetch("/api/admin/settings");
+      const data = await res.json();
+      if (data.success) {
+        setSettings(data.settings);
+      }
+    }
+    fetchSettings();
+  }, []);
+
   const handleWithdrawal = async () => {
     if (!amount || Number.parseFloat(amount) <= 0) {
       alert("Please enter a valid amount");
@@ -80,6 +92,16 @@ export default function WalletPage() {
 
     if (Number.parseFloat(amount) > walletData.availableBalance) {
       alert("Insufficient balance");
+      return;
+    }
+
+    if (amount < settings.minWithdrawalAmount) {
+      alert(`Minimum withdrawal is Ksh ${settings.minWithdrawalAmount}`);
+      return;
+    }
+
+    if (amount > settings.maxWithdrawalAmount) {
+      alert(`Maximum withdrawal is Ksh ${settings.maxWithdrawalAmount}`);
       return;
     }
 

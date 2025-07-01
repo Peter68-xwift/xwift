@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -44,6 +44,7 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [settings, setSettings] = useState(null);
   const [usernameStatus, setUsernameStatus] = useState({
     checking: false,
     available: null,
@@ -52,6 +53,51 @@ export default function SignUpPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const ref = searchParams.get("ref");
+
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch("/api/admin/settings");
+        const data = await res.json();
+        setSettings(data.settings);
+        console.log(data.settings);
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
+  if (!settings?.enableRegistration) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+        <Card className="max-w-md w-full shadow-md">
+          <CardHeader>
+            <CardTitle className="text-center text-red-600">
+              Registration Disabled
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-center space-y-4">
+            <p className="text-gray-700">
+              User registration is currently disabled. Please check back later.
+            </p>
+            <Link
+              href="/"
+              className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+            >
+              Back to Home
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

@@ -21,6 +21,7 @@ export default function AdminSettings() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [settings, setSettings] = useState({
+    key: "general",
     siteName: "Investment Platform",
     siteDescription: "Professional investment management platform",
     adminEmail: "admin@example.com",
@@ -28,14 +29,17 @@ export default function AdminSettings() {
     enableRegistration: true,
     requireEmailVerification: false,
     maintenanceMode: false,
-    maxInvestmentAmount: 100000,
-    minInvestmentAmount: 100,
+    minWithdrawalAmount: 100,
+    maxWithdrawalAmount: 100000,
     platformFee: 2.5,
   });
 
   useEffect(() => {
     if (!loading && (!user || user.role !== "admin")) {
       router.push("/");
+    }
+    if (!loading && user?.role === "admin") {
+      fetchSettingsFromBackend();
     }
   }, [user, loading, router]);
 
@@ -51,10 +55,48 @@ export default function AdminSettings() {
     return null;
   }
 
-  const handleSave = () => {
-    // Save settings logic here
-    // console.log("Saving settings:", settings);
+  const fetchSettingsFromBackend = async () => {
+    try {
+      const res = await fetch("/api/admin/settings");
+      const data = await res.json();
+
+      if (data.success && data.settings) {
+        setSettings((prev) => ({
+          ...prev,
+          ...data.settings,
+        }));
+      } else {
+        console.warn("Failed to load settings from backend");
+      }
+    } catch (error) {
+      console.error("Error loading settings:", error);
+    }
   };
+  
+
+  const handleSave = async () => {
+    try {
+      const response = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(settings), // includes enableRegistration
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("Settings saved successfully!");
+      } else {
+        alert("Failed to save settings.");
+      }
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      alert("Error saving settings");
+    }
+  };
+  
 
   const handleInputChange = (key, value) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
@@ -186,27 +228,27 @@ export default function AdminSettings() {
             </CardContent>
           </Card>
 
-          {/* Investment Settings */}
+          {/* Withdrawal Settings */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Database className="h-5 w-5" />
-                Investment Settings
+                Withdrawal Settings
               </CardTitle>
-              <CardDescription>Configure investment parameters</CardDescription>
+              <CardDescription>Configure withdrawal limits</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="minInvestment">
-                  Minimum Investment Amount (Ksh)
+                <Label htmlFor="minWithdrawal">
+                  Minimum Withdrawal Amount (Ksh)
                 </Label>
                 <Input
-                  id="minInvestment"
+                  id="minWithdrawal"
                   type="number"
-                  value={settings.minInvestmentAmount}
+                  value={settings.minWithdrawalAmount}
                   onChange={(e) =>
                     handleInputChange(
-                      "minInvestmentAmount",
+                      "minWithdrawalAmount",
                       Number.parseInt(e.target.value)
                     )
                   }
@@ -214,33 +256,17 @@ export default function AdminSettings() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="maxInvestment">
-                  Maximum Investment Amount (Ksh)
+                <Label htmlFor="maxWithdrawal">
+                  Maximum Withdrawal Amount (Ksh)
                 </Label>
                 <Input
-                  id="maxInvestment"
+                  id="maxWithdrawal"
                   type="number"
-                  value={settings.maxInvestmentAmount}
+                  value={settings.maxWithdrawalAmount}
                   onChange={(e) =>
                     handleInputChange(
-                      "maxInvestmentAmount",
+                      "maxWithdrawalAmount",
                       Number.parseInt(e.target.value)
-                    )
-                  }
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="platformFee">Platform Fee (%)</Label>
-                <Input
-                  id="platformFee"
-                  type="number"
-                  step="0.1"
-                  value={settings.platformFee}
-                  onChange={(e) =>
-                    handleInputChange(
-                      "platformFee",
-                      Number.parseFloat(e.target.value)
                     )
                   }
                 />
