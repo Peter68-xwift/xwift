@@ -29,6 +29,7 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [referrals, setReferrals] = useState([]);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [copied, setCopied] = useState(false);
@@ -67,10 +68,14 @@ export default function ProfilePage() {
       const response = await fetch(`/api/user/profile?userId=${userId}`, {
         method: "GET",
         credentials: "include",
+
+     
       });
 
       const data = await response.json();
-      // console.log(data);
+      // console.log(data.data);
+      setReferrals(data.data.referrals || []);
+
 
       if (data.success) {
         const { user: userData, stats } = data.data;
@@ -130,7 +135,6 @@ export default function ProfilePage() {
       });
 
       const data = await response.json();
-
       if (data.success) {
         setIsEditing(false);
         setSuccessMessage("Profile updated successfully!");
@@ -187,7 +191,6 @@ export default function ProfilePage() {
             Refresh
           </Button>
         </div>
-
         {/* Error Message */}
         {error && (
           <Card className="mb-4 border-red-200 bg-red-50">
@@ -199,7 +202,6 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         )}
-
         {/* Success Message */}
         {successMessage && (
           <Card className="mb-4 border-green-200 bg-green-50">
@@ -213,7 +215,6 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
         )}
-
         {/* Profile Header */}
         <Card className="mb-6">
           <CardContent className="pt-6">
@@ -284,7 +285,6 @@ export default function ProfilePage() {
             </div>
           </CardContent>
         </Card>
-
         {/* Profile Stats - Real Data */}
         <div className="grid grid-cols-2 gap-3 mb-6">
           {profileStats.map((stat, index) => (
@@ -297,7 +297,43 @@ export default function ProfilePage() {
             </Card>
           ))}
         </div>
+        {/* Referrals Section */}
+        <div className="p-4 border mb-3 rounded-md">
+          <h3 className="font-medium text-lg mb-4">Referred Users</h3>
 
+          {referrals.length === 0 ? (
+            <p>No referrals yet.</p>
+          ) : (
+            <ul className="space-y-4">
+              {referrals.map((ref) => (
+                <li key={ref.id} className="border p-3 rounded-md bg-gray-50">
+                  <div className="mb-2">
+                    <strong>{ref.name}</strong> ({ref.email})
+                  </div>
+
+                  {ref.packages.length > 0 ? (
+                    <div>
+                      <h4 className="font-medium mb-1">Purchased Packages:</h4>
+                      <ul className="list-disc list-inside space-y-1">
+                        {ref.packages.map((pkg, i) => (
+                          <li key={i}>
+                            {pkg.packageName} – Ksh {pkg.amount} (
+                            {new Date(pkg.startDate).toLocaleDateString()} to{" "}
+                            {new Date(pkg.endDate).toLocaleDateString()})
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      No packages bought yet.
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
         {/* Profile Information */}
         <Card className="mb-6">
           <CardHeader>
@@ -385,7 +421,6 @@ export default function ProfilePage() {
             )}
           </CardContent>
         </Card>
-
         {/* Account Settings */}
         <Card>
           <CardHeader>

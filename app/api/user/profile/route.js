@@ -3,7 +3,6 @@ import { UserModel } from "../../../../lib/database";
 
 export async function GET(request) {
   try {
-    // Get user from token
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
@@ -16,13 +15,11 @@ export async function GET(request) {
     if (!user || user.role !== "user") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    // console.log(user)
-    // Calculate real statistics from user data
+
     const totalInvested = user.wallet?.totalInvested || 0;
     const activePackages = user.stats?.activeInvestments || 0;
     const totalReferrals = user.referrals?.length || 0;
 
-    // Calculate member since date
     const memberSince = user.createdAt
       ? new Date(user.createdAt).toLocaleDateString("en-US", {
           year: "numeric",
@@ -54,6 +51,19 @@ export async function GET(request) {
         referrals: totalReferrals.toString(),
         memberSince: memberSince,
       },
+      referrals: user.referrals?.map((ref) => ({
+        id: ref._id,
+        name: ref.fullName,
+        username: ref.username,
+        email: ref.email,
+        packages:
+          ref.packagesSubscribed?.map((pkg) => ({
+            packageName: pkg.packageName,
+            amount: pkg.amount,
+            startDate: pkg.startDate,
+            endDate: pkg.endDate,
+          })) || [],
+      })),
     };
 
     return NextResponse.json({
@@ -68,6 +78,7 @@ export async function GET(request) {
     );
   }
 }
+
 
 export async function PUT(request) {
   try {
