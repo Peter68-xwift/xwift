@@ -82,7 +82,11 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <Image src={logo} alt="Company logo" className="w-[40%] mx-auto" />
+          <img
+            src={settings?.logo}
+            alt="Company logo"
+            className="w-[40%] mx-auto rounded-full"
+          />
 
           <CardTitle className="text-2xl font-bold mb-5">
             {settings.siteName}

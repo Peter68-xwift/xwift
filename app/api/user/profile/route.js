@@ -82,7 +82,6 @@ export async function GET(request) {
 
 export async function PUT(request) {
   try {
-    // Get user from token
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
@@ -97,14 +96,14 @@ export async function PUT(request) {
     }
 
     const body = await request.json();
-    const { name, email, phone, address } = body;
+    const { name, email, phone, address, avatar } = body; // ✅ destructure avatar from body
 
-    // Update user profile
     const updatedUser = await UserModel.updateUser(userId, {
       fullName: name,
-      email: email,
+      email,
       phoneNumber: phone,
-      address: address,
+      address,
+      image: avatar, // ✅ correctly passed
       updatedAt: new Date(),
     });
 
@@ -123,6 +122,7 @@ export async function PUT(request) {
         email: updatedUser.email,
         phone: updatedUser.phoneNumber,
         address: updatedUser.address,
+        avatar: updatedUser.image,
       },
     });
   } catch (error) {
@@ -133,3 +133,4 @@ export async function PUT(request) {
     );
   }
 }
+

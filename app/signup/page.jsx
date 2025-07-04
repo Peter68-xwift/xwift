@@ -44,7 +44,7 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [settings, setSettings] = useState(null);
+  const [settings, setSettings] = useState([]);
   const [usernameStatus, setUsernameStatus] = useState({
     checking: false,
     available: null,
@@ -60,7 +60,7 @@ export default function SignUpPage() {
         const res = await fetch("/api/admin/settings");
         const data = await res.json();
         setSettings(data.settings);
-        console.log(data.settings);
+        // console.log(data.settings);
       } catch (error) {
         console.error("Error fetching settings:", error);
       } finally {
@@ -260,10 +260,10 @@ export default function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <Image src={logo} alt="Company logo" className="w-[40%] mx-auto" />
+          <img src={settings?.logo} alt="Company logo" className="w-[40%] mx-auto rounded-full" />
 
           <CardTitle className="text-2xl font-bold mb-5">
-            {settings.siteName}
+            {settings?.siteName}
           </CardTitle>
           <CardTitle className="text-xl font-bold">Create Account</CardTitle>
           <CardDescription>

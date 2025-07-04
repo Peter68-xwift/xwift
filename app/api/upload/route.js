@@ -8,26 +8,23 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-// Helper to read buffer from stream
-async function streamToBuffer(readableStream) {
-  const chunks = [];
-  for await (const chunk of readableStream) {
-    chunks.push(chunk);
-  }
-  return Buffer.concat(chunks);
-}
-
 export async function POST(req) {
   try {
-    const buffer = await streamToBuffer(req.body);
+    const formData = await req.formData();
+    const file = formData.get("file");
+
+    if (!file) {
+      return NextResponse.json(
+        { success: false, error: "No file uploaded" },
+        { status: 400 }
+      );
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
     const base64 = buffer.toString("base64");
-    const dataURI = `data:image/jpeg;base64,${base64}`;
+    const dataURI = `data:${file.type};base64,${base64}`;
 
     const result = await cloudinary.uploader.upload(dataURI, {
       folder: "packages",

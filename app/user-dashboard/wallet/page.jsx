@@ -33,7 +33,7 @@ export default function WalletPage() {
   const [pin, setPin] = useState("");
   const [newPin, setNewPin] = useState("");
   const [requiresNewPin, setRequiresNewPin] = useState(false);
-
+  const [widhth, setWidhth] = useState([])
   useEffect(() => {
     if (user) {
       setRequiresNewPin(!user.withdrawalPin);
@@ -59,6 +59,12 @@ export default function WalletPage() {
       const result = await response.json();
       if (result.success) {
         setWalletData(result.data);
+        const withdrawals =
+          result.data.transactions?.filter(
+            (tx) => tx.type === "withdrawal" && tx.status === "completed"
+          ) || [];
+
+        setWidhth(withdrawals); // ✅ Update your withdrawal state
       } else {
         throw new Error(result.error || "Failed to fetch wallet data");
       }
@@ -156,6 +162,8 @@ export default function WalletPage() {
       </div>
     );
   }
+
+
 
   if (!user || user.role !== "user") {
     return null;
@@ -467,6 +475,63 @@ export default function WalletPage() {
                 Withdrawals are processed within 1-3 business days
               </p>
             </CardContent>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">All widhdrawals</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                {widhth === 0 ? (
+                  <div className="text-center py-8">
+                    <Wallet className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500">No widhdrawals yet</p>
+                    <p className="text-sm text-gray-400">
+                      Your widhdrawals history will appear here
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {widhth.map((transaction) => (
+                      <div
+                        key={transaction.id}
+                        className="flex items-center justify-between py-2"
+                      >
+                        <div className="flex items-center space-x-3">
+                          {getTransactionIcon(transaction.type)}
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">
+                              {transaction.description}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {transaction.date}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p
+                            className={`text-sm font-medium ${getTransactionColor(
+                              transaction.type
+                            )}`}
+                          >
+                            {transaction.amount > 0 ? "+" : ""}$
+                            {Math.abs(transaction.amount).toFixed(2)}
+                          </p>
+                          <p
+                            className={`text-xs ${
+                              transaction.status === "completed"
+                                ? "text-green-600"
+                                : "text-yellow-600"
+                            }`}
+                          >
+                            {transaction.status}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </Card>
         )}
       </main>

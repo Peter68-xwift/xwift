@@ -81,7 +81,7 @@ export default function GiftCodeRedemption() {
           <Input
             id="gift-code"
             type="text"
-            placeholder="e.g., GIFT2024"
+            placeholder="Gift Code"
             value={giftCode}
             onChange={(e) => setGiftCode(e.target.value.toUpperCase())}
             onKeyPress={handleKeyPress}
@@ -126,12 +126,6 @@ export default function GiftCodeRedemption() {
           </div>
         )}
 
-        <div className="bg-blue-50 p-3 rounded-lg">
-          <p className="text-xs text-blue-800">
-            💡 <strong>Tip:</strong> Gift codes are case-insensitive and
-            typically look like GIFT2024, SAVE7891, or BONUS1234.
-          </p>
-        </div>
       </CardContent>
     </Card>
   );

@@ -172,19 +172,19 @@ export async function POST(request) {
       }
 
       // Optional time restriction (commented)
-      // const now = new Date();
-      // const localNow = new Date(now.getTime() + 3 * 60 * 60 * 1000); // UTC+3
-      // const day = localNow.getDay();
-      // const hour = localNow.getHours();
-      // if (day === 0 || day === 6 || hour < 9 || hour >= 16) {
-      //   return NextResponse.json(
-      //     { error: "Withdrawals allowed Mon–Fri, 9 AM–4 PM." },
-      //     { status: 403 }
-      //   );
-      // }
+      const now = new Date();
+      const localNow = new Date(now.getTime() + 3 * 60 * 60 * 1000); // UTC+3
+      const day = localNow.getDay();
+      const hour = localNow.getHours();
+      if (day === 0 || day === 6 || hour < 9 || hour >= 16) {
+        return NextResponse.json(
+          { error: "Withdrawals allowed Mon–Fri, 9 AM–4 PM." },
+          { status: 403 }
+        );
+      }
 
       // 🛑 One withdrawal per day check
-      const now = new Date();
+      // const now = new Date();
       const startOfDay = new Date(now);
       startOfDay.setHours(0, 0, 0, 0);
 
@@ -195,12 +195,12 @@ export async function POST(request) {
           createdAt: { $gte: startOfDay },
         });
 
-      // if (existingWithdrawal) {
-      //   return NextResponse.json(
-      //     { error: "You have already made a withdrawal today." },
-      //     { status: 403 }
-      //   );
-      // }
+      if (existingWithdrawal) {
+        return NextResponse.json(
+          { error: "You have already made a withdrawal today." },
+          { status: 403 }
+        );
+      }
 
       // Create withdrawal request
       const withdrawalRequest = {

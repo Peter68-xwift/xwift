@@ -34,7 +34,9 @@ export default function AdminSettings() {
     platformFee: 2.5,
     mpesaNumber: "",
     mpesaName: "",
+    logo: "", // 🆕 add this
   });
+  
 
   useEffect(() => {
     if (!loading && (!user || user.role !== "admin")) {
@@ -97,6 +99,36 @@ export default function AdminSettings() {
       alert("Error saving settings");
     }
   };
+
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setSettings((prev) => ({
+          ...prev,
+          logo: data.url, // Set uploaded image URL
+        }));
+      } else {
+        alert("Logo upload failed.");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Error uploading logo.");
+    }
+  };
+  
 
   const handleInputChange = (key, value) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
@@ -164,6 +196,22 @@ export default function AdminSettings() {
                   onChange={(e) =>
                     handleInputChange("adminEmail", e.target.value)
                   }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="adminEmail">Platform logo</Label>
+                {settings.logo && (
+                  <img
+                    src={settings.logo}
+                    alt="Logo Preview"
+                    className="h-16 w-auto mb-2 rounded shadow"
+                  />
+                )}
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoUpload}
                 />
               </div>
             </CardContent>

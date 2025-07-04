@@ -128,13 +128,12 @@ export default function PackageManagement() {
 
       // 🖼 Upload image to Cloudinary using /api/upload
       if (imageFile) {
-        const buffer = await imageFile.arrayBuffer();
-        const bytes = new Uint8Array(buffer);
-        const blob = new Blob([bytes], { type: imageFile.type });
+        const formData = new FormData();
+        formData.append("file", imageFile); // 💡 key must match what's expected on backend
 
         const uploadRes = await fetch("/api/upload", {
           method: "POST",
-          body: blob,
+          body: formData,
         });
 
         const uploadData = await uploadRes.json();
@@ -145,6 +144,7 @@ export default function PackageManagement() {
           return;
         }
       }
+      
 
       // 📦 Save package to DB
       const response = await fetch("/api/admin/packages", {

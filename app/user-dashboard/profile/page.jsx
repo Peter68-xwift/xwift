@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../../contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import MobileHeader from "../../../components/MobileHeader";
 import BottomNavigation from "../../../components/BottomNavigation";
 import {
@@ -41,13 +41,14 @@ export default function ProfilePage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
+  const [profileImageUrl, setProfileImageUrl] = useState("");
   const [formData, setFormData] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
   const [profileData, setProfileData] = useState({
-    name: "",
+    name: "Kelvin kOECH",
     email: "",
     phone: "",
     address: "",
@@ -60,6 +61,42 @@ export default function ProfilePage() {
     { label: "Referrals", value: "0", icon: "👥" },
     { label: "Member Since", value: "Recently", icon: "📅" },
   ]);
+
+  const fileInputRef = useRef(null);
+  const [imageFile, setImageFile] = useState(null);
+
+  const handleCameraClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      uploadProfileImage(file);
+    }
+  };
+
+  // const handleFileChange = async (event) => {
+  //   const file = event.target.files[0];
+  //   if (!file) return;
+
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+
+  //   const res = await fetch("/api/upload", {
+  //     method: "POST",
+  //     body: formData,
+  //   });
+
+  //   const data = await res.json();
+  //   if (data.success) {
+  //     setProfileImageUrl(data.url); // 💾 store the uploaded image URL
+  //   } else {
+  //     alert("Image upload failed");
+  //   }
+  // };
+
 
   useEffect(() => {
     if (!loading && (!user || user.role !== "user")) {
@@ -83,7 +120,7 @@ export default function ProfilePage() {
       });
 
       const data = await response.json();
-      console.log(data.data);
+      // console.log(data.data);
       setReferrals(data.data.referrals || []);
 
       if (data.success) {
@@ -115,6 +152,47 @@ export default function ProfilePage() {
     }
   };
 
+  const uploadProfileImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file); // ✅ Name must match what you get in the API route
+
+    try {
+      const uploadRes = await fetch("/api/upload", {
+        method: "POST",
+        body: formData, // ✅ automatically sets Content-Type
+      });
+
+      const uploadData = await uploadRes.json();
+
+      if (uploadData.success) {
+        const imageUrl = uploadData.url;
+
+        // Save image URL to DB
+        await fetch(`/api/user/profile?userId=${user.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: profileData.name,
+            email: profileData.email,
+            phone: profileData.phone,
+            address: profileData.address,
+            image: imageUrl || profileData.image, // ✅ pass uploaded image
+          }),
+        });
+
+        setProfileData((prev) => ({ ...prev, image: imageUrl }));
+        alert("Profile image updated!");
+      } else {
+        alert("Upload failed");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert("Something went wrong");
+    }
+  };
+  
+  
+
   const referralLink = profileData?.referralLink || "";
 
   const handleCopy = () => {
@@ -128,6 +206,7 @@ export default function ProfilePage() {
       setIsSaving(true);
       setError("");
       setSuccessMessage("");
+
       const userId = user?.id;
       const response = await fetch(`/api/user/profile?userId=${userId}`, {
         method: "PUT",
@@ -140,6 +219,7 @@ export default function ProfilePage() {
           email: profileData.email,
           phone: profileData.phone,
           address: profileData.address,
+          image: profileImageUrl || profileData.image, // ✅ pass uploaded image
         }),
       });
 
@@ -147,7 +227,6 @@ export default function ProfilePage() {
       if (data.success) {
         setIsEditing(false);
         setSuccessMessage("Profile updated successfully!");
-        // Clear success message after 3 seconds
         setTimeout(() => setSuccessMessage(""), 3000);
       } else {
         setError(data.error || "Failed to update profile");
@@ -159,7 +238,7 @@ export default function ProfilePage() {
       setIsSaving(false);
     }
   };
-
+  
   const handleRefresh = () => {
     fetchProfileData();
   };
@@ -199,6 +278,7 @@ export default function ProfilePage() {
     } finally {
     }
   };
+  // console.log(profileData)
 
   if (loading || isLoading) {
     return (
@@ -266,21 +346,37 @@ export default function ProfilePage() {
             <div className="flex flex-col items-center text-center">
               <div className="relative mb-4">
                 <Avatar className="h-20 w-20">
-                  <AvatarFallback className="text-lg bg-blue-100 text-blue-600">
-                    {profileData.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .toUpperCase()}
-                  </AvatarFallback>
+                  {profileData.image ? (
+                    <AvatarImage
+                      src={profileData.image}
+                      alt={profileData.name}
+                    />
+                  ) : (
+                    <AvatarFallback className="text-lg bg-blue-100 text-blue-600">
+                      {profileData.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
                 <Button
                   size="sm"
+                  onClick={handleCameraClick}
                   className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full p-0"
                   variant="secondary"
                 >
                   <Camera className="h-4 w-4" />
                 </Button>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
               </div>
               <h2 className="text-xl font-bold text-gray-900">
                 {profileData.name}
