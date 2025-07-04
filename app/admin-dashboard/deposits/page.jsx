@@ -19,6 +19,7 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function AdminDepositsPage() {
   const { user, loading } = useAuth();
@@ -94,16 +95,16 @@ export default function AdminDepositsPage() {
       const data = await response.json();
 
       if (data.success) {
-        alert(`Deposit request ${action}d successfully!`);
+        toast(`Deposit request ${action}d successfully!`);
         setSelectedRequest(null);
         setAdminNotes("");
         fetchDepositRequests();
       } else {
-        alert(data.error || `Failed to ${action} deposit request`);
+        toast(data.error || `Failed to ${action} deposit request`);
       }
     } catch (error) {
       console.error(`Error ${action}ing deposit request:`, error);
-      alert(`Failed to ${action} deposit request`);
+      toast(`Failed to ${action} deposit request`);
     } finally {
       setIsProcessing(false);
     }

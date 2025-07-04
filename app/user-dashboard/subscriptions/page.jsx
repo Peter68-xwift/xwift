@@ -19,7 +19,7 @@ import {
 import BottomNavigation from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import MobileHeader from "@/components/MobileHeader";
-
+import { toast } from "sonner";
 export default function SubscriptionsPage() {
   const { user } = useAuth();
   const [subscriptions, setSubscriptions] = useState([]);

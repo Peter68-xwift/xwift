@@ -21,7 +21,7 @@ import {
   Send,
   AlertCircle,
 } from "lucide-react";
-
+import { toast } from "sonner";
 export default function CheckoutPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -115,13 +115,13 @@ export default function CheckoutPage() {
         if (selectedPackage) {
           setPackageData(selectedPackage);
         } else {
-          alert("Package not found");
+          toast("Package not found");
           router.push("/user-dashboard/packages");
         }
       }
     } catch (error) {
       console.error("Error fetching package:", error);
-      alert("Failed to load package details");
+      toast("Failed to load package details");
     } finally {
       setIsLoading(false);
     }
@@ -148,18 +148,18 @@ export default function CheckoutPage() {
 
       if (response.ok) {
         if (paymentMethod === "wallet") {
-          alert("Package purchased successfully with wallet balance!");
+          toast("Package purchased successfully with wallet balance!");
           router.push("/user-dashboard/packages");
         } else {
           setPurchaseRequest(data);
           setStep(2);
         }
       } else {
-        alert(data.error || "Failed to purchase package");
+        toast(data.error || "Failed to purchase package");
       }
     } catch (error) {
       console.error("Error purchasing package:", error);
-      alert("Failed to purchase package");
+      toast("Failed to purchase package");
     } finally {
       setIsPurchasing(false);
     }
@@ -167,7 +167,7 @@ export default function CheckoutPage() {
 
   const submitPaymentConfirmation = async () => {
     if (!paymentForm.phoneNumber || !paymentForm.transactionMessage) {
-      alert("Please fill in all payment details");
+      toast("Please fill in all payment details");
       return;
     }
 
@@ -190,22 +190,22 @@ export default function CheckoutPage() {
       );
 
       if (response.ok) {
-        alert(
+        toast(
           "Payment confirmation submitted! Admin will verify and activate your package."
         );
         router.push("/user-dashboard/packages");
       } else {
-        alert("Failed to submit payment confirmation");
+        toast("Failed to submit payment confirmation");
       }
     } catch (error) {
       console.error("Error submitting payment:", error);
-      alert("Failed to submit payment confirmation");
+      toast("Failed to submit payment confirmation");
     }
   };
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    alert("Copied to clipboard!");
+    toast("Copied to clipboard!");
   };
 
   if (loading || isLoading) {

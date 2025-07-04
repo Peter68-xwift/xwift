@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import AdminSidebar from "../../../components/AdminSidebar";
 import { Settings, Save, Shield, Bell, Database, Mail } from "lucide-react";
-
+import { toast } from "sonner";
 export default function AdminSettings() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -36,7 +36,6 @@ export default function AdminSettings() {
     mpesaName: "",
     logo: "", // 🆕 add this
   });
-  
 
   useEffect(() => {
     if (!loading && (!user || user.role !== "admin")) {
@@ -90,13 +89,13 @@ export default function AdminSettings() {
       const data = await response.json();
 
       if (data.success) {
-        alert("Settings saved successfully!");
+        toast("Settings saved successfully!");
       } else {
-        alert("Failed to save settings.");
+        toast("Failed to save settings.");
       }
     } catch (error) {
       console.error("Error saving settings:", error);
-      alert("Error saving settings");
+      toast("Error saving settings");
     }
   };
 
@@ -121,14 +120,13 @@ export default function AdminSettings() {
           logo: data.url, // Set uploaded image URL
         }));
       } else {
-        alert("Logo upload failed.");
+        toast("Logo upload failed.");
       }
     } catch (err) {
       console.error("Upload error:", err);
-      alert("Error uploading logo.");
+      toast("Error uploading logo.");
     }
   };
-  
 
   const handleInputChange = (key, value) => {
     setSettings((prev) => ({ ...prev, [key]: value }));

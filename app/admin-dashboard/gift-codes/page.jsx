@@ -49,6 +49,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function GiftCodesPage() {
   const [giftCodes, setGiftCodes] = useState([]);
@@ -99,7 +100,7 @@ export default function GiftCodesPage() {
   const handleCreateGiftCodes = async (e) => {
     e.preventDefault();
     if (!formData.amount || formData.amount <= 0) {
-      alert("Please enter a valid amount");
+      toast("Please enter a valid amount");
       return;
     }
 
@@ -120,7 +121,7 @@ export default function GiftCodesPage() {
 
       if (response.ok) {
         const result = await response.json();
-        alert(`Successfully created ${result.codes.length} gift code(s)!`);
+        toast(`Successfully created ${result.codes.length} gift code(s)!`);
         setIsCreateDialogOpen(false);
         setFormData({
           amount: "",
@@ -131,11 +132,11 @@ export default function GiftCodesPage() {
         fetchGiftCodes();
       } else {
         const error = await response.json();
-        alert(error.message || "Failed to create gift codes");
+        toast(error.message || "Failed to create gift codes");
       }
     } catch (error) {
       console.error("Error creating gift codes:", error);
-      alert("Failed to create gift codes");
+      toast("Failed to create gift codes");
     } finally {
       setIsSubmitting(false);
     }
@@ -157,11 +158,11 @@ export default function GiftCodesPage() {
       if (response.ok) {
         fetchGiftCodes();
       } else {
-        alert("Failed to update gift code status");
+        toast("Failed to update gift code status");
       }
     } catch (error) {
       console.error("Error updating gift code:", error);
-      alert("Failed to update gift code status");
+      toast("Failed to update gift code status");
     }
   };
 
@@ -177,18 +178,18 @@ export default function GiftCodesPage() {
       if (response.ok) {
         fetchGiftCodes();
       } else {
-        alert("Failed to delete gift code");
+        toast("Failed to delete gift code");
       }
     } catch (error) {
       console.error("Error deleting gift code:", error);
-      alert("Failed to delete gift code");
+      toast("Failed to delete gift code");
     }
   };
 
   // Copy code to clipboard
   const copyToClipboard = (code) => {
     navigator.clipboard.writeText(code);
-    alert("Gift code copied to clipboard!");
+    toast("Gift code copied to clipboard!");
   };
 
   // Filter gift codes based on search

@@ -49,7 +49,7 @@ import {
   TrendingUp,
   Loader2,
 } from "lucide-react";
-
+import { toast } from "sonner";
 export default function PackageManagement() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -118,7 +118,7 @@ export default function PackageManagement() {
       !newPackage.roi ||
       !newPackage.description
     ) {
-      alert("Please fill in all required fields");
+      toast("Please fill in all required fields");
       return;
     }
 
@@ -140,11 +140,10 @@ export default function PackageManagement() {
         if (uploadData.success) {
           imageUrl = uploadData.url;
         } else {
-          alert("Image upload failed");
+          toast("Image upload failed");
           return;
         }
       }
-      
 
       // 📦 Save package to DB
       const response = await fetch("/api/admin/packages", {
@@ -170,13 +169,13 @@ export default function PackageManagement() {
         });
         setImageFile(null);
         setIsAddDialogOpen(false);
-        alert("Package created successfully!");
+        toast("Package created successfully!");
       } else {
-        alert(data.message || "Failed to create package");
+        toast(data.message || "Failed to create package");
       }
     } catch (error) {
       console.error("Error creating package:", error);
-      alert("Failed to create package");
+      toast("Failed to create package");
     } finally {
       setIsSubmitting(false);
     }
@@ -190,7 +189,7 @@ export default function PackageManagement() {
       !editPackage.roi ||
       !editPackage.description
     ) {
-      alert("Please fill in all required fields");
+      toast("Please fill in all required fields");
       return;
     }
 
@@ -227,13 +226,13 @@ export default function PackageManagement() {
         );
         setIsEditDialogOpen(false);
         setEditingPackage(null);
-        alert("Package updated successfully!");
+        toast("Package updated successfully!");
       } else {
-        alert(data.message || "Failed to update package");
+        toast(data.message || "Failed to update package");
       }
     } catch (error) {
       console.error("Error updating package:", error);
-      alert("Failed to update package");
+      toast("Failed to update package");
     } finally {
       setIsSubmitting(false);
     }
@@ -254,13 +253,13 @@ export default function PackageManagement() {
 
         if (data.success) {
           setPackages(packages.filter((pkg) => pkg._id !== packageId));
-          alert("Package deleted successfully!");
+          toast("Package deleted successfully!");
         } else {
-          alert(data.message || "Failed to delete package");
+          toast(data.message || "Failed to delete package");
         }
       } catch (error) {
         console.error("Error deleting package:", error);
-        alert("Failed to delete package");
+        toast("Failed to delete package");
       }
     } else if (action === "activate" || action === "deactivate") {
       try {
@@ -281,13 +280,13 @@ export default function PackageManagement() {
               pkg._id === packageId ? { ...pkg, status: newStatus } : pkg
             )
           );
-          alert(`Package ${action}d successfully!`);
+          toast(`Package ${action}d successfully!`);
         } else {
-          alert(data.message || `Failed to ${action} package`);
+          toast(data.message || `Failed to ${action} package`);
         }
       } catch (error) {
         console.error(`Error ${action}ing package:`, error);
-        alert(`Failed to ${action} package`);
+        toast(`Failed to ${action} package`);
       }
     } else if (action === "edit") {
       const packageToEdit = packages.find((pkg) => pkg._id === packageId);

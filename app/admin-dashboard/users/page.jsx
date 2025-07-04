@@ -56,7 +56,7 @@ import {
   Package,
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
+import { toast } from "sonner";
 export default function UserManagement() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -170,13 +170,13 @@ export default function UserManagement() {
           walletBalance: 0,
         });
         fetchUsers();
-        alert("User created successfully!");
+        toast("User created successfully!");
       } else {
-        alert(data.message || "Failed to create user");
+        toast(data.message || "Failed to create user");
       }
     } catch (error) {
       console.error("Error creating user:", error);
-      alert("Failed to create user");
+      toast("Failed to create user");
     } finally {
       setIsSubmitting(false);
     }
@@ -214,13 +214,13 @@ export default function UserManagement() {
         setIsEditDialogOpen(false);
         setSelectedUser(null);
         fetchUsers();
-        alert("User updated successfully!");
+        toast("User updated successfully!");
       } else {
-        alert(data.message || "Failed to update user");
+        toast(data.message || "Failed to update user");
       }
     } catch (error) {
       console.error("Error updating user:", error);
-      alert("Failed to update user");
+      toast("Failed to update user");
     } finally {
       setIsSubmitting(false);
     }
@@ -257,13 +257,13 @@ export default function UserManagement() {
         setWalletForm({ action: "credit", amount: "", description: "" });
         setSelectedUser(null);
         fetchUsers();
-        alert(`Wallet ${walletForm.action} successful!`);
+        toast(`Wallet ${walletForm.action} successful!`);
       } else {
-        alert(data.message || "Failed to update wallet");
+        toast(data.message || "Failed to update wallet");
       }
     } catch (error) {
       console.error("Error updating wallet:", error);
-      alert("Failed to update wallet");
+      toast("Failed to update wallet");
     } finally {
       setIsSubmitting(false);
     }
@@ -287,13 +287,13 @@ export default function UserManagement() {
 
       if (data.success) {
         fetchUsers();
-        alert("User deleted successfully!");
+        toast("User deleted successfully!");
       } else {
-        alert(data.message || "Failed to delete user");
+        toast(data.message || "Failed to delete user");
       }
     } catch (error) {
       console.error("Error deleting user:", error);
-      alert("Failed to delete user");
+      toast("Failed to delete user");
     }
   };
 
@@ -313,15 +313,15 @@ export default function UserManagement() {
 
       if (data.success) {
         fetchUsers();
-        alert(
+        toast(
           `User ${!currentStatus ? "activated" : "deactivated"} successfully!`
         );
       } else {
-        alert(data.message || "Failed to update user status");
+        toast(data.message || "Failed to update user status");
       }
     } catch (error) {
       console.error("Error updating user status:", error);
-      alert("Failed to update user status");
+      toast("Failed to update user status");
     }
   };
 
@@ -371,13 +371,13 @@ export default function UserManagement() {
       const data = await res.json();
 
       if (data.success) {
-        alert("Password reset successfully. New password is 0000.");
+        toast("Password reset successfully. New password is 0000.");
       } else {
-        alert(data.error || "Failed to reset password");
+        toast(data.error || "Failed to reset password");
       }
     } catch (error) {
       console.error("Reset error:", error);
-      alert("Something went wrong");
+      toast("Something went wrong");
     }
   };
 

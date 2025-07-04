@@ -23,6 +23,7 @@ import {
   Wallet,
   RefreshCw,
 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function AdminDashboard() {
   const { user, loading } = useAuth();

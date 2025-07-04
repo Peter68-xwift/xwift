@@ -20,7 +20,7 @@ import {
   AlertCircle,
   Send,
 } from "lucide-react";
-
+import { toast } from "sonner";
 export default function DepositPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -78,7 +78,7 @@ export default function DepositPage() {
       !formData.phoneNumber ||
       !formData.transactionMessage
     ) {
-      alert("Please fill in all fields");
+      toast("Please fill in all fields");
       return;
     }
 
@@ -100,18 +100,18 @@ export default function DepositPage() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(
+        toast(
           "Deposit request submitted successfully! Admin will verify and process your deposit."
         );
         setFormData({ amount: "", phoneNumber: "", transactionMessage: "" });
         setStep(1);
         fetchDepositRequests();
       } else {
-        alert(data.error || "Failed to submit deposit request");
+        toast(data.error || "Failed to submit deposit request");
       }
     } catch (error) {
       console.error("Error submitting deposit:", error);
-      alert("Failed to submit deposit request");
+      toast("Failed to submit deposit request");
     } finally {
       setIsSubmitting(false);
     }
@@ -119,7 +119,7 @@ export default function DepositPage() {
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    alert("Copied to clipboard!");
+    toast("Copied to clipboard!");
   };
 
   const getStatusIcon = (status) => {

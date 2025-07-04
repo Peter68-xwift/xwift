@@ -19,7 +19,7 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
-
+import { toast } from "sonner";
 export default function AdminwithdrawalsPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -94,16 +94,16 @@ export default function AdminwithdrawalsPage() {
       const data = await response.json();
 
       if (data.success) {
-        alert(`withdrawal request ${action}d successfully!`);
+        toast(`withdrawal request ${action}d successfully!`);
         setSelectedRequest(null);
         setAdminNotes("");
         fetchwithdrawalRequests();
       } else {
-        alert(data.error || `Failed to ${action} withdrawal request`);
+        toast(data.error || `Failed to ${action} withdrawal request`);
       }
     } catch (error) {
       console.error(`Error ${action}ing withdrawal request:`, error);
-      alert(`Failed to ${action} withdrawal request`);
+      toast(`Failed to ${action} withdrawal request`);
     } finally {
       setIsProcessing(false);
     }

@@ -29,7 +29,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
+import { toast } from "sonner";
 export default function ProfilePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -93,10 +93,9 @@ export default function ProfilePage() {
   //   if (data.success) {
   //     setProfileImageUrl(data.url); // 💾 store the uploaded image URL
   //   } else {
-  //     alert("Image upload failed");
+  //     toast("Image upload failed");
   //   }
   // };
-
 
   useEffect(() => {
     if (!loading && (!user || user.role !== "user")) {
@@ -181,17 +180,15 @@ export default function ProfilePage() {
         });
 
         setProfileData((prev) => ({ ...prev, image: imageUrl }));
-        alert("Profile image updated!");
+        toast("Profile image updated!");
       } else {
-        alert("Upload failed");
+        toast("Upload failed");
       }
     } catch (err) {
       console.error("Upload error:", err);
-      alert("Something went wrong");
+      toast("Something went wrong");
     }
   };
-  
-  
 
   const referralLink = profileData?.referralLink || "";
 
@@ -238,14 +235,14 @@ export default function ProfilePage() {
       setIsSaving(false);
     }
   };
-  
+
   const handleRefresh = () => {
     fetchProfileData();
   };
 
   const handleChangePassword = async () => {
     if (formData.newPassword !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      toast("Passwords do not match");
       return;
     }
 
@@ -262,7 +259,7 @@ export default function ProfilePage() {
       const data = await res.json();
 
       if (data.success) {
-        alert("Password updated successfully");
+        toast("Password updated successfully");
         setOpen(false);
         setFormData({
           currentPassword: "",
@@ -270,11 +267,11 @@ export default function ProfilePage() {
           confirmPassword: "",
         });
       } else {
-        alert(data.message || "Failed to update password");
+        toast(data.message || "Failed to update password");
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred");
+      toast("An error occurred");
     } finally {
     }
   };

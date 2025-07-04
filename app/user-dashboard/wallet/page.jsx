@@ -19,7 +19,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import GiftCodeRedemption from "../../../components/GiftCodeRedemption";
-
+import { toast } from "sonner";
 export default function WalletPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function WalletPage() {
   const [pin, setPin] = useState("");
   const [newPin, setNewPin] = useState("");
   const [requiresNewPin, setRequiresNewPin] = useState(false);
-  const [widhth, setWidhth] = useState([])
+  const [widhth, setWidhth] = useState([]);
   useEffect(() => {
     if (user) {
       setRequiresNewPin(!user.withdrawalPin);
@@ -100,22 +100,22 @@ export default function WalletPage() {
 
   const handleWithdrawal = async () => {
     if (!amount || Number.parseFloat(amount) <= 0) {
-      alert("Please enter a valid amount");
+      toast("Please enter a valid amount");
       return;
     }
 
     if (Number.parseFloat(amount) > walletData.availableBalance) {
-      alert("Insufficient balance");
+      toast("Insufficient balance");
       return;
     }
 
     if (amount < settings.minWithdrawalAmount) {
-      alert(`Minimum withdrawal is Ksh ${settings.minWithdrawalAmount}`);
+      toast(`Minimum withdrawal is Ksh ${settings.minWithdrawalAmount}`);
       return;
     }
 
     if (amount > settings.maxWithdrawalAmount) {
-      alert(`Maximum withdrawal is Ksh ${settings.maxWithdrawalAmount}`);
+      toast(`Maximum withdrawal is Ksh ${settings.maxWithdrawalAmount}`);
       return;
     }
 
@@ -139,17 +139,17 @@ export default function WalletPage() {
       const result = await response.json();
 
       if (result.success) {
-        alert("Withdrawal request submitted successfully!");
+        toast("Withdrawal request submitted successfully!");
         setAmount("");
         setPin("");
         setNewPin("");
         fetchWalletData(); // Refresh wallet data
       } else {
-        alert(result.error || "Failed to process withdrawal");
+        toast(result.error || "Failed to process withdrawal");
       }
     } catch (error) {
       console.error("Withdrawal error:", error);
-      alert("Failed to process withdrawal");
+      toast("Failed to process withdrawal");
     } finally {
       setProcessing(false);
     }
@@ -162,8 +162,6 @@ export default function WalletPage() {
       </div>
     );
   }
-
-
 
   if (!user || user.role !== "user") {
     return null;

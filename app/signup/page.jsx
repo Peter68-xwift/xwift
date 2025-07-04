@@ -27,8 +27,7 @@ import {
   Lock,
   Link2,
 } from "lucide-react";
-import Image from "next/image";
-import logo from "@/public/logo.png";
+import { toast } from "sonner";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
