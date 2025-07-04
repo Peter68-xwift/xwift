@@ -146,7 +146,7 @@ export default function SubscriptionsPage() {
               My Subscriptions
             </h1>
             <p className="text-gray-600">
-              Manage your active packages and claim daily income
+              Manage your active products and claim daily income
             </p>
           </div>
           <Button onClick={fetchSubscriptions} variant="outline" size="sm">
@@ -181,7 +181,7 @@ export default function SubscriptionsPage() {
               <div className="flex items-center space-x-2">
                 <Package className="h-5 w-5 text-blue-500" />
                 <div>
-                  <p className="text-sm text-gray-600">Active Packages</p>
+                  <p className="text-sm text-gray-600">Active Products</p>
                   <p className="text-xl font-bold">
                     {stats.totalSubscriptions || 0}
                   </p>
@@ -223,7 +223,7 @@ export default function SubscriptionsPage() {
               <div className="flex items-center space-x-2">
                 <Zap className="h-5 w-5 text-orange-500" />
                 <div>
-                  <p className="text-sm text-gray-600">Available Feeds</p>
+                  <p className="text-sm text-gray-600">Available Claims</p>
                   <p className="text-xl font-bold">
                     {stats.availableFeeds || 0}
                   </p>
@@ -242,10 +242,10 @@ export default function SubscriptionsPage() {
                 No Active Subscriptions
               </h3>
               <p className="text-gray-600 mb-4">
-                You don't have any active package subscriptions yet.
+                You don't have any active products subscriptions yet.
               </p>
               <Button onClick={() => router.push("/user-dashboard/packages")}>
-                Browse Packages
+                Browse products
               </Button>
             </CardContent>
           </Card>
@@ -319,7 +319,7 @@ export default function SubscriptionsPage() {
                         <p className="font-medium">Daily Claims</p>
                         <p className="text-sm text-gray-600">
                           {subscription.fedToday
-                            ? `Fed today! Next feed in ${formatTimeUntilTomorrow()}`
+                            ? `Claim today! Next Claim in ${formatTimeUntilTomorrow()}`
                             : `Claim your daily Ksh${subscription.dailyIncome}`}
                         </p>
                       </div>
