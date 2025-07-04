@@ -9,7 +9,7 @@ import { Gift, Check, X, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function GiftCodeRedemption() {
-  const {user} = useAuth()
+  const { user } = useAuth();
   const [giftCode, setGiftCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -24,15 +24,18 @@ export default function GiftCodeRedemption() {
 
     setIsLoading(true);
     setMessage("");
-    const userId = user?.id
+    const userId = user?.id;
     try {
-      const response = await fetch(`/api/user/redeem-gift-code?userId=${userId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ code: giftCode.trim().toUpperCase() }),
-      });
+      const response = await fetch(
+        `/api/user/redeem-gift-code?userId=${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ code: giftCode.trim().toUpperCase() }),
+        }
+      );
 
       const data = await response.json();
 
@@ -65,7 +68,7 @@ export default function GiftCodeRedemption() {
   };
 
   return (
-    <Card className="mb-6 bg-blue-200">
+    <Card className="mb-6 bg-yellow-300">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
           <Gift className="h-4 w-4 text-purple-600" />

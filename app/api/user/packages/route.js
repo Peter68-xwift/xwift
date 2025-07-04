@@ -43,6 +43,7 @@ export async function GET(request) {
         description: pkg.description,
         features: pkg.features || ["Basic support", "Mobile access"],
         popular: pkg.subscribers > 10, // Mark as popular if more than 10 subscribers
+        image: pkg.image, // Mark as popular if more than 10 subscribers
       }));
 
     // Get user's packages (mock data for now - you can implement user investments later)

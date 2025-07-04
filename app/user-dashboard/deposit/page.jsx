@@ -33,6 +33,7 @@ export default function DepositPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [depositRequests, setDepositRequests] = useState([]);
   const [showInstructions, setShowInstructions] = useState(true);
+  const [settings, setSettings] = useState([]);
 
   useEffect(() => {
     if (!loading && (!user || user.role !== "user")) {
@@ -41,6 +42,17 @@ export default function DepositPage() {
       fetchDepositRequests();
     }
   }, [user, loading, router]);
+
+  useEffect(() => {
+    async function fetchSettings() {
+      const res = await fetch("/api/admin/settings");
+      const data = await res.json();
+      if (data.success) {
+        setSettings(data.settings);
+      }
+    }
+    fetchSettings();
+  }, []);
 
   const fetchDepositRequests = async () => {
     try {
@@ -149,7 +161,7 @@ export default function DepositPage() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-300 pb-20">
+    <div className="min-h-screen bg-[#ffff00] pb-20">
       <MobileHeader
         title="Deposit Funds"
         showBack={true}
@@ -219,12 +231,12 @@ export default function DepositPage() {
                       </span>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-green-900">
-                          0795486102
+                          {settings?.mpesaNumber}
                         </span>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => copyToClipboard("0795486102")}
+                          onClick={() => copyToClipboard(settings.mpesaNumber)}
                           className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
                         >
                           <Copy className="h-3 w-3" />
@@ -237,12 +249,12 @@ export default function DepositPage() {
                       </span>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-green-900">
-                          Cosmas Kipyegon
+                          {settings.mpesaName}
                         </span>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => copyToClipboard("Cosmas Kipyegon")}
+                          onClick={() => copyToClipboard(settings.mpesaName)}
                           className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
                         >
                           <Copy className="h-3 w-3" />

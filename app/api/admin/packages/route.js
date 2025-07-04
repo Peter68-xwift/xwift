@@ -26,7 +26,7 @@ export async function POST(request) {
     const body = await request.json();
 
     // Validate required fields
-    const { name, price, duration, roi, description, features } = body;
+    const { name, price, duration, roi, description, features, image } = body;
 
     if (!name || !price || !duration || !roi || !description) {
       return NextResponse.json(
@@ -63,6 +63,7 @@ export async function POST(request) {
       description: description.trim(),
       features: featuresArray || [],
       status: "active",
+      image,
     };
 
     const newPackage = await PackageModel.createPackage(packageData);

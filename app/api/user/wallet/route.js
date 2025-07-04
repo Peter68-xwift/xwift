@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { UserModel } from "../../../../lib/database";
 import { ObjectId } from "mongodb";
 import clientPromise from "../../../../lib/mongodb";
+import bcrypt from "bcrypt";
 
 export async function GET(request) {
   try {
@@ -86,6 +87,7 @@ export async function GET(request) {
   }
 }
 
+
 export async function POST(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -103,7 +105,7 @@ export async function POST(request) {
     const client = await clientPromise;
     const db = client.db("mern_auth_app");
 
-    const { type, amount, description } = await request.json();
+    const { type, amount, description, pin, newPin } = await request.json();
 
     if (!type || !amount || !description) {
       return NextResponse.json(
@@ -118,6 +120,7 @@ export async function POST(request) {
         { status: 400 }
       );
     }
+
     const available = user.wallet?.availableBalance || 0;
 
     if (available < amount) {
@@ -126,29 +129,62 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-    
 
-
-
-    // Handle withdrawal
+    // 🔐 Withdrawal Handling
     if (type === "withdrawal") {
-      const now = new Date();
-      const localNow = new Date(now.getTime() + 3 * 60 * 60 * 1000); // convert to UTC+3
-      const day = localNow.getDay(); // 0 = Sunday, 6 = Saturday
-      const hour = localNow.getHours();
+      // 🔐 Handle PIN logic
+      if (!user.withdrawalPin) {
+        // First-time withdrawal: set new PIN
+        if (!newPin || newPin.length < 4) {
+          return NextResponse.json(
+            { error: "Please set a valid withdrawal PIN (minimum 4 digits)." },
+            { status: 400 }
+          );
+        }
 
+        const hashedPin = await bcrypt.hash(newPin, 10);
+        const result = await UserModel.updateUser(userId, {
+          withdrawalPin: hashedPin,
+        });
 
-      if (day === 0 || day === 6 || hour < 9 || hour >= 16) {
-        return NextResponse.json(
-          {
-            error:
-              "Withdrawals are only permitted Monday to Friday between 9:00 AM and 4:00 PM.",
-          },
-          { status: 403 }
-        );
+        if (!result || result.modifiedCount === 0) {
+          return NextResponse.json(
+            { error: "Failed to save withdrawal PIN." },
+            { status: 500 }
+          );
+        }
+      } else {
+        // PIN already exists — verify input PIN
+        if (!pin) {
+          return NextResponse.json(
+            { error: "Withdrawal PIN is required." },
+            { status: 400 }
+          );
+        }
+
+        const isValidPin = await bcrypt.compare(pin, user.withdrawalPin);
+        if (!isValidPin) {
+          return NextResponse.json(
+            { error: "Incorrect withdrawal PIN." },
+            { status: 401 }
+          );
+        }
       }
 
+      // Optional time restriction (commented)
+      // const now = new Date();
+      // const localNow = new Date(now.getTime() + 3 * 60 * 60 * 1000); // UTC+3
+      // const day = localNow.getDay();
+      // const hour = localNow.getHours();
+      // if (day === 0 || day === 6 || hour < 9 || hour >= 16) {
+      //   return NextResponse.json(
+      //     { error: "Withdrawals allowed Mon–Fri, 9 AM–4 PM." },
+      //     { status: 403 }
+      //   );
+      // }
+
       // 🛑 One withdrawal per day check
+      const now = new Date();
       const startOfDay = new Date(now);
       startOfDay.setHours(0, 0, 0, 0);
 
@@ -159,19 +195,12 @@ export async function POST(request) {
           createdAt: { $gte: startOfDay },
         });
 
-      if (existingWithdrawal) {
-        return NextResponse.json(
-          { error: "You have already made a withdrawal request today." },
-          { status: 403 }
-        );
-      }
-
-      if (available < amount) {
-        return NextResponse.json(
-          { error: "Insufficient available balance" },
-          { status: 400 }
-        );
-      }
+      // if (existingWithdrawal) {
+      //   return NextResponse.json(
+      //     { error: "You have already made a withdrawal today." },
+      //     { status: 403 }
+      //   );
+      // }
 
       // Create withdrawal request
       const withdrawalRequest = {
@@ -214,11 +243,11 @@ export async function POST(request) {
 
       return NextResponse.json({
         success: true,
-        message: "Withdrawal request submitted and is pending admin approval.",
+        message: "Withdrawal request submitted and pending approval.",
       });
     }
 
-    // Handle deposit or other types
+    // 🎯 Handle deposit or other transaction types
     const transaction = {
       _id: new ObjectId(),
       userId: new ObjectId(userId),
@@ -231,7 +260,7 @@ export async function POST(request) {
 
     const newBalance = (user.wallet?.balance || 0) + amount;
 
-    const updateResult = await UserModel.updateUserWalletBalance(userId, {
+    const updateResult = await UserModel.updateUserWallet(userId, {
       balance: newBalance,
       availableBalance: newBalance,
       transaction,
@@ -246,7 +275,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       success: true,
-      message: `${type} processed successfully`,
+      message: `${type} processed successfully.`,
     });
   } catch (error) {
     console.error("Wallet Transaction Error:", error);

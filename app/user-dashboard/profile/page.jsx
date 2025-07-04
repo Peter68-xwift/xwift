@@ -22,6 +22,13 @@ import {
   AlertCircle,
   Copy,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
@@ -33,7 +40,12 @@ export default function ProfilePage() {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [copied, setCopied] = useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
   const [profileData, setProfileData] = useState({
     name: "",
     email: "",
@@ -68,14 +80,11 @@ export default function ProfilePage() {
       const response = await fetch(`/api/user/profile?userId=${userId}`, {
         method: "GET",
         credentials: "include",
-
-     
       });
 
       const data = await response.json();
       console.log(data.data);
       setReferrals(data.data.referrals || []);
-
 
       if (data.success) {
         const { user: userData, stats } = data.data;
@@ -155,9 +164,45 @@ export default function ProfilePage() {
     fetchProfileData();
   };
 
+  const handleChangePassword = async () => {
+    if (formData.newPassword !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    try {
+      const userId = user?.id;
+      const res = await fetch(`/api/auth/change-password?userId=${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Password updated successfully");
+        setOpen(false);
+        setFormData({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+      } else {
+        alert(data.message || "Failed to update password");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred");
+    } finally {
+    }
+  };
+
   if (loading || isLoading) {
     return (
-      <div className="min-h-screen bg-blue-300 pb-20">
+      <div className="min-h-screen bg-[#ffff00] pb-20">
         <MobileHeader title="Profile" />
         <div className="flex items-center justify-center pt-20">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -426,22 +471,70 @@ export default function ProfilePage() {
           <CardHeader>
             <CardTitle className="text-base">Account Settings</CardTitle>
           </CardHeader>
+
           <CardContent className="space-y-3">
-            <Button variant="outline" className="w-full justify-start">
-              Change Password
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              Security Settings
-            </Button>
-            <Button variant="outline" className="w-full justify-start">
-              Notification Preferences
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start text-red-600 hover:text-red-700"
-            >
-              Delete Account
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="w-full justify-start">
+                  Change Password
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent className="max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Change Password</DialogTitle>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Current Password</Label>
+                    <Input
+                      type="password"
+                      value={formData.currentPassword}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          currentPassword: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>New Password</Label>
+                    <Input
+                      type="password"
+                      value={formData.newPassword}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          newPassword: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Confirm New Password</Label>
+                    <Input
+                      type="password"
+                      value={formData.confirmPassword}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          confirmPassword: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <Button
+                    className="w-full"
+                    onClick={handleChangePassword}
+                    disabled={loading}
+                  >
+                    {loading ? "Updating..." : "Update Password"}
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
           </CardContent>
         </Card>
       </main>

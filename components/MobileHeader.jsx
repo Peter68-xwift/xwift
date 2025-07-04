@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { useAuth } from "../contexts/AuthContext"
-import { Button } from "@/components/ui/button"
-import { LogOut, Bell } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useAuth } from "../contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { LogOut, Bell } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function MobileHeader({ title }) {
-  const { user, logout } = useAuth()
-  const router = useRouter()
+  const { user, logout } = useAuth();
+  const router = useRouter();
 
   const handleLogout = () => {
-    logout()
-    router.push("/")
-  }
+    logout();
+    router.push("/");
+  };
 
   return (
-    <header className="bg-blue-200 shadow-sm border-b sticky top-0 z-40">
+    <header className="bg-yellow-300 shadow-sm border-b sticky top-0 z-40">
       <div className="px-4 py-3">
         <div className="flex justify-between items-center">
           <div>

@@ -1,32 +1,48 @@
-import { NextResponse } from "next/server"
-import { UserModel } from "../../../../lib/database"
+import { NextResponse } from "next/server";
+import { UserModel } from "../../../../lib/database";
 
 export async function POST(request) {
   try {
-    const { email, password } = await request.json()
+    const { email, password } = await request.json();
 
     if (!email || !password) {
-      return NextResponse.json({ error: "Email and password are required" }, { status: 400 })
+      return NextResponse.json(
+        { error: "Email and password are required" },
+        { status: 400 }
+      );
     }
 
     // Find user by email or username
-    const user = await UserModel.findUserByEmailOrUsername(email)
+    const user = await UserModel.findUserByEmailOrUsername(email);
 
     if (!user) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401 }
+      );
     }
 
     // Check if user is active
     if (user.isActive === false) {
-      return NextResponse.json({ error: "Account is deactivated. Please contact support." }, { status: 401 })
+      return NextResponse.json(
+        { error: "Account is deactivated. Please contact support." },
+        { status: 401 }
+      );
     }
 
     // Verify password
-    const isPasswordValid = await UserModel.verifyPassword(password, user.password)
+    const isPasswordValid = await UserModel.verifyPassword(
+      password,
+      user.password
+    );
 
     if (!isPasswordValid) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401 }
+      );
     }
+    console.log(user)
 
     // Return user without password
     const userResponse = {
@@ -40,14 +56,18 @@ export async function POST(request) {
       emailVerified: user.emailVerified,
       createdAt: user.createdAt,
       referralLink: user.referralLink,
+      withdrawalPin: user.withdrawalPin,
     };
 
     return NextResponse.json({
       user: userResponse,
       message: "Login successful",
-    })
+    });
   } catch (error) {
-    console.error("Login error:", error)
-    return NextResponse.json({ error: "Server error. Please try again." }, { status: 500 })
+    console.error("Login error:", error);
+    return NextResponse.json(
+      { error: "Server error. Please try again." },
+      { status: 500 }
+    );
   }
 }

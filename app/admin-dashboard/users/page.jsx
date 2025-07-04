@@ -355,6 +355,32 @@ export default function UserManagement() {
     setIsReferralsDialogOpen(true);
   };
 
+  const handleResetPassword = async (userId) => {
+    if (
+      !confirm("Are you sure you want to reset this user's password to 0000?")
+    )
+      return;
+
+    try {
+      const res = await fetch("/api/admin/reset-password", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Password reset successfully. New password is 0000.");
+      } else {
+        alert(data.error || "Failed to reset password");
+      }
+    } catch (error) {
+      console.error("Reset error:", error);
+      alert("Something went wrong");
+    }
+  };
+
   if (loading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -384,7 +410,7 @@ export default function UserManagement() {
 
   return (
     <AdminSidebar>
-      <div className="p-6 space-y-6 bg-blue-300">
+      <div className="p-6 space-y-6 bg-[#ffff00]">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -688,9 +714,7 @@ export default function UserManagement() {
                             {user.role}
                           </Badge>
                         </TableCell>
-                        <TableCell>
-                          {user.phone}
-                        </TableCell>
+                        <TableCell>{user.phone}</TableCell>
                         <TableCell>
                           ${(user.wallet?.balance || 0).toLocaleString()}
                         </TableCell>
@@ -755,6 +779,13 @@ export default function UserManagement() {
                               >
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Delete
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleResetPassword(user._id)}
+                                variant="destructive"
+                                className="text-red-600 cursor-pointer"
+                              >
+                                Reset Password to 0000
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>

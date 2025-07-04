@@ -30,6 +30,15 @@ export default function WalletPage() {
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState(false);
   const [settings, setSettings] = useState(null);
+  const [pin, setPin] = useState("");
+  const [newPin, setNewPin] = useState("");
+  const [requiresNewPin, setRequiresNewPin] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setRequiresNewPin(!user.withdrawalPin);
+    }
+  }, [user]);
 
   const fetchWalletData = async () => {
     try {
@@ -37,7 +46,6 @@ export default function WalletPage() {
       setError(null);
 
       const userId = user?.id;
-
       const response = await fetch(`/api/user/wallet?userId=${userId}`, {
         headers: {
           "Content-Type": "application/json",
@@ -118,6 +126,7 @@ export default function WalletPage() {
           type: "withdrawal",
           amount: Number.parseFloat(amount),
           description: "Withdrawal request",
+          ...(requiresNewPin ? { newPin } : { pin }),
         }),
       });
 
@@ -126,6 +135,8 @@ export default function WalletPage() {
       if (result.success) {
         alert("Withdrawal request submitted successfully!");
         setAmount("");
+        setPin("");
+        setNewPin("");
         fetchWalletData(); // Refresh wallet data
       } else {
         alert(result.error || "Failed to process withdrawal");
@@ -212,7 +223,7 @@ export default function WalletPage() {
   };
 
   return (
-    <div className="min-h-screen bg-blue-300 pb-20">
+    <div className="min-h-screen bg-[#ffff00] pb-20">
       <MobileHeader title="Wallet" />
 
       <main className="px-4 py-6 max-w-md mx-auto">
@@ -415,6 +426,33 @@ export default function WalletPage() {
                   max={walletData.availableBalance}
                 />
               </div>
+
+              {/* Withdrawal PIN */}
+              {requiresNewPin ? (
+                <div className="space-y-2">
+                  <Label htmlFor="new-pin">Set a 4-digit Withdrawal PIN</Label>
+                  <Input
+                    id="new-pin"
+                    type="password"
+                    maxLength={4}
+                    placeholder="Set 4-digit PIN"
+                    value={newPin}
+                    onChange={(e) => setNewPin(e.target.value)}
+                  />
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label htmlFor="pin">Withdrawal PIN</Label>
+                  <Input
+                    id="pin"
+                    type="password"
+                    maxLength={4}
+                    placeholder="Enter your 4-digit PIN"
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value)}
+                  />
+                </div>
+              )}
 
               <Button
                 className="w-full"

@@ -100,7 +100,7 @@ export async function PUT(request) {
     const { name, email, phone, address } = body;
 
     // Update user profile
-    const updatedUser = await UserModel.updateUser(decoded.userId, {
+    const updatedUser = await UserModel.updateUser(userId, {
       fullName: name,
       email: email,
       phoneNumber: phone,

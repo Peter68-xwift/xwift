@@ -58,6 +58,8 @@ export default function PackageManagement() {
   const [packages, setPackages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+
   const [editingPackage, setEditingPackage] = useState(null);
 
   const [newPackage, setNewPackage] = useState({
@@ -122,12 +124,35 @@ export default function PackageManagement() {
 
     try {
       setIsSubmitting(true);
+      let imageUrl = "";
+
+      // 🖼 Upload image to Cloudinary using /api/upload
+      if (imageFile) {
+        const buffer = await imageFile.arrayBuffer();
+        const bytes = new Uint8Array(buffer);
+        const blob = new Blob([bytes], { type: imageFile.type });
+
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: blob,
+        });
+
+        const uploadData = await uploadRes.json();
+        if (uploadData.success) {
+          imageUrl = uploadData.url;
+        } else {
+          alert("Image upload failed");
+          return;
+        }
+      }
+
+      // 📦 Save package to DB
       const response = await fetch("/api/admin/packages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newPackage),
+        body: JSON.stringify({ ...newPackage, image: imageUrl }),
       });
 
       const data = await response.json();
@@ -141,7 +166,9 @@ export default function PackageManagement() {
           roi: "",
           description: "",
           features: "",
+          image: "",
         });
+        setImageFile(null);
         setIsAddDialogOpen(false);
         alert("Package created successfully!");
       } else {
@@ -320,7 +347,7 @@ export default function PackageManagement() {
 
   return (
     <AdminSidebar>
-      <div className="p-6 space-y-6 bg-blue-300">
+      <div className="p-6 space-y-6 bg-[#ffff00]">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -338,7 +365,7 @@ export default function PackageManagement() {
                 Add New Package
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>Create New Package</DialogTitle>
                 <DialogDescription>
@@ -424,6 +451,24 @@ export default function PackageManagement() {
                     placeholder="Priority support, Real-time updates, Advanced analytics"
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor="image">Package Image</Label>
+                  <Input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) setImageFile(file);
+                    }}
+                  />
+                  {imageFile && (
+                    <p className="text-sm text-gray-600">
+                      Selected: <strong>{imageFile.name}</strong>
+                    </p>
+                  )}
+                </div>
+
                 <div className="flex space-x-2">
                   <Button
                     onClick={handleAddPackage}

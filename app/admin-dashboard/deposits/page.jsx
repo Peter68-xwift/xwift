@@ -154,7 +154,7 @@ export default function AdminDepositsPage() {
 
   return (
     <AdminSidebar>
-      <div className="flex min-h-screen bg-blue-300">
+      <div className="flex min-h-screen bg-[#ffff00]">
         <main className="flex-1 p-6 ">
           <div className="max-w-7xl mx-auto">
             <div className="mb-6">

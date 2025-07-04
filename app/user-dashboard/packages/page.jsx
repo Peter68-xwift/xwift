@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import MobileHeader from "../../../components/MobileHeader";
 import BottomNavigation from "../../../components/BottomNavigation";
 import { Package, Star, CheckCircle, RefreshCw } from "lucide-react";
+import Image from "next/image";
 
 export default function PackagesPage() {
   const { user, loading } = useAuth();
@@ -25,7 +26,7 @@ export default function PackagesPage() {
 
       const response = await fetch(`/api/user/packages?userId=${userId}`);
       const result = await response.json();
-      // console.log(result.data);
+      console.log(result.data);
       if (result.success) {
         setPackagesData(result.data);
         setError(null);
@@ -87,7 +88,7 @@ export default function PackagesPage() {
   const myPackages = packagesData?.myPackages || [];
 
   return (
-    <div className="min-h-screen bg-blue-300 pb-20">
+    <div className="min-h-screen bg-[#ffff00] pb-20">
       <MobileHeader title="Packages" />
 
       <main className="px-4 py-6 max-w-md mx-auto">
@@ -142,18 +143,27 @@ export default function PackagesPage() {
               availablePackages.map((pkg) => (
                 <Card
                   key={pkg.id}
-                  className={`relative ${
+                  className={`relative overflow-hidden ${
                     pkg.popular ? "border-blue-500 border-2" : ""
                   }`}
                 >
                   {pkg.popular && (
-                    <div className="absolute -top-2 left-4">
+                    <div className="absolute -top-2 left-4 z-10">
                       <Badge className="bg-blue-600 text-white">
                         <Star className="h-3 w-3 mr-1" />
                         Popular
                       </Badge>
                     </div>
                   )}
+
+                  {pkg.image && (
+                    <img
+                      src={pkg.image}
+                      alt={pkg.name}
+                      className="w-full h-48 object-cover"
+                    />
+                  )}
+
                   <CardHeader className="pb-3">
                     <div className="flex justify-between items-start">
                       <div>
@@ -217,6 +227,14 @@ export default function PackagesPage() {
             {myPackages.length > 0 ? (
               myPackages.map((pkg) => (
                 <Card key={pkg.id}>
+                  {pkg.image && (
+                    <img
+                      src={pkg.image}
+                      alt={pkg.name}
+                      className="w-full h-48 object-cover"
+                    />
+                  )}
+
                   <CardHeader className="pb-3">
                     <div className="flex justify-between items-start">
                       <div>

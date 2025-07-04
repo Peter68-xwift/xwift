@@ -28,7 +28,7 @@ import {
   Link2,
 } from "lucide-react";
 import Image from "next/image";
-import logo from "@/public/logo.png"
+import logo from "@/public/logo.png";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -54,7 +54,6 @@ export default function SignUpPage() {
   const searchParams = useSearchParams();
   const ref = searchParams.get("ref");
 
-
   useEffect(() => {
     const fetchSettings = async () => {
       try {
@@ -74,30 +73,30 @@ export default function SignUpPage() {
 
   if (loading) return <p>Loading...</p>;
 
-  if (!settings?.enableRegistration) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
-        <Card className="max-w-md w-full shadow-md">
-          <CardHeader>
-            <CardTitle className="text-center text-red-600">
-              Registration Disabled
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <p className="text-gray-700">
-              User registration is currently disabled. Please check back later.
-            </p>
-            <Link
-              href="/"
-              className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-            >
-              Back to Home
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  // if (!settings?.enableRegistration) {
+  //   return (
+  //     <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+  //       <Card className="max-w-md w-full shadow-md">
+  //         <CardHeader>
+  //           <CardTitle className="text-center text-red-600">
+  //             Registration Disabled
+  //           </CardTitle>
+  //         </CardHeader>
+  //         <CardContent className="text-center space-y-4">
+  //           <p className="text-gray-700">
+  //             User registration is currently disabled. Please check back later.
+  //           </p>
+  //           <Link
+  //             href="/"
+  //             className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+  //           >
+  //             Back to Home
+  //           </Link>
+  //         </CardContent>
+  //       </Card>
+  //     </div>
+  //   );
+  // }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -261,12 +260,12 @@ export default function SignUpPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <Image
-            src={logo}
-            alt="Company logo"
-            className="w-[40%] mx-auto mb-5"
-          />
-          <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+          <Image src={logo} alt="Company logo" className="w-[40%] mx-auto" />
+
+          <CardTitle className="text-2xl font-bold mb-5">
+            {settings.siteName}
+          </CardTitle>
+          <CardTitle className="text-xl font-bold">Create Account</CardTitle>
           <CardDescription>
             Sign up to get started with your investment journey
           </CardDescription>

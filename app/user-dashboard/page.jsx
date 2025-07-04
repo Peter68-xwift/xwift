@@ -113,7 +113,7 @@ export default function UserDashboard() {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-blue-300 pb-20">
+      <div className="min-h-screen bg-[#ffff00] pb-20">
         <MobileHeader title="Dashboard" />
 
         <main className="px-4 py-6 max-w-md mx-auto">

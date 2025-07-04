@@ -34,6 +34,7 @@ export default function CheckoutPage() {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const [walletData, setWalletData] = useState(null);
   const [purchaseRequest, setPurchaseRequest] = useState(null);
+  const [settings, setSettings] = useState([]);
   const [paymentForm, setPaymentForm] = useState({
     phoneNumber: "",
     transactionMessage: "",
@@ -52,14 +53,25 @@ export default function CheckoutPage() {
 
     if (user) {
       fetchPackageData();
-      fetchWalletData()
+      fetchWalletData();
     }
   }, [user, loading, router, packageId]);
+
+  useEffect(() => {
+    async function fetchSettings() {
+      const res = await fetch("/api/admin/settings");
+      const data = await res.json();
+      if (data.success) {
+        setSettings(data.settings);
+      }
+    }
+    fetchSettings();
+  }, []);
+  // console.log(settings)
 
   const fetchWalletData = async () => {
     try {
       setIsLoading(true);
-     
 
       const userId = user?.id;
 
@@ -81,7 +93,6 @@ export default function CheckoutPage() {
       }
     } catch (error) {
       console.error("Error fetching wallet data:", error);
-     
     } finally {
       setIsLoading(false);
     }
@@ -210,7 +221,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-300 pb-20">
+    <div className="min-h-screen bg-[#ffff00] pb-20">
       <MobileHeader
         title="Checkout"
         showBack={true}
@@ -283,7 +294,7 @@ export default function CheckoutPage() {
                   <div className="flex-1">
                     <p className="font-medium">Wallet Balance</p>
                     <p className="text-sm text-gray-600">
-                      Available: Ksh{walletData?.balance.toFixed(2) || 0.00}
+                      Available: Ksh{walletData?.balance.toFixed(2) || 0.0}
                     </p>
                   </div>
                 </div>
@@ -375,16 +386,12 @@ export default function CheckoutPage() {
                       </span>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-green-900">
-                          {purchaseRequest.paymentInstructions.businessNumber}
+                          {settings.mpesaNumber}
                         </span>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() =>
-                            copyToClipboard(
-                              purchaseRequest.paymentInstructions.businessNumber
-                            )
-                          }
+                          onClick={() => copyToClipboard(settings.mpesaNumber)}
                           className="h-6 w-6 p-0 text-green-600 hover:text-green-800"
                         >
                           <Copy className="h-3 w-3" />
@@ -397,7 +404,7 @@ export default function CheckoutPage() {
                       </span>
                       <div className="flex items-center space-x-2">
                         <span className="font-bold text-green-900">
-                          {purchaseRequest.paymentInstructions.businessName}
+                          {settings.mpesaName}
                         </span>
                         <Button
                           variant="ghost"

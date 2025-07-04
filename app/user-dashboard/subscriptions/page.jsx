@@ -60,7 +60,7 @@ export default function SubscriptionsPage() {
     }
   };
 
-  const handleFeed = async (subscriptionId) => { 
+  const handleFeed = async (subscriptionId) => {
     try {
       setFeedingId(subscriptionId);
       const userId = user?.id;
@@ -113,7 +113,7 @@ export default function SubscriptionsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-blue-300 p-4">
+      <div className="min-h-screen bg-[#ffff00] p-4">
         <div className="max-w-4xl mx-auto">
           <div className="animate-pulse space-y-4">
             <div className="h-8 bg-gray-200 rounded w-1/3"></div>
@@ -316,7 +316,7 @@ export default function SubscriptionsPage() {
                         <Zap className="h-5 w-5 text-orange-600" />
                       </div>
                       <div>
-                        <p className="font-medium">Daily Feed</p>
+                        <p className="font-medium">Daily Claims</p>
                         <p className="text-sm text-gray-600">
                           {subscription.fedToday
                             ? `Fed today! Next feed in ${formatTimeUntilTomorrow()}`
@@ -343,7 +343,7 @@ export default function SubscriptionsPage() {
                       ) : (
                         <Zap className="h-4 w-4 mr-2" />
                       )}
-                      {subscription.fedToday ? "Fed Today" : "Feed"}
+                      {subscription.fedToday ? "Claimed" : "Claim"}
                     </Button>
                   </div>
 

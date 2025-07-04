@@ -110,7 +110,7 @@ export default function AdminSidebar({ children }) {
   };
 
   const SidebarContent = () => (
-    <div className="flex h-full flex-col bg-blue-200 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
+    <div className="flex h-full flex-col bg-yellow-300 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700">
       {/* Logo/Header */}
       <div className="flex h-16 items-center justify-center border-b border-gray-200 dark:border-gray-700 px-4">
         <div className="flex items-center space-x-2">
@@ -135,14 +135,14 @@ export default function AdminSidebar({ children }) {
               className={`group flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                 item.current
                   ? "bg-red-100 text-red-900 dark:bg-red-900/20 dark:text-red-100"
-                  : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                  : "text-[#111827] hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
               }`}
             >
               <Icon
                 className={`mr-3 h-5 w-5 flex-shrink-0 ${
                   item.current
                     ? "text-red-600 dark:text-red-400"
-                    : "text-gray-400 group-hover:text-gray-500"
+                    : "text-[#111827] group-hover:text-gray-500"
                 }`}
               />
               {item.name}

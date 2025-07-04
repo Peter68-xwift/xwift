@@ -137,7 +137,7 @@ export default function AdminDashboard() {
 
   return (
     <AdminSidebar>
-      <div className="p-6 space-y-6 bg-blue-300 dark:bg-gray-900 min-h-full">
+      <div className="p-6 space-y-6 bg-[#ffff00] dark:bg-gray-900 min-h-full">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>

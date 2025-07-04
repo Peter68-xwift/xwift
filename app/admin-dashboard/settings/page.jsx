@@ -32,6 +32,8 @@ export default function AdminSettings() {
     minWithdrawalAmount: 100,
     maxWithdrawalAmount: 100000,
     platformFee: 2.5,
+    mpesaNumber: "",
+    mpesaName: "",
   });
 
   useEffect(() => {
@@ -72,7 +74,6 @@ export default function AdminSettings() {
       console.error("Error loading settings:", error);
     }
   };
-  
 
   const handleSave = async () => {
     try {
@@ -96,7 +97,6 @@ export default function AdminSettings() {
       alert("Error saving settings");
     }
   };
-  
 
   const handleInputChange = (key, value) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
@@ -104,7 +104,7 @@ export default function AdminSettings() {
 
   return (
     <AdminSidebar>
-      <div className="p-6 space-y-6 bg-blue-300">
+      <div className="p-6 space-y-6 bg-[#ffff00]">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -279,56 +279,36 @@ export default function AdminSettings() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Bell className="h-5 w-5" />
-                Notification Settings
+                Admin Payment Settings
               </CardTitle>
-              <CardDescription>Configure system notifications</CardDescription>
+              <CardDescription>
+                Configure your Mpesa payment details
+              </CardDescription>
             </CardHeader>
+
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label>Enable Notifications</Label>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Send system notifications to users
-                  </p>
-                </div>
-                <Switch
-                  checked={settings.enableNotifications}
-                  onCheckedChange={(checked) =>
-                    handleInputChange("enableNotifications", checked)
+              <div className="space-y-2">
+                <Label htmlFor="mpesaName">Mpesa Name</Label>
+                <Input
+                  id="mpesaName"
+                  value={settings.mpesaName}
+                  onChange={(e) =>
+                    handleInputChange("mpesaName", e.target.value)
                   }
+                  placeholder="e.g. Kelvin Koech"
                 />
               </div>
 
-              <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                  Email Templates
-                </h4>
-                <div className="space-y-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start"
-                  >
-                    <Mail className="h-4 w-4 mr-2" />
-                    Welcome Email
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start"
-                  >
-                    <Mail className="h-4 w-4 mr-2" />
-                    Investment Confirmation
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full justify-start"
-                  >
-                    <Mail className="h-4 w-4 mr-2" />
-                    Withdrawal Notification
-                  </Button>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="mpesaNumber">Mpesa Phone Number</Label>
+                <Input
+                  id="mpesaNumber"
+                  value={settings.mpesaNumber}
+                  onChange={(e) =>
+                    handleInputChange("mpesaNumber", e.target.value)
+                  }
+                  placeholder="e.g. 0700123456"
+                />
               </div>
             </CardContent>
           </Card>
