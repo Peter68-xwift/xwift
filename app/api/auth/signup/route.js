@@ -87,7 +87,7 @@ export async function POST(request) {
     const referrerId = await UserModel.getReferrerIdByCode(referrerCode);
 
     // 6. Construct referral link for the new user
-    const referralLink = `xwiftranch.vercel.app/signup?ref=${referralCode}`;
+    const referralLink = `https://www.xwiftranch.com/signup?ref=${referralCode}`;
     // const referralLink = `http://localhost:5000/signup?ref=${referralCode}`;
 
     // 5. Create user
