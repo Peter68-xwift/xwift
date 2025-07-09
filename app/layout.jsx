@@ -8,7 +8,7 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Xswift Ranch",
+  title: "Zerih Tech",
   icons: {
     icon: "/url.png", // use string path, not import
   },
