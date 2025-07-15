@@ -4,6 +4,7 @@ import { AuthProvider } from "../contexts/AuthContext";
 import { ThemeProvider } from "../contexts/ThemeContext";
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "sonner";
+import WhatsappButton from "@/components/WhatsappButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,8 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <ThemeProvider>
           <AuthProvider>
-            {children} <Toaster richColors position="top-right" />
+            {children} <Toaster richColors position="top-right" />{" "}
+            <WhatsappButton />
           </AuthProvider>
         </ThemeProvider>
       </body>
