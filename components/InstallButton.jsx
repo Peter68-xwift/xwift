@@ -52,7 +52,7 @@ export default function InstallButton() {
     setDeferredPrompt(null);
   };
 
-  // Don't show if already installed or no prompt available
+  // Don't show if already installed or no prompt availabl
   if (isInstalled || !deferredPrompt) {
     return null;
   }
