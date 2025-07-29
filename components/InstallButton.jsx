@@ -83,7 +83,7 @@ export default function InstallButton() {
     <>
       <Button
         onClick={handleInstallClick}
-        className="fixed bottom-32 right-4 z-50 bg-blue-500 hover:bg-blue-600 text-white rounded-full w-14 h-14 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
+        className="fixed bottom-36 right-4 z-50 bg-blue-500 hover:bg-blue-600 text-white rounded-full w-14 h-14 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
         aria-label="Install Swift Investment App"
       >
         <Smartphone className="h-6 w-6" />
