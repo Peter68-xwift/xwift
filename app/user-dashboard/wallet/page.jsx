@@ -231,7 +231,7 @@ export default function WalletPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#ffff00] pb-20">
+    <div className="min-h-screen bg-green-300 pb-20">
       <MobileHeader title="Wallet" />
 
       <main className="px-4 py-6 max-w-md mx-auto">

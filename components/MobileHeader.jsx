@@ -15,7 +15,7 @@ export default function MobileHeader({ title }) {
   };
 
   return (
-    <header className="bg-yellow-300 shadow-sm border-b sticky top-0 z-40">
+    <header className="bg-green-300 shadow-sm border-b sticky top-0 z-40">
       <div className="px-4 py-3">
         <div className="flex justify-between items-center">
           <div>

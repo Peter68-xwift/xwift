@@ -21,7 +21,7 @@ export const metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Swift Investment App",
+    title: "Xwift Investment App",
   },
 };
 
