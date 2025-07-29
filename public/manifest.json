@@ -1,6 +1,6 @@
 {
-  "name": "Swift Investment App",
-  "short_name": "Swift",
+  "name": "AI Zoo",
+  "short_name": "AI Zoo",
   "description": "A modern investment platform for managing packages, earnings, and referrals",
   "start_url": "/",
   "display": "standalone",

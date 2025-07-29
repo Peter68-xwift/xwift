@@ -84,20 +84,23 @@ export default function InstallButton() {
       <Button
         onClick={handleInstallClick}
         className="fixed bottom-36 right-4 z-50 bg-blue-500 hover:bg-blue-600 text-white rounded-full w-14 h-14 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
-        aria-label="Install Swift Investment App"
+        aria-label="Install AI Zoo"
       >
         <Smartphone className="h-6 w-6" />
       </Button>
 
-      <Dialog open={showManualInstructions} onOpenChange={setShowManualInstructions}>
+      <Dialog
+        open={showManualInstructions}
+        onOpenChange={setShowManualInstructions}
+      >
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Download className="h-5 w-5" />
-              Install Swift Investment App
+              Install AI Zoo
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-4">
             <p className="text-sm text-gray-600">
               Install our app for the best experience! Here's how:
@@ -111,7 +114,9 @@ export default function InstallButton() {
                   </div>
                   <div>
                     <p className="text-sm font-medium">Tap the Share button</p>
-                    <p className="text-xs text-gray-500">Look for the square with arrow icon in your browser</p>
+                    <p className="text-xs text-gray-500">
+                      Look for the square with arrow icon in your browser
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -119,8 +124,12 @@ export default function InstallButton() {
                     2
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Select "Add to Home Screen"</p>
-                    <p className="text-xs text-gray-500">This will install the app on your device</p>
+                    <p className="text-sm font-medium">
+                      Select "Add to Home Screen"
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      This will install the app on your device
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -129,7 +138,9 @@ export default function InstallButton() {
                   </div>
                   <div>
                     <p className="text-sm font-medium">Tap "Add" to confirm</p>
-                    <p className="text-xs text-gray-500">The app will appear on your home screen</p>
+                    <p className="text-xs text-gray-500">
+                      The app will appear on your home screen
+                    </p>
                   </div>
                 </div>
               </div>
@@ -143,7 +154,9 @@ export default function InstallButton() {
                   </div>
                   <div>
                     <p className="text-sm font-medium">Tap the menu button</p>
-                    <p className="text-xs text-gray-500">Look for the three dots in your browser</p>
+                    <p className="text-xs text-gray-500">
+                      Look for the three dots in your browser
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -151,8 +164,12 @@ export default function InstallButton() {
                     2
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Select "Add to Home screen"</p>
-                    <p className="text-xs text-gray-500">This will install the app on your device</p>
+                    <p className="text-sm font-medium">
+                      Select "Add to Home screen"
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      This will install the app on your device
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -161,7 +178,9 @@ export default function InstallButton() {
                   </div>
                   <div>
                     <p className="text-sm font-medium">Tap "Add" to confirm</p>
-                    <p className="text-xs text-gray-500">The app will appear on your home screen</p>
+                    <p className="text-xs text-gray-500">
+                      The app will appear on your home screen
+                    </p>
                   </div>
                 </div>
               </div>
@@ -174,8 +193,12 @@ export default function InstallButton() {
                     1
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Open in Chrome browser</p>
-                    <p className="text-xs text-gray-500">PWA install works best with Chrome</p>
+                    <p className="text-sm font-medium">
+                      Open in Chrome browser
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      PWA install works best with Chrome
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -184,7 +207,9 @@ export default function InstallButton() {
                   </div>
                   <div>
                     <p className="text-sm font-medium">Tap the menu button</p>
-                    <p className="text-xs text-gray-500">Look for the three dots in Chrome</p>
+                    <p className="text-xs text-gray-500">
+                      Look for the three dots in Chrome
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -192,8 +217,12 @@ export default function InstallButton() {
                     3
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Select "Add to Home screen"</p>
-                    <p className="text-xs text-gray-500">This will install the app on your device</p>
+                    <p className="text-sm font-medium">
+                      Select "Add to Home screen"
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      This will install the app on your device
+                    </p>
                   </div>
                 </div>
               </div>
@@ -206,8 +235,12 @@ export default function InstallButton() {
                     1
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Open in Safari browser</p>
-                    <p className="text-xs text-gray-500">PWA install works best with Safari on iOS</p>
+                    <p className="text-sm font-medium">
+                      Open in Safari browser
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      PWA install works best with Safari on iOS
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -216,7 +249,9 @@ export default function InstallButton() {
                   </div>
                   <div>
                     <p className="text-sm font-medium">Tap the Share button</p>
-                    <p className="text-xs text-gray-500">Look for the square with arrow icon</p>
+                    <p className="text-xs text-gray-500">
+                      Look for the square with arrow icon
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -224,8 +259,12 @@ export default function InstallButton() {
                     3
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Select "Add to Home Screen"</p>
-                    <p className="text-xs text-gray-500">This will install the app on your device</p>
+                    <p className="text-sm font-medium">
+                      Select "Add to Home Screen"
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      This will install the app on your device
+                    </p>
                   </div>
                 </div>
               </div>
@@ -238,8 +277,12 @@ export default function InstallButton() {
                     1
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Look for the install option</p>
-                    <p className="text-xs text-gray-500">Check your browser's menu or address bar</p>
+                    <p className="text-sm font-medium">
+                      Look for the install option
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Check your browser's menu or address bar
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -247,8 +290,12 @@ export default function InstallButton() {
                     2
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Click "Install" or "Add to Home Screen"</p>
-                    <p className="text-xs text-gray-500">Follow your browser's installation prompts</p>
+                    <p className="text-sm font-medium">
+                      Click "Install" or "Add to Home Screen"
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Follow your browser's installation prompts
+                    </p>
                   </div>
                 </div>
               </div>
@@ -274,7 +321,10 @@ export default function InstallButton() {
                 <Info className="h-4 w-4 text-yellow-600 mt-0.5" />
                 <div className="text-xs text-yellow-800">
                   <p className="font-medium mb-1">Note:</p>
-                  <p>If you don't see the install option, try refreshing the page or using a different browser.</p>
+                  <p>
+                    If you don't see the install option, try refreshing the page
+                    or using a different browser.
+                  </p>
                 </div>
               </div>
             </div>

@@ -148,7 +148,7 @@ export default function SubscriptionsPage() {
               My Subscriptions
             </h1>
             <p className="text-gray-600">
-              Manage your active products and claim daily income
+              Manage your active animals and claim daily income
             </p>
           </div>
           <Button onClick={fetchSubscriptions} variant="outline" size="sm">
@@ -183,7 +183,7 @@ export default function SubscriptionsPage() {
               <div className="flex items-center space-x-2">
                 <Package className="h-5 w-5 text-green-500" />
                 <div>
-                  <p className="text-sm text-gray-600">Active Products</p>
+                  <p className="text-sm text-gray-600">Active Animals</p>
                   <p className="text-xl font-bold">
                     {stats.totalSubscriptions || 0}
                   </p>
@@ -244,10 +244,10 @@ export default function SubscriptionsPage() {
                 No Active Subscriptions
               </h3>
               <p className="text-gray-600 mb-4">
-                You don't have any active products subscriptions yet.
+                You don't have any active animals subscriptions yet.
               </p>
               <Button onClick={() => router.push("/user-dashboard/packages")}>
-                Browse products
+                Browse animals
               </Button>
             </CardContent>
           </Card>

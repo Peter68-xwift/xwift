@@ -8,7 +8,7 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Swift Investment App",
+  title: "AI Zoo",
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",

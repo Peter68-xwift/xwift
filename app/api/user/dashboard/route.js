@@ -115,9 +115,9 @@ export async function GET(request) {
           Number.parseFloat(growthPercentage) > 0 ? "positive" : "neutral",
       },
       {
-        title: "Active Packages",
+        title: "Active Animals",
         value: activePackages.toString(),
-        change: totalPackages > 0 ? `${totalPackages} total` : "No packages",
+        change: totalPackages > 0 ? `${totalPackages} total` : "No animals",
         changeType: "neutral",
       },
       {

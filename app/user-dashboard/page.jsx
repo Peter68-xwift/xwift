@@ -149,7 +149,7 @@ export default function UserDashboard() {
     switch (title) {
       case "Total Balance":
         return DollarSign;
-      case "Active Packages":
+      case "Active Animals":
         return Package;
       case "Monthly Growth":
         return TrendingUp;

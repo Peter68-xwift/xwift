@@ -15,13 +15,13 @@ export default function BottomNavigation() {
       active: pathname === "/user-dashboard",
     },
     {
-      name: "Products",
+      name: "Animals",
       icon: Package,
       path: "/user-dashboard/packages",
       active: pathname === "/user-dashboard/packages",
     },
     {
-      name: "Shop",
+      name: "Feed",
       path: "/user-dashboard/subscriptions",
       icon: CreditCard,
       active: pathname === "/user-dashboard/subscriptions",

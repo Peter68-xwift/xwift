@@ -138,7 +138,7 @@ export default function ProfilePage() {
 
         setProfileStats([
           { label: "Total Invested", value: stats.totalInvested, icon: "💰" },
-          { label: "Active Packages", value: stats.activePackages, icon: "📦" },
+          { label: "Active Animals", value: stats.activePackages, icon: "📦" },
           { label: "Referrals", value: stats.referrals, icon: "👥" },
           { label: "Member Since", value: stats.memberSince, icon: "📅" },
         ]);

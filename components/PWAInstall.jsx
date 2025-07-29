@@ -67,12 +67,12 @@ export default function PWAInstall() {
   }
 
   return (
-            <Card className="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+    <Card className="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
             <Smartphone className="h-4 w-4 text-blue-600" />
-            📱 Install Swift App
+            📱 Install AI Zoo
           </CardTitle>
           <Button
             variant="ghost"
@@ -87,7 +87,7 @@ export default function PWAInstall() {
       <CardContent className="pt-0">
         <div className="space-y-3 mb-4">
           <p className="text-sm text-gray-600">
-            Get the full mobile app experience! Install Swift Investment App on your device.
+            Get the full mobile app experience! Install AI Zoo on your device.
           </p>
           <div className="space-y-2 text-xs text-gray-500">
             <div className="flex items-center gap-2">
@@ -116,11 +116,7 @@ export default function PWAInstall() {
             <Download className="h-4 w-4 mr-2" />
             Install Now
           </Button>
-          <Button
-            variant="outline"
-            onClick={handleDismiss}
-            className="flex-1"
-          >
+          <Button variant="outline" onClick={handleDismiss} className="flex-1">
             Maybe Later
           </Button>
         </div>

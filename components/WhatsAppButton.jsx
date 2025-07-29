@@ -7,7 +7,7 @@ export default function WhatsAppButton() {
   const handleWhatsAppClick = () => {
     // You can customize the WhatsApp number and message
     const phoneNumber = "+16056718890"; // Replace with your actual WhatsApp number
-    const message = "Hello! I need help with my Swift Investment App account.";
+    const message = "Hello! I need help with my  AI Zoo account.";
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     
     window.open(whatsappUrl, '_blank');

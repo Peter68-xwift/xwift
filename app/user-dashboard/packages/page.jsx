@@ -69,7 +69,7 @@ export default function PackagesPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 pb-20">
-        <MobileHeader title="Products" />
+        <MobileHeader title="Animals" />
         <main className="px-4 py-6 max-w-md mx-auto">
           <Card className="text-center p-6">
             <CardContent>
@@ -91,7 +91,7 @@ export default function PackagesPage() {
 
   return (
     <div className="min-h-screen bg-green-300 pb-20">
-      <MobileHeader title="Products" />
+      <MobileHeader title="Animals" />
 
       <main className="px-4 py-6 max-w-md mx-auto">
         {/* Summary Stats */}
@@ -101,7 +101,7 @@ export default function PackagesPage() {
               <p className="text-2xl font-bold text-blue-600">
                 {myPackages.length}
               </p>
-              <p className="text-xs text-gray-600">My Products</p>
+              <p className="text-xs text-gray-600">My Animals</p>
             </div>
           </Card>
           <Card className="p-4">
@@ -134,7 +134,7 @@ export default function PackagesPage() {
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            My Products ({myPackages.length})
+            My Animals ({myPackages.length})
           </button>
         </div>
 
@@ -214,7 +214,7 @@ export default function PackagesPage() {
             ) : (
               <Card className="text-center p-8">
                 <Package className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-gray-600 mb-2">No Products available</p>
+                <p className="text-gray-600 mb-2">No Animals available</p>
                 <p className="text-sm text-gray-500">
                   Check back later for new investment opportunities
                 </p>
@@ -295,15 +295,15 @@ export default function PackagesPage() {
             ) : (
               <Card className="text-center p-8">
                 <Package className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-gray-600 mb-2">No active Products</p>
+                <p className="text-gray-600 mb-2">No active Animals</p>
                 <p className="text-sm text-gray-500 mb-4">
-                  Start investing to see your Products here
+                  Start investing to see your Animals here
                 </p>
                 <Button
                   onClick={() => setActiveTab("available")}
                   variant="outline"
                 >
-                  Browse Products
+                  Browse Animals
                 </Button>
               </Card>
             )}
