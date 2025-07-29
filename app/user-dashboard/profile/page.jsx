@@ -284,7 +284,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-[#ffff00] pb-20">
         <MobileHeader title="Profile" />
         <div className="flex items-center justify-center pt-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
         </div>
         <BottomNavigation />
       </div>
@@ -351,7 +351,7 @@ export default function ProfilePage() {
                       alt={profileData.name}
                     />
                   ) : (
-                    <AvatarFallback className="text-lg bg-blue-100 text-blue-600">
+                    <AvatarFallback className="text-lg bg-green-100 text-green-600">
                       {profileData.name
                         .split(" ")
                         .map((n) => n[0])
@@ -407,7 +407,7 @@ export default function ProfilePage() {
                   href={referralLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-700 underline break-all text-sm"
+                  className="text-green-700 underline break-all text-sm"
                 >
                   {referralLink}
                 </a>
@@ -415,7 +415,7 @@ export default function ProfilePage() {
                 {referralLink && (
                   <button
                     onClick={handleCopy}
-                    className="text-xs text-white bg-blue-600 px-2 py-1 rounded hover:bg-blue-700 transition flex items-center gap-1"
+                    className="text-xs text-white bg-green-600 px-2 py-1 rounded hover:bg-green-700 transition flex items-center gap-1"
                   >
                     <Copy className="w-4 h-4" />
                     {copied ? "Copied!" : "Copy"}

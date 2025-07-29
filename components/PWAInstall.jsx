@@ -67,7 +67,7 @@ export default function PWAInstall() {
   }
 
   return (
-    <Card className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+            <Card className="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">

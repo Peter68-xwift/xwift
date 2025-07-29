@@ -16,7 +16,7 @@ export const metadata = {
   description: "A modern investment platform for managing packages, earnings, and referrals",
   generator: "v0.dev",
   manifest: "/manifest.json",
-  themeColor: "#2563eb",
+  themeColor: "#16a34a",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   appleWebApp: {
     capable: true,

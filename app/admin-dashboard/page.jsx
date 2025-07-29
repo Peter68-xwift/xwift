@@ -77,7 +77,7 @@ export default function AdminDashboard() {
               {[...Array(4)].map((_, i) => (
                 <div
                   key={i}
-                  className="bg-blue-100 dark:bg-gray-800 rounded-lg p-6 h-32"
+                  className="bg-green-100 dark:bg-gray-800 rounded-lg p-6 h-32"
                 >
                   <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
                   <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
       case "package_created":
         return <Package className="h-4 w-4 text-purple-600" />;
       case "deposit":
-        return <DollarSign className="h-4 w-4 text-blue-600" />;
+        return <DollarSign className="h-4 w-4 text-green-600" />;
       case "withdrawal":
         return <DollarSign className="h-4 w-4 text-orange-600" />;
       default:
@@ -162,7 +162,7 @@ export default function AdminDashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
                 Total Users
@@ -179,7 +179,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
                 Active Users
@@ -190,7 +190,7 @@ export default function AdminDashboard() {
               <div className="text-2xl font-bold text-gray-900 dark:text-white">
                 {dashboardData?.activeUsers?.toLocaleString() || 0}
               </div>
-              <p className="text-xs text-blue-600">
+              <p className="text-xs text-green-600">
                 {(
                   (dashboardData.activeUsers / dashboardData.totalUsers) *
                   100
@@ -200,7 +200,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
                 Total Revenue
@@ -217,7 +217,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
                 Total Invested
@@ -228,14 +228,14 @@ export default function AdminDashboard() {
               <div className="text-2xl font-bold text-gray-900 dark:text-white">
                 {formatCurrency(dashboardData.totalInvested)}
               </div>
-              <p className="text-xs text-purple-600">Active investments</p>
+              <p className="text-xs text-green-600">Active investments</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Additional Stats Row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
                 Active Packages
@@ -252,7 +252,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
                 Wallet Balance
@@ -269,7 +269,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-900 dark:text-white">
                 Monthly Growth
@@ -290,7 +290,7 @@ export default function AdminDashboard() {
         {/* Charts and Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* User Growth Chart */}
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="text-gray-900 dark:text-white">
                 User Growth (Last 6 Months)
@@ -307,7 +307,7 @@ export default function AdminDashboard() {
                     className="flex-1 flex flex-col items-center"
                   >
                     <div
-                      className="w-full bg-blue-500 rounded-t transition-all duration-300 hover:bg-blue-600"
+                      className="w-full bg-green-500 rounded-t transition-all duration-300 hover:bg-green-600"
                       style={{
                         height: `${Math.max(
                           (data.users /
@@ -333,7 +333,7 @@ export default function AdminDashboard() {
           </Card>
 
           {/* Recent Activities */}
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="text-gray-900 dark:text-white">
                 Recent Activities
@@ -365,7 +365,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+        <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
           <CardHeader>
             <CardTitle className="text-gray-900 dark:text-white">
               Quick Actions
@@ -380,7 +380,7 @@ export default function AdminDashboard() {
                 onClick={() => router.push("/admin-dashboard/users")}
                 className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
-                <Users className="h-6 w-6 text-blue-600 mb-2" />
+                <Users className="h-6 w-6 text-green-600 mb-2" />
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
                   Manage Users
                 </p>
@@ -430,7 +430,7 @@ export default function AdminDashboard() {
 
         {/* Top Performing Packages */}
         {dashboardData.topPackages.length > 0 && (
-          <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+          <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="text-gray-900 dark:text-white">
                 Top Performing Packages
@@ -470,7 +470,7 @@ export default function AdminDashboard() {
         )}
 
         {/* System Status */}
-        <Card className="bg-blue-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+        <Card className="bg-green-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
           <CardHeader>
             <CardTitle className="text-gray-900 dark:text-white">
               System Status
@@ -490,7 +490,7 @@ export default function AdminDashboard() {
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-green-600">
                   {dashboardData.systemStats.avgResponseTime}
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">

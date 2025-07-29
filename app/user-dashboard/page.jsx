@@ -113,7 +113,7 @@ export default function UserDashboard() {
   if (loading || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
       </div>
     );
   }
@@ -185,7 +185,7 @@ export default function UserDashboard() {
               return (
                 <Card key={index} className="p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <Icon className="h-5 w-5 text-blue-600" />
+                    <Icon className="h-5 w-5 text-green-600" />
                     <span
                       className={`text-xs px-2 py-1 rounded-full ${
                         stat.changeType === "positive"
@@ -270,7 +270,7 @@ export default function UserDashboard() {
           <Card className="mb-6">
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
-                <Clock className="h-4 w-4 text-blue-600" />
+                <Clock className="h-4 w-4 text-green-600" />
                 Withdrawal Requests
               </CardTitle>
             </CardHeader>

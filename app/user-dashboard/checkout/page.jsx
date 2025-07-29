@@ -213,7 +213,7 @@ export default function CheckoutPage() {
   if (loading || isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
       </div>
     );
   }
@@ -235,7 +235,7 @@ export default function CheckoutPage() {
         <Card className="mb-6">
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center">
-              <Package className="h-5 w-5 mr-2 text-blue-600" />
+                              <Package className="h-5 w-5 mr-2 text-green-600" />
               Package Summary
             </CardTitle>
           </CardHeader>
@@ -247,7 +247,7 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Price:</span>
-                <span className="font-bold text-blue-600">
+                <span className="font-bold text-green-600">
                   {packageData.price}
                 </span>
               </div>
@@ -292,7 +292,7 @@ export default function CheckoutPage() {
                       <div className="w-2 h-2 bg-white rounded-full m-0.5"></div>
                     )}
                   </div>
-                  <Wallet className="h-5 w-5 text-blue-600" />
+                  <Wallet className="h-5 w-5 text-green-600" />
                   <div className="flex-1">
                     <p className="font-medium">Wallet Balance</p>
                     <p className="text-sm text-gray-600">
@@ -544,10 +544,10 @@ export default function CheckoutPage() {
                 </p>
               </div>
 
-              <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+              <div className="bg-green-50 p-3 rounded-lg border border-green-200">
                 <div className="flex items-start space-x-2">
-                  <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5" />
-                  <div className="text-xs text-blue-800">
+                  <AlertCircle className="h-4 w-4 text-green-600 mt-0.5" />
+                  <div className="text-xs text-green-800">
                     <p className="font-medium mb-1">Package Activation:</p>
                     <p>
                       Your package will be activated once admin verifies your

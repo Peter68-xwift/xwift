@@ -181,7 +181,7 @@ export default function SubscriptionsPage() {
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center space-x-2">
-                <Package className="h-5 w-5 text-blue-500" />
+                <Package className="h-5 w-5 text-green-500" />
                 <div>
                   <p className="text-sm text-gray-600">Active Products</p>
                   <p className="text-xl font-bold">
@@ -285,7 +285,7 @@ export default function SubscriptionsPage() {
                     </div>
                     <div>
                       <p className="text-gray-600">Total Earned</p>
-                      <p className="font-semibold text-blue-600">
+                      <p className="font-semibold text-green-600">
                         Ksh{subscription.totalEarnings}
                       </p>
                     </div>
@@ -305,7 +305,7 @@ export default function SubscriptionsPage() {
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
-                        className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+                        className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${subscription.progress}%` }}
                       ></div>
                     </div>

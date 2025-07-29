@@ -256,7 +256,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-emerald-100 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <img src={settings?.logo} alt="Company logo" className="w-[40%] mx-auto rounded-full" />
@@ -456,7 +456,7 @@ export default function SignUpPage() {
               Already have an account?{" "}
               <Link
                 href="/"
-                className="font-medium text-blue-600 hover:text-blue-500"
+                className="font-medium text-green-600 hover:text-green-500"
               >
                 Sign in here
               </Link>

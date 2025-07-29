@@ -160,7 +160,7 @@ export default function WalletPage() {
   if (loading || walletLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
       </div>
     );
   }
@@ -194,7 +194,7 @@ export default function WalletPage() {
   if (!walletData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
       </div>
     );
   }
@@ -209,7 +209,7 @@ export default function WalletPage() {
         return <ArrowUpRight className="h-4 w-4 text-red-600" />;
       case "earning":
       case "roi":
-        return <DollarSign className="h-4 w-4 text-blue-600" />;
+        return <DollarSign className="h-4 w-4 text-green-600" />;
       default:
         return <DollarSign className="h-4 w-4 text-gray-600" />;
     }
@@ -251,26 +251,26 @@ export default function WalletPage() {
         </div>
 
         {/* Wallet Balance Card */}
-        <Card className="mb-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
+        <Card className="mb-6 bg-gradient-to-r from-green-600 to-green-700 text-white">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-blue-100 text-sm">Total Balance</p>
+                <p className="text-green-100 text-sm">Total Balance</p>
                 <p className="text-3xl font-bold">
                   Ksh{walletData.balance.toFixed(2)}
                 </p>
               </div>
-              <Wallet className="h-8 w-8 text-blue-200" />
+                              <Wallet className="h-8 w-8 text-green-200" />
             </div>
             <div className="flex justify-between text-sm">
               <div>
-                <p className="text-blue-100">Pending</p>
+                                  <p className="text-green-100">Pending</p>
                 <p className="font-medium">
                   Ksh{walletData.pendingBalance.toFixed(2)}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-blue-100">Available</p>
+                                  <p className="text-green-100">Available</p>
                 <p className="font-medium">
                   Ksh{walletData.availableBalance.toFixed(2)}
                 </p>
