@@ -61,10 +61,10 @@ export default function LoginPage() {
       const loggedInUser = result.user || user;
 
       // Check for maintenance mode
-      if (settings?.maintenanceMode && loggedInUser?.role !== "admin") {
-        setLoading(false);
-        return router.push("/maintenance");
-      }
+      // if (settings?.maintenanceMode && loggedInUser?.role !== "admin") {
+      //   setLoading(false);
+      //   return router.push("/maintenance");
+      // }
 
       if (loggedInUser?.role === "admin") {
         router.push("/admin-dashboard");
