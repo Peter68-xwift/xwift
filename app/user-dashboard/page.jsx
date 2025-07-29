@@ -13,6 +13,10 @@ import {
   Package,
   Activity,
   RefreshCw,
+  Clock,
+  Gift,
+  Users,
+  ArrowUpRight,
 } from "lucide-react";
 import { BrowserRouter } from "react-router-dom";
 
@@ -20,25 +24,68 @@ export default function UserDashboard() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [dashboardData, setDashboardData] = useState(null);
+  const [earningsData, setEarningsData] = useState(null);
+  const [withdrawalData, setWithdrawalData] = useState(null);
+  const [giftCodeData, setGiftCodeData] = useState(null);
+  const [referralData, setReferralData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  // console.log(user)
 
   const fetchDashboardData = async () => {
     try {
       setIsLoading(true);
+      const userId = user?.id;
 
-      const userId = user?.id; // ← replace this with the actual ID from auth context or state
-      const response = await fetch(`/api/user/dashboard?userId=${userId}`);
+      // Fetch all dashboard data in parallel
+      const [
+        dashboardResponse,
+        earningsResponse,
+        withdrawalResponse,
+        giftCodeResponse,
+        referralResponse,
+      ] = await Promise.all([
+        fetch(`/api/user/dashboard?userId=${userId}`),
+        fetch(`/api/user/dashboard/earnings-today?userId=${userId}`),
+        fetch(`/api/user/dashboard/withdrawal-requests?userId=${userId}`),
+        fetch(`/api/user/dashboard/gift-code-history?userId=${userId}`),
+        fetch(`/api/user/dashboard/referral-commissions?userId=${userId}`),
+      ]);
 
-      // console.log(response);
-      const result = await response.json();
+      const [
+        dashboardResult,
+        earningsResult,
+        withdrawalResult,
+        giftCodeResult,
+        referralResult,
+      ] = await Promise.all([
+        dashboardResponse.json(),
+        earningsResponse.json(),
+        withdrawalResponse.json(),
+        giftCodeResponse.json(),
+        referralResponse.json(),
+      ]);
 
-      if (result.success) {
-        setDashboardData(result.data);
+      if (dashboardResult.success) {
+        setDashboardData(dashboardResult.data);
         setError(null);
       } else {
-        setError(result.error || "Failed to fetch dashboard data");
+        setError(dashboardResult.error || "Failed to fetch dashboard data");
+      }
+
+      if (earningsResult.success) {
+        setEarningsData(earningsResult.data);
+      }
+
+      if (withdrawalResult.success) {
+        setWithdrawalData(withdrawalResult.data);
+      }
+
+      if (giftCodeResult.success) {
+        setGiftCodeData(giftCodeResult.data);
+      }
+
+      if (referralResult.success) {
+        setReferralData(referralResult.data);
       }
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
@@ -92,9 +139,7 @@ export default function UserDashboard() {
   }
 
   const stats = dashboardData?.stats || [];
-  const recentActivities = dashboardData?.recentActivities || [];
   const wallet = dashboardData?.wallet || {};
-  const commision = dashboardData?.subordinateCommission || 0.0;
 
   const getStatIcon = (title) => {
     switch (title) {
@@ -157,6 +202,32 @@ export default function UserDashboard() {
             })}
           </div>
 
+          {/* Quick Actions */}
+          <Card className="mb-6">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  className="h-12 flex-col space-y-1"
+                  onClick={() => router.push("/user-dashboard/packages")}
+                >
+                  <Package className="h-4 w-4" />
+                  <span className="text-xs">Buy Package</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 flex-col space-y-1"
+                  onClick={() => router.push("/user-dashboard/wallet")}
+                >
+                  <DollarSign className="h-4 w-4" />
+                  <span className="text-xs">Add Funds</span>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Wallet Summary */}
           <Card className="mb-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
             <CardContent className="pt-6">
@@ -186,11 +257,14 @@ export default function UserDashboard() {
             </CardContent>
           </Card>
 
-          {/* Quick Actions */}
+          {/* Earnings Generated Today */}
           <Card className="mb-6">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base">Quick Actions</CardTitle>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-green-600" />
+                  Earnings Generated Today
+                </CardTitle>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -204,66 +278,179 @@ export default function UserDashboard() {
               </div>
             </CardHeader>
             <CardContent className="pt-0">
-              <div className="grid grid-cols-2 gap-3">
-                <Button
-                  className="h-12 flex-col space-y-1"
-                  onClick={() => router.push("/user-dashboard/packages")}
-                >
-                  <Package className="h-4 w-4" />
-                  <span className="text-xs">Buy Package</span>
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-12 flex-col space-y-1"
-                  onClick={() => router.push("/user-dashboard/wallet")}
-                >
-                  <DollarSign className="h-4 w-4" />
-                  <span className="text-xs">Add Funds</span>
-                </Button>
+              <div className="mb-4">
+                <p className="text-2xl font-bold text-green-600">
+                  Ksh{earningsData?.totalEarnings || "0.00"}
+                </p>
+                <p className="text-sm text-gray-600">Total earnings today</p>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Recent Activities */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">Recent Activities</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              {recentActivities.length > 0 ? (
+              {earningsData?.earnings && earningsData.earnings.length > 0 ? (
                 <div className="space-y-3">
-                  {recentActivities.map((activity) => (
+                  {earningsData.earnings.slice(0, 5).map((earning) => (
                     <div
-                      key={activity.id}
-                      className="flex items-center justify-between py-2"
+                      key={earning.id}
+                      className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0"
                     >
                       <div className="flex-1">
                         <p className="text-sm font-medium text-gray-900">
-                          {activity.action}
+                          {earning.description || "Earning"}
                         </p>
-                        <p className="text-xs text-gray-500">{activity.time}</p>
+                        <p className="text-xs text-gray-500">{earning.timeAgo}</p>
                       </div>
                       <div className="text-right">
-                        <p
-                          className={`text-sm font-medium ${
-                            activity.type === "income"
-                              ? "text-green-600"
-                              : "text-red-600"
-                          }`}
-                        >
-                          {activity.amount}
+                        <p className="text-sm font-medium text-green-600">
+                          {earning.formattedAmount}
                         </p>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No recent activities</p>
-                  <p className="text-xs">
-                    Start investing to see your activity here
-                  </p>
+                <div className="text-center py-6 text-gray-500">
+                  <TrendingUp className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">No earnings today</p>
+                  <p className="text-xs">Complete tasks to earn rewards</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Records of Withdrawal Requests */}
+          <Card className="mb-6">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Clock className="h-4 w-4 text-blue-600" />
+                Withdrawal Requests
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="mb-4">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Pending: {withdrawalData?.pendingRequests || 0}</span>
+                  <span className="text-gray-600">Total: {withdrawalData?.totalRequests || 0}</span>
+                </div>
+              </div>
+              {withdrawalData?.requests && withdrawalData.requests.length > 0 ? (
+                <div className="space-y-3">
+                  {withdrawalData.requests.slice(0, 5).map((request) => (
+                    <div
+                      key={request.id}
+                      className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0"
+                    >
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          {request.description || "Withdrawal Request"}
+                        </p>
+                        <p className="text-xs text-gray-500">{request.timeAgo}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-medium text-gray-900">
+                          {request.formattedAmount}
+                        </p>
+                        <span className={`text-xs px-2 py-1 rounded-full ${request.statusColor}`}>
+                          {request.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-6 text-gray-500">
+                  <Clock className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">No withdrawal requests</p>
+                  <p className="text-xs">Your withdrawal history will appear here</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Claimed Gift Code History */}
+          <Card className="mb-6">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Gift className="h-4 w-4 text-purple-600" />
+                Gift Code History
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="mb-4">
+                <p className="text-lg font-bold text-purple-600">
+                  Ksh{giftCodeData?.totalValue || "0.00"}
+                </p>
+                <p className="text-sm text-gray-600">Total value claimed</p>
+              </div>
+              {giftCodeData?.redemptions && giftCodeData.redemptions.length > 0 ? (
+                <div className="space-y-3">
+                  {giftCodeData.redemptions.slice(0, 5).map((redemption) => (
+                    <div
+                      key={redemption.id}
+                      className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0"
+                    >
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          {redemption.description || "Gift Code Redemption"}
+                        </p>
+                        <p className="text-xs text-gray-500">{redemption.timeAgo}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-medium text-purple-600">
+                          {redemption.formattedAmount}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-6 text-gray-500">
+                  <Gift className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">No gift codes claimed</p>
+                  <p className="text-xs">Your gift code history will appear here</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Referral Commissions Earned Today */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Users className="h-4 w-4 text-orange-600" />
+                Referral Commissions Today
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="mb-4">
+                <p className="text-2xl font-bold text-orange-600">
+                  Ksh{referralData?.todayCommissions || "0.00"}
+                </p>
+                <p className="text-sm text-gray-600">Total today • Ksh{referralData?.totalCommissions || "0.00"} all time</p>
+              </div>
+              {referralData?.commissions && referralData.commissions.length > 0 ? (
+                <div className="space-y-3">
+                  {referralData.commissions.slice(0, 5).map((commission) => (
+                    <div
+                      key={commission.id}
+                      className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0"
+                    >
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          {commission.description || "Referral Commission"}
+                        </p>
+                        <p className="text-xs text-gray-500">{commission.timeAgo}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-medium text-orange-600">
+                          {commission.formattedAmount}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-6 text-gray-500">
+                  <Users className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">No referral commissions today</p>
+                  <p className="text-xs">Invite friends to earn commissions</p>
                 </div>
               )}
             </CardContent>
