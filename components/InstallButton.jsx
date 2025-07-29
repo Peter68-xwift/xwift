@@ -69,7 +69,7 @@ export default function InstallButton() {
       
       setDeferredPrompt(null);
     } else {
-      // Show manual installation instructions
+      // Show manual installation 
       setShowManualInstructions(true);
     }
   };
