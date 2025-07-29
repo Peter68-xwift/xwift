@@ -208,61 +208,6 @@ export default function UserDashboard() {
             })}
           </div>
 
-          {/* Quick Actions */}
-          <Card className="mb-6">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <Button
-                  className="h-12 flex-col space-y-1"
-                  onClick={() => router.push("/user-dashboard/packages")}
-                >
-                  <Package className="h-4 w-4" />
-                  <span className="text-xs">Buy Package</span>
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-12 flex-col space-y-1"
-                  onClick={() => router.push("/user-dashboard/wallet")}
-                >
-                  <DollarSign className="h-4 w-4" />
-                  <span className="text-xs">Add Funds</span>
-                </Button>
-              </div>
-              <ManualInstallButton />
-            </CardContent>
-          </Card>
-
-          {/* Wallet Summary */}
-          <Card className="mb-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-blue-100 text-sm">Available Balance</p>
-                  <p className="text-2xl font-bold">
-                    Ksh{wallet.availableBalance?.toFixed(2) || "0.00"}
-                  </p>
-                </div>
-                <DollarSign className="h-8 w-8 text-blue-200" />
-              </div>
-              <div className="flex justify-between text-sm">
-                <div>
-                  <p className="text-blue-100">Total Invested</p>
-                  <p className="font-medium">
-                    Ksh{wallet.totalInvested?.toFixed(2) || "0.00"}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-blue-100">Total Returns</p>
-                  <p className="font-medium">
-                    Ksh{wallet.totalReturns?.toFixed(2) || "0.00"}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Earnings Generated Today */}
           <Card className="mb-6">
