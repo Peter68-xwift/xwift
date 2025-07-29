@@ -330,16 +330,6 @@ export default function WalletPage() {
         {/* Tab Navigation */}
         <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
           <button
-            onClick={() => setActiveTab("overview")}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-              activeTab === "overview"
-                ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-600 hover:text-gray-900"
-            }`}
-          >
-            Overview
-          </button>
-          <button
             onClick={() => setActiveTab("withdraw")}
             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === "withdraw"
@@ -352,66 +342,9 @@ export default function WalletPage() {
         </div>
 
         {/* Tab Content */}
-        {activeTab === "overview" && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Recent Transactions</CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
-              {walletData.transactions.length === 0 ? (
-                <div className="text-center py-8">
-                  <Wallet className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">No transactions yet</p>
-                  <p className="text-sm text-gray-400">
-                    Your transaction history will appear here
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {walletData.transactions.map((transaction) => (
-                    <div
-                      key={transaction.id}
-                      className="flex items-center justify-between py-2"
-                    >
-                      <div className="flex items-center space-x-3">
-                        {getTransactionIcon(transaction.type)}
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">
-                            {transaction.description}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {transaction.date}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p
-                          className={`text-sm font-medium ${getTransactionColor(
-                            transaction.type
-                          )}`}
-                        >
-                          {transaction.amount > 0 ? "+" : ""}$
-                          {Math.abs(transaction.amount).toFixed(2)}
-                        </p>
-                        <p
-                          className={`text-xs ${
-                            transaction.status === "completed"
-                              ? "text-green-600"
-                              : "text-yellow-600"
-                          }`}
-                        >
-                          {transaction.status}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
 
-        {activeTab === "withdraw" && (
+
+
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Withdraw Funds</CardTitle>
@@ -475,65 +408,8 @@ export default function WalletPage() {
                 Withdrawals are processed within 1-3 business days
               </p>
             </CardContent>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">All widhdrawals</CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0">
-                {widhth === 0 ? (
-                  <div className="text-center py-8">
-                    <Wallet className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500">No widhdrawals yet</p>
-                    <p className="text-sm text-gray-400">
-                      Your widhdrawals history will appear here
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {widhth.map((transaction) => (
-                      <div
-                        key={transaction.id}
-                        className="flex items-center justify-between py-2"
-                      >
-                        <div className="flex items-center space-x-3">
-                          {getTransactionIcon(transaction.type)}
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">
-                              {transaction.description}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              {transaction.date}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p
-                            className={`text-sm font-medium ${getTransactionColor(
-                              transaction.type
-                            )}`}
-                          >
-                            {transaction.amount > 0 ? "+" : ""}$
-                            {Math.abs(transaction.amount).toFixed(2)}
-                          </p>
-                          <p
-                            className={`text-xs ${
-                              transaction.status === "completed"
-                                ? "text-green-600"
-                                : "text-yellow-600"
-                            }`}
-                          >
-                            {transaction.status}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
           </Card>
-        )}
+
       </main>
 
       {/* Floating Action Buttons */}
