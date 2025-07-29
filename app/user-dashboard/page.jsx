@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import MobileHeader from "../../components/MobileHeader";
 import BottomNavigation from "../../components/BottomNavigation";
+import PWAInstall from "../../components/PWAInstall";
+import PWARegistration from "../../components/PWARegistration";
+import ManualInstallButton from "../../components/ManualInstallButton";
 import {
   TrendingUp,
   DollarSign,
@@ -159,9 +162,12 @@ export default function UserDashboard() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-[#ffff00] pb-20">
+        <PWARegistration />
         <MobileHeader title="Dashboard" />
 
         <main className="px-4 py-6 max-w-md mx-auto">
+          {/* PWA Install Prompt */}
+          <PWAInstall />
           {/* Welcome Message */}
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">
@@ -208,7 +214,7 @@ export default function UserDashboard() {
               <CardTitle className="text-base">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3 mb-3">
                 <Button
                   className="h-12 flex-col space-y-1"
                   onClick={() => router.push("/user-dashboard/packages")}
@@ -225,6 +231,7 @@ export default function UserDashboard() {
                   <span className="text-xs">Add Funds</span>
                 </Button>
               </div>
+              <ManualInstallButton />
             </CardContent>
           </Card>
 

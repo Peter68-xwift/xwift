@@ -8,12 +8,21 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Xswift Ranch",
+  title: "Swift Investment App",
   icons: {
-    icon: "/url.png", // use string path, not import
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
-  description: "A modern mern application",
+  description: "A modern investment platform for managing packages, earnings, and referrals",
   generator: "v0.dev",
+  manifest: "/manifest.json",
+  themeColor: "#2563eb",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Swift Investment App",
+  },
 };
 
 export default function RootLayout({ children }) {
