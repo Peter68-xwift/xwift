@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import MobileHeader from "../../../components/MobileHeader";
 import BottomNavigation from "../../../components/BottomNavigation";
+import WhatsAppButton from "../../../components/WhatsAppButton";
+import InstallButton from "../../../components/InstallButton";
 import {
   Wallet,
   Plus,
@@ -533,6 +535,10 @@ export default function WalletPage() {
           </Card>
         )}
       </main>
+
+      {/* Floating Action Buttons */}
+      <InstallButton />
+      <WhatsAppButton />
 
       <BottomNavigation />
     </div>

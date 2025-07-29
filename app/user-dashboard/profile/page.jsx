@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import MobileHeader from "../../../components/MobileHeader";
 import BottomNavigation from "../../../components/BottomNavigation";
+import WhatsAppButton from "../../../components/WhatsAppButton";
+import InstallButton from "../../../components/InstallButton";
 import {
   User,
   Mail,
@@ -631,6 +633,10 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
       </main>
+
+      {/* Floating Action Buttons */}
+      <InstallButton />
+      <WhatsAppButton />
 
       <BottomNavigation />
     </div>

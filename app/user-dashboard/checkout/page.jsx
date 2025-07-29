@@ -10,6 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import MobileHeader from "../../../components/MobileHeader";
 import BottomNavigation from "../../../components/BottomNavigation";
+import WhatsAppButton from "../../../components/WhatsAppButton";
+import InstallButton from "../../../components/InstallButton";
 import {
   ArrowLeft,
   Smartphone,
@@ -565,6 +567,10 @@ export default function CheckoutPage() {
           </Card>
         )}
       </main>
+
+      {/* Floating Action Buttons */}
+      <InstallButton />
+      <WhatsAppButton />
 
       <BottomNavigation />
     </div>

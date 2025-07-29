@@ -7,9 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import MobileHeader from "../../components/MobileHeader";
 import BottomNavigation from "../../components/BottomNavigation";
-import PWAInstall from "../../components/PWAInstall";
 import PWARegistration from "../../components/PWARegistration";
 import ManualInstallButton from "../../components/ManualInstallButton";
+import WhatsAppButton from "../../components/WhatsAppButton";
+import InstallButton from "../../components/InstallButton";
 import {
   TrendingUp,
   DollarSign,
@@ -166,8 +167,6 @@ export default function UserDashboard() {
         <MobileHeader title="Dashboard" />
 
         <main className="px-4 py-6 max-w-md mx-auto">
-          {/* PWA Install Prompt */}
-          <PWAInstall />
           {/* Welcome Message */}
           <div className="mb-6">
             <h1 className="text-xl font-bold text-gray-900">
@@ -408,6 +407,10 @@ export default function UserDashboard() {
             </CardContent>
           </Card>
         </main>
+
+        {/* Floating Action Buttons */}
+        <InstallButton />
+        <WhatsAppButton />
 
         <BottomNavigation />
       </div>

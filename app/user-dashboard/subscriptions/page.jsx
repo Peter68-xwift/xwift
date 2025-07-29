@@ -17,6 +17,8 @@ import {
   Zap,
 } from "lucide-react";
 import BottomNavigation from "@/components/BottomNavigation";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import InstallButton from "@/components/InstallButton";
 import { useAuth } from "@/contexts/AuthContext";
 import MobileHeader from "@/components/MobileHeader";
 import { toast } from "sonner";
@@ -364,6 +366,11 @@ export default function SubscriptionsPage() {
           </div>
         )}
       </div>
+
+      {/* Floating Action Buttons */}
+      <InstallButton />
+      <WhatsAppButton />
+
       <BottomNavigation />
     </div>
   );

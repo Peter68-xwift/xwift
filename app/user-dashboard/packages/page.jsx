@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import MobileHeader from "../../../components/MobileHeader";
 import BottomNavigation from "../../../components/BottomNavigation";
+import WhatsAppButton from "../../../components/WhatsAppButton";
+import InstallButton from "../../../components/InstallButton";
 import { Package, Star, CheckCircle, RefreshCw } from "lucide-react";
 import Image from "next/image";
 
@@ -308,6 +310,10 @@ export default function PackagesPage() {
           </div>
         )}
       </main>
+
+      {/* Floating Action Buttons */}
+      <InstallButton />
+      <WhatsAppButton />
 
       <BottomNavigation />
     </div>
