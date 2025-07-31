@@ -448,7 +448,7 @@ export default function ProfilePage() {
               {referrals.map((ref) => (
                 <li key={ref.id} className="border p-3 rounded-md bg-gray-50">
                   <div className="mb-2">
-                    <strong>{ref.name}</strong> ({ref.email})
+                    <strong>{ref.name}</strong> ({ref.phone})
                   </div>
 
                   {ref.packages.length > 0 ? (
