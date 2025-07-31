@@ -121,7 +121,7 @@ export default function ProfilePage() {
       });
 
       const data = await response.json();
-      console.log(data.data.referrals);
+      // console.log(data.data.referrals);
       setReferrals(data.data.referrals || []);
 
       if (data.success) {
@@ -448,7 +448,7 @@ export default function ProfilePage() {
               {referrals.map((ref) => (
                 <li key={ref.id} className="border p-3 rounded-md bg-gray-50">
                   <div className="mb-2">
-                    <strong>{ref.name}</strong> ({ref.phone})
+                    <strong>{ref.name}</strong> ({ref.username})
                   </div>
 
                   {ref.packages.length > 0 ? (
