@@ -168,15 +168,7 @@ export default function UserDashboard() {
 
         <main className="px-4 py-6 max-w-md mx-auto">
           {/* Welcome Message */}
-          <div className="mb-6">
-            <h1 className="text-xl font-bold text-gray-900">
-              Welcome back, {dashboardData?.user?.name?.split(" ")[0] || "User"}
-              !
-            </h1>
-            <p className="text-sm text-gray-600">
-              Here's your portfolio overview
-            </p>
-          </div>
+        
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 gap-4 mb-6">

@@ -19,6 +19,7 @@ export async function GET(request) {
     const totalInvested = user.wallet?.totalInvested || 0;
     const activePackages = user.stats?.activeInvestments || 0;
     const totalReferrals = user.referrals?.length || 0;
+    console.log(user.referrals)
 
     const memberSince = user.createdAt
       ? new Date(user.createdAt).toLocaleDateString("en-US", {
@@ -55,6 +56,7 @@ export async function GET(request) {
         id: ref._id,
         name: ref.fullName,
         username: ref.username,
+        phone: ref.phone,
         email: ref.email,
         packages:
           ref.packagesSubscribed?.map((pkg) => ({
