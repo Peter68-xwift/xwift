@@ -422,7 +422,7 @@ export default function DepositPage() {
 
       {/* Floating Action Buttons */}
       <InstallButton />
-      <WhatsAppButton />
+      {/* <WhatsAppButton /> */}
 
       <BottomNavigation />
     </div>

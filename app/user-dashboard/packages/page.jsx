@@ -313,7 +313,7 @@ export default function PackagesPage() {
 
       {/* Floating Action Buttons */}
       <InstallButton />
-      <WhatsAppButton />
+      {/* <WhatsAppButton /> */}
 
       <BottomNavigation />
     </div>

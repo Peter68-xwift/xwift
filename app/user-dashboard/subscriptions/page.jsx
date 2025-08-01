@@ -369,7 +369,7 @@ export default function SubscriptionsPage() {
 
       {/* Floating Action Buttons */}
       <InstallButton />
-      <WhatsAppButton />
+      {/* <WhatsAppButton /> */}
 
       <BottomNavigation />
     </div>

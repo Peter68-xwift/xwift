@@ -570,7 +570,7 @@ export default function CheckoutPage() {
 
       {/* Floating Action Buttons */}
       <InstallButton />
-      <WhatsAppButton />
+      {/* <WhatsAppButton /> */}
 
       <BottomNavigation />
     </div>

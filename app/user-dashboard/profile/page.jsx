@@ -636,7 +636,7 @@ export default function ProfilePage() {
 
       {/* Floating Action Buttons */}
       <InstallButton />
-      <WhatsAppButton />
+      {/* <WhatsAppButton /> */}
 
       <BottomNavigation />
     </div>

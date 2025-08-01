@@ -10,8 +10,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "AI Zoo",
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: "/logo.jpeg",
+    apple: "/logo.jpeg",
   },
   description: "A modern investment platform for managing packages, earnings, and referrals",
   generator: "v0.dev",

@@ -402,7 +402,7 @@ export default function UserDashboard() {
 
         {/* Floating Action Buttons */}
         <InstallButton />
-        <WhatsAppButton />
+        {/* <WhatsAppButton /> */}
 
         <BottomNavigation />
       </div>
