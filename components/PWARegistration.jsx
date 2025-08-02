@@ -45,7 +45,7 @@ export default function PWARegistration() {
       // Add apple-touch-icon
       const appleTouchIcon = document.createElement('link');
       appleTouchIcon.rel = 'apple-touch-icon';
-      appleTouchIcon.href = '/logo.png';
+      appleTouchIcon.href = '/logo.jpg';
       document.head.appendChild(appleTouchIcon);
 
       // Add manifest link if not already present
