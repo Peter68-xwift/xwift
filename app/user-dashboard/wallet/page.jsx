@@ -260,17 +260,17 @@ export default function WalletPage() {
                   Ksh{walletData.balance.toFixed(2)}
                 </p>
               </div>
-                              <Wallet className="h-8 w-8 text-green-200" />
+              <Wallet className="h-8 w-8 text-green-200" />
             </div>
             <div className="flex justify-between text-sm">
               <div>
-                                  <p className="text-green-100">Pending</p>
+                <p className="text-green-100">Pending</p>
                 <p className="font-medium">
                   Ksh{walletData.pendingBalance.toFixed(2)}
                 </p>
               </div>
               <div className="text-right">
-                                  <p className="text-green-100">Available</p>
+                <p className="text-green-100">Available</p>
                 <p className="font-medium">
                   Ksh{walletData.availableBalance.toFixed(2)}
                 </p>
@@ -343,73 +343,123 @@ export default function WalletPage() {
 
         {/* Tab Content */}
 
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Withdraw Funds</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-blue-50 p-3 rounded-lg">
+              <p className="text-sm text-blue-800">
+                Available for withdrawal: Ksh{" "}
+                {walletData.availableBalance.toFixed(2)}
+              </p>
+            </div>
 
+            <div className="space-y-2">
+              <Label>Select Amount</Label>
+              <div className="grid grid-cols-3 gap-2">
+                {/* First row */}
+                <Button variant="outline" onClick={() => setAmount("120")}>
+                  Ksh 120
+                </Button>
+                <Button variant="outline" onClick={() => setAmount("200")}>
+                  Ksh 200
+                </Button>
+                <Button variant="outline" onClick={() => setAmount("300")}>
+                  Ksh 300
+                </Button>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Withdraw Funds</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="bg-blue-50 p-3 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  Available for withdrawal: Ksh
-                  {walletData.availableBalance.toFixed(2)}
+                {/* Second row */}
+                <Button variant="outline" onClick={() => setAmount("500")}>
+                  Ksh 500
+                </Button>
+                <Button variant="outline" onClick={() => setAmount("800")}>
+                  Ksh 800
+                </Button>
+                <Button variant="outline" onClick={() => setAmount("1000")}>
+                  Ksh 1,000
+                </Button>
+
+                {/* Third row */}
+                <Button variant="outline" onClick={() => setAmount("2000")}>
+                  Ksh 2,000
+                </Button>
+                <Button variant="outline" onClick={() => setAmount("5000")}>
+                  Ksh 5,000
+                </Button>
+                <Button variant="outline" onClick={() => setAmount("8000")}>
+                  Ksh 8,000
+                </Button>
+
+                {/* Fourth row */}
+                <Button variant="outline" onClick={() => setAmount("15000")}>
+                  Ksh 15,000
+                </Button>
+                <Button variant="outline" onClick={() => setAmount("25000")}>
+                  Ksh 25,000
+                </Button>
+                <Button variant="outline" onClick={() => setAmount("30000")}>
+                  Ksh 30,000
+                </Button>
+
+                {/* Fifth row */}
+                <Button variant="outline" onClick={() => setAmount("40000")}>
+                  Ksh 40,000
+                </Button>
+                <Button variant="outline" onClick={() => setAmount("50000")}>
+                  Ksh 50,000
+                </Button>
+              </div>
+            </div>
+
+            {/* Display selected amount */}
+            {amount && (
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <p className="text-sm text-gray-800">
+                  Selected amount: Ksh {Number(amount).toLocaleString()}
                 </p>
               </div>
+            )}
+
+            {/* Withdrawal PIN */}
+            {requiresNewPin ? (
               <div className="space-y-2">
-                <Label htmlFor="withdraw-amount">Amount</Label>
+                <Label htmlFor="new-pin">Set a 4-digit Withdrawal PIN</Label>
                 <Input
-                  id="withdraw-amount"
-                  type="number"
-                  placeholder="Enter amount"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  max={walletData.availableBalance}
+                  id="new-pin"
+                  type="password"
+                  maxLength={4}
+                  placeholder="Set 4-digit PIN"
+                  value={newPin}
+                  onChange={(e) => setNewPin(e.target.value)}
                 />
               </div>
+            ) : (
+              <div className="space-y-2">
+                <Label htmlFor="pin">Withdrawal PIN</Label>
+                <Input
+                  id="pin"
+                  type="password"
+                  maxLength={4}
+                  placeholder="Enter your 4-digit PIN"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value)}
+                />
+              </div>
+            )}
 
-              {/* Withdrawal PIN */}
-              {requiresNewPin ? (
-                <div className="space-y-2">
-                  <Label htmlFor="new-pin">Set a 4-digit Withdrawal PIN</Label>
-                  <Input
-                    id="new-pin"
-                    type="password"
-                    maxLength={4}
-                    placeholder="Set 4-digit PIN"
-                    value={newPin}
-                    onChange={(e) => setNewPin(e.target.value)}
-                  />
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <Label htmlFor="pin">Withdrawal PIN</Label>
-                  <Input
-                    id="pin"
-                    type="password"
-                    maxLength={4}
-                    placeholder="Enter your 4-digit PIN"
-                    value={pin}
-                    onChange={(e) => setPin(e.target.value)}
-                  />
-                </div>
-              )}
-
-              <Button
-                className="w-full"
-                onClick={handleWithdrawal}
-                disabled={
-                  processing || !amount || Number.parseFloat(amount) <= 0
-                }
-              >
-                {processing ? "Processing..." : "Request Withdrawal"}
-              </Button>
-              <p className="text-xs text-gray-500 text-center">
-                Withdrawals are processed within 1-3 business days
-              </p>
-            </CardContent>
-          </Card>
-
+            <Button
+              className="w-full"
+              onClick={handleWithdrawal}
+              disabled={processing || !amount || Number.parseFloat(amount) <= 0}
+            >
+              {processing ? "Processing..." : "Request Withdrawal"}
+            </Button>
+            <p className="text-xs text-gray-500 text-center">
+              Withdrawals are processed within 1-3 business days
+            </p>
+          </CardContent>
+        </Card>
       </main>
 
       {/* Floating Action Buttons */}

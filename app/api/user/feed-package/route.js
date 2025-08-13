@@ -8,6 +8,20 @@ export async function POST(request) {
     const client = await clientPromise;
     const db = client.db("mern_auth_app");
 
+    // First check if today is Sunday
+    const sunday = new Date();
+    const isSunday = sunday.getDay() === 0; 
+
+    if (isSunday) {
+      return NextResponse.json(
+        {
+          error:
+            "Feeding is not available on Sundays. Please come back tomorrow!",
+        },
+        { status: 400 }
+      );
+    }
+
     const { subscriptionId } = await request.json();
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
